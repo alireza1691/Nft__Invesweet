@@ -21,11 +21,11 @@ contract CollectionCreator{
 
 address immutable private i_owner;
 uint256 private s_createFee;
-AggregatorV3Interface internal immutable aggregator;
+// AggregatorV3Interface internal immutable aggregator;
 
-constructor(address aggregatorAddress){
+constructor(/*address aggregatorAddress*/){
     i_owner = msg.sender;
-    aggregator = AggregatorV3Interface(aggregatorAddress);
+    // aggregator = AggregatorV3Interface(aggregatorAddress);
 }
 
 mapping (address => address[]) private ownerToCollection;

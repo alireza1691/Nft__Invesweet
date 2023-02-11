@@ -1,0 +1,1 @@
+[{"type":"constructor","payable":false,"inputs":[]},{"type":"function","name":"create","constant":false,"payable":false,"gas":29000000,"inputs":[{"type":"string","name":"name"},{"type":"string","name":"symbol"},{"type":"uint256","name":"maxSupply"},{"type":"uint256","name":"firstSupply"},{"type":"uint256","name":"mineReward"},{"type":"uint256","name":"decimals"}],"outputs":[]}]
