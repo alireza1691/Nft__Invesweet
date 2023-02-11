@@ -34,24 +34,26 @@ async function updateContractAddresses() {
     const ERC721CreatorAddressFile = JSON.parse(fs.readFileSync(ERC721CreatorAddress, "utf8"))
     const ERC20CreatorAddressFile = JSON.parse(fs.readFileSync(ERC20CreatorAddress, "utf8"))
     if (chainId in ERC721CreatorAddressFile) {
-        if (!ERC721CreatorAddressFile[chainId]["ERC721Creator"].includes(ERC721Creator.address)) {
-            ERC721CreatorAddressFile[chainId]["ERC721Creator"].push(ERC721Creator.address)
+        if (!ERC721CreatorAddressFile[chainId]["erc721Creator"].includes(ERC721Creator.address)) {
+            ERC721CreatorAddressFile[chainId]["erc721Creator"].push(ERC721Creator.address)
         }
         
     } else {
-        ERC721CreatorAddressFile[chainId] = {ERC721Creator:[ERC721Creator.address]} 
+        ERC721CreatorAddressFile[chainId] = { erc721Creator: [ERC721Creator.address]} 
     }
 
     if (chainId in ERC20CreatorAddressFile) {
-        if (!ERC20CreatorAddressFile[chainId]["ERC20Creator"].includes(ERC20Creator.address)) {
-            ERC20CreatorAddressFile[chainId]["ERC20Creator"].push(ERC20Creator.address)
+        if (!ERC20CreatorAddressFile[chainId]["erc20Creator"].includes(ERC20Creator.address)) {
+            ERC20CreatorAddressFile[chainId]["erc20Creator"].push(ERC20Creator.address)
         }
         
     } else {
-        ERC20CreatorAddressFile[chainId]= {ERC20Creator:[ERC20Creator.address]} 
+        ERC20CreatorAddressFile[chainId]= { erc20Creator:[ERC20Creator.address]} 
     }
 
     fs.writeFileSync(ERC721CreatorAddress, JSON.stringify(ERC721CreatorAddressFile))
     fs.writeFileSync(ERC20CreatorAddress, JSON.stringify(ERC20CreatorAddressFile))
+    console.log(ERC721CreatorAddressFile);
+    console.log(ERC20CreatorAddressFile);
 }
 module.exports.tags = ["all", "frontend"]

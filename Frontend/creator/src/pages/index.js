@@ -4,6 +4,10 @@ import styles from '../styles/Home.module.css'
 import 'bulma/css/bulma.css'
 import {BigNumber, ethers} from 'ethers'
 import { useState, useEffect } from 'react'
+import ERC20CreatorAddress from "../../Blockchain/ERC20CreatorAddress.json"
+import ERC721CreatorAddress from "../../Blockchain/ERC721CreatorAddress.json"
+import ERC20CreatorAbi from "../../Blockchain/ERC20Creator.json"
+import ERC721CreatorAbi from "../../Blockchain/ERC721Creator.json"
 
 import { _, fill } from 'lodash'
 // import logo from "../public/invesweet.png"
@@ -15,6 +19,26 @@ import 'bootstrap/dist/css/bootstrap.css'
 
 
 export default function Home() {
+
+const [isConnected, setIsConnected] = useState(false);
+const [provider, setProvider] = useState();
+
+  const conncetWalletHandler = async () => {
+    if (typeof window ==! "undefined" && window.ethereum !== "undefined") {
+      try {
+        const accounts = await ethereum.request({method: "eth_requestAccounts"});
+        setIsConnected(true)
+        let connectedProvider = new ethers.providers.Web3Provider(window.ethereum)
+        setProvider(connectedProvider)
+      } catch (error) {
+        
+      }
+    }
+  }
+
+  const contractERC721Create = async () => {
+    const contract = new ethers.Contract(ERC721CreatorAddress,ERC721CreatorAbi,provider)
+  }
 
   const [tabHandler, setTabHandler] = useState("tab-docs")
   useEffect(() => {

@@ -7,19 +7,23 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "compile": "solcjs  --abi --include-path node-modules/ --base-path . -o . blockchain/GetBalance.sol --output-dir blockchain/build blockchain/Sender.sol --output-dir blockchain/build"
+    "compile": "solcjs  --abi --include-path node-modules/ --base-path . -o . blockchain/GetBalance.sol --output-dir blockchain/build blockchain/Sender.sol --output-dir blockchain/build",
+    "moralis:sync": "moralis-admin-cli connect-local-devchain --chain hardhat --moralisSubdomain lkei3yi1kglb.usemoralis.com --frpcPath ./frp/frpc",
+    "moralis:cloud": "moralis-admin-cli watch-cloud-folder --moralisSubdomain lkei3yi1kglb.usemoralis.com --autoSave 1 --moralisCloudfolder ./cloudFunctions"
   },
   "dependencies": {
+    "@chainlink/contracts": "^0.5.1",
     "@next/font": "13.1.6",
-    "next": "13.1.6",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "bootstrap": "^5.3.0-alpha1",
+    "bulma": "^0.9.4",
+    "dotenv": "^16.0.3",
     "ethers": "^5.7.2",
     "lodash": "^4.17.21",
     "lodash.foreachright": "^4.4.0",
-    "bootstrap": "^5.3.0-alpha1",
-    "bulma": "^0.9.4",
+    "next": "13.1.6",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "solc": "^0.8.17",
-    "@chainlink/contracts": "^0.5.1"
+    "web3uikit": "^1.0.4"
   }
 }
