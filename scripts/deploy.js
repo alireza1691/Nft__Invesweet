@@ -1,26 +1,41 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional
-// but useful for running the script in a standalone fashion through `node <script>`.
-//
-// You can also run a script with `npx hardhat run <script>`. If you do that, Hardhat
-// will compile your contracts, add the Hardhat Runtime Environment's members to the
-// global scope, and execute the script.
-const hre = require("hardhat");
+
+const {hre, ethers, network, getNamedAccounts} = require("hardhat");
+const ERC721V2Abi = require ('../artifacts/contracts/CollectionV2.sol/CollectionV2.json')
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
-  const unlockTime = currentTimestampInSeconds + ONE_YEAR_IN_SECS;
 
-  const lockedAmount = hre.ethers.utils.parseEther("1");
+  const accounts = await ethers.getSigners()
+  const deployer = accounts[0]
+  const user =  accounts[1]
+  console.log(deployer.address,'\n',user.address);
 
-  const Lock = await hre.ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
 
-  await lock.deployed();
+  const ERC721Creator = await ethers.getContract("ERC721Creator")
+  console.log(ERC721Creator.address);
+  console.log('ERC721 Successfully deployed');
 
-  console.log(
-    `Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
-  );
+  const balanceBeforeMint = await ERC721Creator.getBalance(deployer.address)
+  console.log(balanceBeforeMint.toString());
+
+
+
+  const Collection = await ERC721Creator.createCollection('test','tst',10,1000,"some uri")
+  const tx = await Collection.wait(1)
+  const CollectionV2 = tx.events[0].args[1]
+  console.log(CollectionV2);
+  const bytes = await ERC721Creator.mint(CollectionV2,{value:1000})
+  const balanceAfterMint = await ERC721Creator.getBalance(deployer.address)
+  console.log(balanceAfterMint.toString());
+
+  const CollectionV2Contract = await ethers.getContractAt("CollectionV2", CollectionV2)
+  console.log(CollectionV2Contract);
+  // console.log(bytes);
+  // const ERC721 = await ethers.getContract("CollectionV2")
+  // const ERC721 = new ethers.Contract(CollectionV2,ERC721V2Abi,user)
+  // console.log(ERC721);
+  
+
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere

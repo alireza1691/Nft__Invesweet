@@ -18,7 +18,7 @@ module.exports = async () => {
         waitConfirmations: waitBlockConfirmations,
     })
 
-    const ERC721Creator = await deploy("CollectionCreator", {
+    const ERC721Creator = await deploy("ERC721Creator", {
         from: deployer,
         args: arguments,
         log: true,

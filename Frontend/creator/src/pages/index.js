@@ -8,6 +8,7 @@ import ERC20CreatorAddress from "../../Blockchain/ERC20CreatorAddress.json"
 import ERC721CreatorAddress from "../../Blockchain/ERC721CreatorAddress.json"
 import ERC20CreatorAbi from "../../Blockchain/ERC20Creator.json"
 import ERC721CreatorAbi from "../../Blockchain/ERC721Creator.json"
+// import { useMoralis, useWeb3Contract } from "react-moralis"
 
 // import Moralis from 'moralis';
 // import { EvmChain } from "@moralisweb3/evm-utils";
@@ -27,9 +28,12 @@ import 'bootstrap/dist/css/bootstrap.css'
 
 export default function Home() {
 
+  const chainId = "31337"
+
 const [isConnected, setIsConnected] = useState(false);
 const [user, setUser] = useState()
 const [provider, setProvider] = useState();
+const [signer, setSigner] = useState()
 const [name, setName] = useState("");
 const [symbol, setSymbol] = useState("");
 const [price, setPrice] = useState(0);
@@ -37,6 +41,7 @@ const [url, setUrl] = useState("");
 const [description, setDescription] = useState("");
 const [maxSupply, setMaxSupply] = useState(0)
 const [limitDisabler, setLimitDisabler] = useState(1)
+// const [chainId , setChainId] = useState()
 
 let number
 
@@ -56,6 +61,15 @@ function changeFunc() {
         console.log(`${accounts[0]} connected!`);
         let connectedProvider = new ethers.providers.Web3Provider(window.ethereum)
         setProvider(connectedProvider)
+        console.log(connectedProvider);
+        
+        // let signer = connectedProvider.getSigner()
+        const _signer = connectedProvider.getSigner(accounts[0]);
+        setSigner(_signer)
+        console.log(_signer);
+
+        const chainId =await _signer.getChainId()
+        console.log("chain id",chainId);
       } catch (error) {
         console.log(error);
       }
@@ -64,12 +78,20 @@ function changeFunc() {
 
   // const contractERC721Create = async (price,max,name,symbol,requestfrom,uri) => {
     const contractERC721Create = async () => {
-    let uri = {"name": name.toString(),
+      try {
+        let uri = {"name": name.toString(),
     "description": description.toString(),
     "image": url.toString(),
-  }
-    const contract = new ethers.Contract(ERC721CreatorAddress,ERC721CreatorAbi,provider)
-    await contract.createCollection(name,symbol,price,maxSupply,user,uri,{value: ethers.utils.parseEther("0.01")})
+    }
+    const ContractAddress = await ERC721CreatorAddress[chainId].erc721Creator[0]
+    const contract = new ethers.Contract(ContractAddress,ERC721CreatorAbi,provider)
+    const contractConnectToSigner = contract.connect(signer)
+    await contractConnectToSigner.createCollection(name,symbol,price,maxSupply,uri)
+      } catch (error) {
+        window.alert(error)
+        console.log(error);
+      }
+    
   }
 
   const [tabHandler, setTabHandler] = useState("tab-erc721")

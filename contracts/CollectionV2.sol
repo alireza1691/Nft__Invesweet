@@ -19,6 +19,8 @@ uint256 immutable private i_mintFee;
 uint256 immutable private i_maxSupply;
 string private i_uri;
 
+mapping(uint256 => address) private _owners;
+
 constructor(string memory _name, string memory _symbol, uint256 _mintFee ,uint256 _maxSupply, address _owner, string memory _uri) ERC721(_name,_symbol)  {
     i_creator = msg.sender;
     i_mintFee = _mintFee;
@@ -26,6 +28,10 @@ constructor(string memory _name, string memory _symbol, uint256 _mintFee ,uint25
     i_owner = _owner;
     i_uri = _uri;
 }
+function getOwner (uint256 tokenId) public view returns(address){
+    return _owners[tokenId];
+}
+
 
 modifier onlyCreator() {
     if(msg.sender == i_creator) {

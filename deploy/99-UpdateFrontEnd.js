@@ -14,7 +14,7 @@ module.exports = async () => {
 
 async function updateAbi() {
     const ERC20Creator = await ethers.getContract("ERC20Creator")
-    const ERC721Creator = await ethers.getContract("CollectionCreator")
+    const ERC721Creator = await ethers.getContract("ERC721Creator")
     // fs.writeFileSync(frontEndERC721CreatorAbiFile, ERC721Creator.interface.format(ethers.utils.FormatTypes.json))
     // fs.writeFileSync(frontEndERC20CreatorAbiFile, ERC20Creator.interface.format(ethers.utils.FormatTypes.json))
     fs.writeFileSync(
@@ -29,7 +29,7 @@ async function updateAbi() {
 
 async function updateContractAddresses() {
     const chainId = network.config.chainId.toString()
-    const ERC721Creator = await ethers.getContract("CollectionCreator")
+    const ERC721Creator = await ethers.getContract("ERC721Creator")
     const ERC20Creator = await ethers.getContract("ERC20Creator")
     const ERC721CreatorAddressFile = JSON.parse(fs.readFileSync(ERC721CreatorAddress, "utf8"))
     const ERC20CreatorAddressFile = JSON.parse(fs.readFileSync(ERC20CreatorAddress, "utf8"))
