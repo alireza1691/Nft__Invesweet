@@ -12,9 +12,9 @@ const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL
 export default function App({ Component, pageProps }) {
   return(
     <>
-    {/* <MoralisProvider appId={APP_ID} serverUrl={SERVER_URL}> */}
+    {/* // <MoralisProvider appId={APP_ID} serverUrl={SERVER_URL}> */}
       <Component {...pageProps}/>
-    {/* </MoralisProvider> */}
+    {/* // </MoralisProvider> */}
     </>
     )
 }
