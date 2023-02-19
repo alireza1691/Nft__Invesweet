@@ -328,7 +328,12 @@ export default function Home() {
                             <input
                               className="input"
                               type="text"
-                              placeholder="Enter your amount..."
+                              placeholder="Enter token name"
+                            />
+                            <input
+                              className="input"
+                              type="text"
+                              placeholder="Enter token symbol"
                             />
                             <select>
                               <option>ETH</option>
