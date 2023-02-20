@@ -23,18 +23,18 @@ async function main() {
   const tx = await Collection.wait(1)
   const CollectionV2 = tx.events[0].args[1]
   console.log(CollectionV2);
-  const bytes = await ERC721Creator.mint(CollectionV2,{value:1000})
+  const signleNft = await ERC721Creator.mint(CollectionV2,{value:1000})
   const balanceAfterMint = await ERC721Creator.getBalance(deployer.address)
   console.log(balanceAfterMint.toString());
 
-  const CollectionV2Contract = await ethers.getContractAt("CollectionV2", CollectionV2)
-  console.log(CollectionV2Contract);
-  // console.log(bytes);
-  // const ERC721 = await ethers.getContract("CollectionV2")
-  // const ERC721 = new ethers.Contract(CollectionV2,ERC721V2Abi,user)
-  // console.log(ERC721);
-  
+  // *********________ This way we can create instance for new contract: _____________*******************
+  //
+  // const CollectionV2Contract = await ethers.getContractAt("CollectionV2", CollectionV2)
+  // console.log(CollectionV2Contract);
+  // _____________________________________________________
 
+
+  console.log(signleNft);
 
 }
 

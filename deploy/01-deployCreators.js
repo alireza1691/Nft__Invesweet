@@ -10,17 +10,20 @@ module.exports = async () => {
         : VERIFICATION_BLOCK_CONFIRMATIONS
 
     log("----------------------------------------------------")
-    const arguments = []
+    const creationFee = ethers.utils.parseEther("0.01")
+
+    const ERC20CreatorArguments = [creationFee]
+    const ERC721CreatorArguments = []
     const ERC20Creator = await deploy("ERC20Creator", {
         from: deployer,
-        args: arguments,
+        args: ERC20CreatorArguments,
         log: true,
         waitConfirmations: waitBlockConfirmations,
     })
 
     const ERC721Creator = await deploy("ERC721Creator", {
         from: deployer,
-        args: arguments,
+        args: ERC721CreatorArguments,
         log: true,
         waitConfirmations: waitBlockConfirmations,
     })

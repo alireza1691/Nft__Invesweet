@@ -47,22 +47,12 @@ contract ERC20v2 is ERC20 ,ERC20Burnable{
         _mint(userAddress, amount);
     }
 
-    // function _beforeTokenTransfer(address from, uint256 amount) internal  /*returns(uint256)*/{
-    //     uint256 burnedAmount = amount * ((1000 - s_burnPercent)/1000);
-    //     unchecked {
-    //         _balances[from] = burnedAmount;
-    //         // Overflow not possible: amount <= accountBalance <= totalSupply.
-    //         _totalSupply -= burnedAmount;
-    //     }
-        
-       
-    // }
 
    function _transfer(
         address from,
         address to,
         uint256 amount
-    ) internal override {
+    ) internal virtual override {
         require(from != address(0), "ERC20: transfer from the zero address");
         require(to != address(0), "ERC20: transfer to the zero address");
 
@@ -91,7 +81,7 @@ contract ERC20v2 is ERC20 ,ERC20Burnable{
         _afterTokenTransfer(from, to, amount);
     }
 
-    function _mint(address account, uint256 amount) internal override supplyLimit(amount) {
+    function _mint(address account, uint256 amount) internal virtual override supplyLimit(amount) {
         require(account != address(0), "ERC20: mint to the zero address");
 
         super._beforeTokenTransfer(address(0), account, amount);

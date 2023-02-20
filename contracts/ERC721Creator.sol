@@ -17,10 +17,10 @@ contract ERC721Creator{
 
     event Withdraw();
     event NewCollection(address requestCollectionFrom, address contractAddress);
-    event Name();
+    event Mint(address indexed mintBy , address indexed collection ,uint256 tokenId);
 
 address immutable private i_owner;
-uint256 private s_createFee;
+uint256 private s_createFee; 
 // AggregatorV3Interface internal immutable aggregator;
 
 constructor(/*address aggregatorAddress*/){
@@ -49,7 +49,7 @@ function createCollection(
 }
 
 function mint(address collectionAddress) payable external {
-    CollectionV2(collectionAddress)._mintWithEther(msg.sender,msg.value);
+    uint256 tokenId = CollectionV2(collectionAddress)._mintWithEther(msg.sender,msg.value);
     // (bool success,/* bytes memory data*/) = collectionAddress.delegatecall(
     //         abi.encodeWithSignature("_mintWithEther(address, uint256)", msg.sender,msg.value)
     //     );
@@ -57,6 +57,7 @@ function mint(address collectionAddress) payable external {
     //     revert CollectionCreator__TransactionFailed();
     // }
     balances[CollectionV2(collectionAddress).collectionOwner()] += msg.value;
+    emit Mint(msg.sender, collectionAddress, tokenId);
 }
 
 function withdraw() external payable {
