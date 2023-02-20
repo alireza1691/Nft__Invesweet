@@ -52,23 +52,24 @@ modifier onlyOwner() {
     
 }
 
-function _mintWithEther (address requestFrom , uint256 amount) public onlyCreator{
+function _mintWithEther (address requestFrom , uint256 amount) public onlyCreator returns(uint256){
     if (amount <= i_mintFee) {
         revert Collection__NotEnoughValue();
     }
     if (i_maxSupply > 0 && s_counter > i_maxSupply) {
         revert Collection__MaximumSupply();
     }
- _safeMint(requestFrom, s_counter);
- _setTokenURI(s_counter,i_uri);
- s_counter ++;
+    _safeMint(requestFrom, s_counter);
+    _setTokenURI(s_counter,i_uri);
+    s_counter ++;
+    return (s_counter-1);
 }
 // function _mintWithUsd () external {
 // }
 
-function tokenURI(uint256 tokenId) public view override returns (string memory) {
+function getTokenURI(uint256 tokenId) public view returns (string memory) {
     // require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
-    return i_uri;
+    return tokenURI(tokenId);
 }
 
 function changeUri (string memory newUri) external onlyOwner{
