@@ -32,8 +32,14 @@ const developmentChains = ["hardhat", "localhost"]
 const VERIFICATION_BLOCK_CONFIRMATIONS = 6
 const ERC20CreatorAddress = "./Frontend/creator/Blockchain/ERC20CreatorAddress.json"
 const ERC721CreatorAddress = "./Frontend/creator/Blockchain/ERC721CreatorAddress.json"
+const ProxyERC721CreatorAddress = "./Frontend/creator/Blockchain/ProxyERC721CreatorAddress.json"
+const ProxyERC20CreatorAddress = "./Frontend/creator/Blockchain/ProxyERC20CreatorAddress.json"
+const ProxyAdminERC721CreatorAddress = "./Frontend/creator/Blockchain/ProxyAdminERC721CreatorAddress.json"
+const ProxyAdminERC20CreatorAddress = "./Frontend/creator/Blockchain/ProxyAdminERC20CreatorAddress.json"
 const frontEndERC20CreatorAbiFile = "./Frontend/creator/Blockchain/"
 const frontEndERC721CreatorAbiFile = "./Frontend/creator/Blockchain/"
+const ProxyAbiFile = "./Frontend/creator/Blockchain/"
+const AdminProxyAbiFile = "./Frontend/creator/Blockchain/"
 
 module.exports = {
     networkConfig,
@@ -42,5 +48,11 @@ module.exports = {
     ERC20CreatorAddress,
     ERC721CreatorAddress,
     frontEndERC20CreatorAbiFile,
-    frontEndERC721CreatorAbiFile
+    frontEndERC721CreatorAbiFile,
+    ProxyERC721CreatorAddress,
+    ProxyERC20CreatorAddress,
+    ProxyAdminERC721CreatorAddress,
+    ProxyAdminERC20CreatorAddress,
+    ProxyAbiFile,
+    AdminProxyAbiFile
 }

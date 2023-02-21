@@ -17,7 +17,7 @@ address immutable private i_owner;
 uint256 private s_counter = 0;
 uint256 immutable private i_mintFee;
 uint256 immutable private i_maxSupply;
-string private i_uri;
+string private uri;
 
 mapping(uint256 => address) private _owners;
 
@@ -26,10 +26,7 @@ constructor(string memory _name, string memory _symbol, uint256 _mintFee ,uint25
     i_mintFee = _mintFee;
     i_maxSupply = _maxSupply;
     i_owner = _owner;
-    i_uri = _uri;
-}
-function getOwner (uint256 tokenId) public view returns(address){
-    return _owners[tokenId];
+    uri = _uri;
 }
 
 
@@ -52,15 +49,15 @@ modifier onlyOwner() {
     
 }
 
-function _mintWithEther (address requestFrom , uint256 amount) public onlyCreator returns(uint256){
+function _mintWithEther (address requestFrom , uint256 amount) external onlyCreator returns(uint256) {
     if (amount <= i_mintFee) {
         revert Collection__NotEnoughValue();
     }
-    if (i_maxSupply > 0 && s_counter > i_maxSupply) {
+    if (i_maxSupply > 0 && s_counter >= i_maxSupply) {
         revert Collection__MaximumSupply();
     }
     _safeMint(requestFrom, s_counter);
-    _setTokenURI(s_counter,i_uri);
+    _setTokenURI(s_counter,uri);
     s_counter ++;
     return (s_counter-1);
 }
@@ -68,12 +65,13 @@ function _mintWithEther (address requestFrom , uint256 amount) public onlyCreato
 // }
 
 function getTokenURI(uint256 tokenId) public view returns (string memory) {
-    // require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
-    return tokenURI(tokenId);
+    require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
+    // return tokenURI(tokenId);
+    return uri;
 }
 
 function changeUri (string memory newUri) external onlyOwner{
-    i_uri = newUri;
+    uri = newUri;
 }
 
 function price () external view returns(uint256){
@@ -89,5 +87,9 @@ function collectionOwner() external view returns(address){
 function count() external view returns(uint256){
     return s_counter;
 }
+function getOwner (uint256 tokenId) external view returns(address){
+    return _owners[tokenId];
+}
+
 
 }

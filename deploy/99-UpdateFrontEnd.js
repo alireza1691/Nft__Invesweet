@@ -1,4 +1,4 @@
-const { ERC20CreatorAddress, ERC721CreatorAddress, frontEndERC20CreatorAbiFile , frontEndERC721CreatorAbiFile } = require("../helper-hardhat-config")
+const { ERC20CreatorAddress, ERC721CreatorAddress, frontEndERC20CreatorAbiFile , frontEndERC721CreatorAbiFile, ProxyERC721CreatorAddress, ProxyERC20CreatorAddress, ProxyAdminERC721CreatorAddress, ProxyAdminERC20CreatorAddress, ProxyAbiFile, AdminProxyAbiFile } = require("../helper-hardhat-config")
 const fs = require("fs")
 const { ethers, network } = require("hardhat")
 require("dotenv").config
@@ -15,6 +15,8 @@ module.exports = async () => {
 async function updateAbi() {
     const ERC20Creator = await ethers.getContract("ERC20Creator")
     const ERC721Creator = await ethers.getContract("ERC721Creator")
+    // const Proxy = await ethers.getContract("Proxy")
+    // const ProxyAdmin = await ethers.getContract("ProxyAdmin")
     // fs.writeFileSync(frontEndERC721CreatorAbiFile, ERC721Creator.interface.format(ethers.utils.FormatTypes.json))
     // fs.writeFileSync(frontEndERC20CreatorAbiFile, ERC20Creator.interface.format(ethers.utils.FormatTypes.json))
     fs.writeFileSync(
@@ -25,6 +27,14 @@ async function updateAbi() {
         `${frontEndERC20CreatorAbiFile}ERC20Creator.json`,
         ERC20Creator.interface.format(ethers.utils.FormatTypes.json)
     )
+    // fs.writeFileSync(
+    //     `${ProxyAbiFile}ProxyAbi.json`,
+    //     Proxy.interface.format(ethers.utils.FormatTypes.json)
+    // )
+    // fs.writeFileSync(
+    //     `${AdminProxyAbiFile}ProxyAdminAbi.json`,
+    //     ProxyAdmin.interface.format(ethers.utils.FormatTypes.json)
+    // )
 }
 
 async function updateContractAddresses() {

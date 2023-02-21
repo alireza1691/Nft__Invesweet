@@ -49,7 +49,7 @@ function createCollection(
 }
 
 function mint(address collectionAddress) payable external {
-    uint256 tokenId = CollectionV2(collectionAddress)._mintWithEther(msg.sender,msg.value);
+    uint256 tokenId = CollectionV2(collectionAddress)._mintWithEther(msg.sender, msg.value);
     // (bool success,/* bytes memory data*/) = collectionAddress.delegatecall(
     //         abi.encodeWithSignature("_mintWithEther(address, uint256)", msg.sender,msg.value)
     //     );

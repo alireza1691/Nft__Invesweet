@@ -4,7 +4,7 @@ pragma solidity ^0.8.17;
 
 library StorageSlot {
     struct Addresses {
-        address ERC20Creator;
+        address value;
     }
 
     function getAddress(bytes32 slot) internal pure returns(Addresses storage r) {
