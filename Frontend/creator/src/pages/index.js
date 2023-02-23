@@ -243,7 +243,7 @@ export default function Home() {
                                 type="text"
                                 placeholder="Enter amount"
                                 value={number}
-                                onChange={(e) => setMaxSupply(e.target.value)}
+                                onChange={(e) => setMaxSupply(0)}
                                 disabled
                               />
                             ) : (
@@ -319,26 +319,78 @@ export default function Home() {
                   id="tab-pool"
                 >
                   <div className="field">
-                    <label className="label">Pool</label>
+                    <label className="label">Create your ERC20 token:</label>
                     <div className="control">
                       {/* <h6 className='mt-4'>Selected token amount:</h6> */}
                       <div>
                         <nav className="navbar">
-                          <div className="select navbar-end">
+                        <div className=" my-1">
+                            <h6 style={{ fontSize: "14px" }}>
+                              Write name and symbol of your collection:
+                            </h6>
                             <input
+                              style={{ width: "200px" }}
                               className="input"
                               type="text"
-                              placeholder="Enter token name"
+                              placeholder="Enter name"
+                              value={name}
+                              onChange={(e) => setName(e.target.value)}
                             />
+                          </div>
+                          <div className=" my-1">
                             <input
+                              style={{ width: "200px" }}
                               className="input"
                               type="text"
-                              placeholder="Enter token symbol"
+                              placeholder="Enter symbol"
+                              value={name}
+                              onChange={(e) => setName(e.target.value)}
                             />
-                            <select>
-                              <option>ETH</option>
-                              <option>USDC</option>
+                          </div>
+                          <p6>
+                            If you want to set max supply for token enter amount:
+                          </p6>
+                          <div className="select navbar my-1">
+                            {limitDisabler == 2 ? (
+                              <input
+                                style={{ width: "200px", marginRight: "4px" }}
+                                className="input"
+                                type="text"
+                                placeholder="Token has not max supply"
+                                value={number}
+                                onChange={(e) => setMaxSupply(0)}
+                                disabled
+                              />
+                            ) : (
+                              <input
+                                style={{ width: "200px", marginRight: "4px" }}
+                                className="input"
+                                type="text"
+                                placeholder="Enter max spply..."
+                                value={number}
+                                onChange={(e) => setMaxSupply(e.target.value)}
+                              />
+                            )}
+                            <select
+                              style={{ width: "120px", marginLeft: "4px" }}
+                              id="selectBox"
+                              onChange={() => changeFunc()}
+                            >
+                              <option value={1}>Limit</option>
+                              <option value={2}>Unlimit</option>
                             </select>
+                          </div>
+                          <div className=" my-1">
+                            <input
+                              style={{ width: "200px" }}
+                              className="input"
+                              type="text"
+                              placeholder="Enter circulating supply"
+                              value={name}
+                              onChange={(e) => setName(e.target.value)}
+                            />
+                            <p style={{'fontSize':'13px' , 'color':'GrayText'}}>the amount that transfered to owner after creation of contract</p>
+                            
                           </div>
                         </nav>
                       </div>
