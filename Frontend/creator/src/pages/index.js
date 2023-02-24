@@ -366,7 +366,7 @@ export default function Home() {
                                 style={{ width: "200px", marginRight: "4px" }}
                                 className="input"
                                 type="text"
-                                placeholder="Enter max spply..."
+                                placeholder="Enter max cap..."
                                 value={number}
                                 onChange={(e) => setMaxSupply(e.target.value)}
                               />
@@ -376,8 +376,8 @@ export default function Home() {
                               id="selectBox"
                               onChange={() => changeFunc()}
                             >
-                              <option value={1}>Limit</option>
-                              <option value={2}>Unlimit</option>
+                              <option value={1}>Capped</option>
+                              <option value={2}>Not capped</option>
                             </select>
                           </div>
                           <div className=" my-1">
@@ -392,25 +392,43 @@ export default function Home() {
                             <p style={{'fontSize':'13px' , 'color':'GrayText'}}>the amount that transfered to owner after creation of contract</p>
                             
                           </div>
-                        </nav>
-                      </div>
-                      {/* <h6 className='mt-4'>You will receive:</h6> */}
-                      <div>
-                        <nav className="navbar">
-                          <div className="select navbar-end">
-                            <input
-                              className="input"
-                              type="text"
-                              placeholder="0"
-                            />
-                            <select>
-                              <option>USDC</option>
-                              <option>ETH</option>
+                          <p>Burn a specific amount in each transfer:</p>
+                          <div className="select navbar my-1">
+                          
+                            {limitDisabler == 2 ? (
+                              <input
+                                style={{ width: "200px", marginRight: "4px" }}
+                                className="input"
+                                type="text"
+                                placeholder="Token has not max supply"
+                                value={number}
+                                onChange={(e) => setMaxSupply(0)}
+                                disabled
+                              />
+                            ) : (
+                              <input
+                                style={{ width: "200px", marginRight: "4px" }}
+                                className="input"
+                                type="text"
+                                placeholder="Enter burn percentage..."
+                                value={number}
+                                onChange={(e) => setMaxSupply(e.target.value)}
+                              />
+                            )}
+                            <select
+                              style={{ width: "120px", marginLeft: "4px" }}
+                              id="selectBox"
+                              onChange={() => changeFunc()}
+                            >
+                              <option value={1}>Brunable</option>
+                              <option value={2}>Not burn</option>
                             </select>
                           </div>
                         </nav>
                       </div>
-                      <p className="help navbar-end">APY: 11%</p>
+                      {/* <h6 className='mt-4'>You will receive:</h6> */}
+                      
+                      <p className="help navbar-end my-2">APY: 11%</p>
                     </div>
                   </div>
                   <button
