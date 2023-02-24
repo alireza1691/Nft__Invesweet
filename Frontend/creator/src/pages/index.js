@@ -36,6 +36,10 @@ export default function Home() {
   const [description, setDescription] = useState("");
   const [maxSupply, setMaxSupply] = useState(0);
   const [limitDisabler, setLimitDisabler] = useState(1);
+  const [maxCap, setMaxCap] = useState();
+  const [decimals, setDecimals] = useState();
+  const [circulatingCupply, setCirculatingSupply] = useState();
+  const [burnPercentage, setBurnPercentage] = useState();
   // const [chainId , setChainId] = useState()
 
   let number;
@@ -344,7 +348,7 @@ export default function Home() {
                               type="text"
                               placeholder="Enter symbol"
                               value={name}
-                              onChange={(e) => setName(e.target.value)}
+                              onChange={(e) => setSymbol(e.target.value)}
                             />
                           </div>
                           <p6>
@@ -426,9 +430,17 @@ export default function Home() {
                           </div>
                         </nav>
                       </div>
-                      {/* <h6 className='mt-4'>You will receive:</h6> */}
-                      
-                      <p className="help navbar-end my-2">APY: 11%</p>
+                      <div className=" my-1">
+                            <input
+                              style={{ width: "200px" }}
+                              className="input"
+                              type="text"
+                              placeholder="Enter decimals"
+                              value={name}
+                              onChange={(e) => setName(e.target.value)}
+                            />
+                          </div>
+                  
                     </div>
                   </div>
                   <button
@@ -436,12 +448,6 @@ export default function Home() {
                     className="button is-dark is-outlined is-centered mr-4"
                   >
                     Approve
-                  </button>
-                  <button
-                    onClick={() => approve}
-                    className="button is-dark is-centered"
-                  >
-                    Provide
                   </button>
                 </div>
                 <div
