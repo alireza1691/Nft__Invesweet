@@ -138,6 +138,7 @@ export default function Home() {
       );
       const contractConnectToSigner = ERC20Contract.connect(signer);
       const tx = await contractConnectToSigner.create(name,symbol,maxCap,circulatingSupply,burnPercentage,decimals,{value: ethers.utils.parseEther("0.01")})
+      window.alert(`ERC20 Token with name : ${name} and symbol : ${symbol} was successfully created!`)
     } catch (error) {
       console.log(error)
     }  
@@ -175,16 +176,16 @@ export default function Home() {
           >
             <ul style={{ zIndex: "10" }}>
               <li
-                className={tabHandler == "tab-swap" ? "is-active" : ""}
+                className={tabHandler == "tab-erc721" ? "is-active" : ""}
                 data-target="tab-erc721"
                 onClick={(e) => setTabHandler("tab-erc721")}
               >
                 <a>Create NFT</a>
               </li>
               <li
-                className={tabHandler == "tab-pool" ? "is-active" : ""}
-                data-target="tab-pool"
-                onClick={(e) => setTabHandler("tab-pool")}
+                className={tabHandler == "tab-erc20" ? "is-active" : ""}
+                data-target="tab-erc20"
+                onClick={(e) => setTabHandler("tab-erc20")}
               >
                 <a>Create Token</a>
               </li>
@@ -336,8 +337,8 @@ export default function Home() {
                   {/* <button onClick={() => approve} className='button is-dark is-centered' >Transact</button> */}
                 </div>
                 <div
-                  className={tabHandler == "tab-pool" ? "" : "is-hidden"}
-                  id="tab-pool"
+                  className={tabHandler == "tab-erc20" ? "" : "is-hidden"}
+                  id="tab-erc20"
                 >
                   <div className="field">
                     <label className="label">Create your ERC20 token:</label>
@@ -378,8 +379,8 @@ export default function Home() {
                                 className="input"
                                 type="text"
                                 placeholder="Token has not max supply"
-                                value={0}
-                                onChange={(e) => setMaxSupply(0)}
+                                // value={0}
+                                // onChange={(e) => setMaxSupply(0)}
                                 disabled
                               />
                             ) : (
@@ -422,8 +423,8 @@ export default function Home() {
                                 className="input"
                                 type="text"
                                 placeholder="Token is not burnable"
-                                value={0}
-                                onChange={(e) => setBurnPercentage(0)}
+                                // value={0}
+                                // onChange={(e) => setBurnPercentage(0)}
                                 disabled
                               />
                             ) : (
