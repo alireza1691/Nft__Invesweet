@@ -35,19 +35,32 @@ export default function Home() {
   const [url, setUrl] = useState("");
   const [description, setDescription] = useState("");
   const [maxSupply, setMaxSupply] = useState(0);
-  const [limitDisabler, setLimitDisabler] = useState(1);
-  const [maxCap, setMaxCap] = useState();
-  const [decimals, setDecimals] = useState();
-  const [circulatingCupply, setCirculatingSupply] = useState();
-  const [burnPercentage, setBurnPercentage] = useState();
+  const [limitDisablerERC721, setLimitDisablerERC721] = useState(1);
+  const [limitDisablerERC20, setLimitDisablerERC20] = useState(1);
+  const [ERC20BurnDisabler, setERC20BurnDisabler] = useState(1);
+  const [maxCap, setMaxCap] = useState(0);
+  const [decimals, setDecimals] = useState(18);
+  const [circulatingSupply, setCirculatingSupply] = useState(0);
+  const [burnPercentage, setBurnPercentage] = useState(0);
   // const [chainId , setChainId] = useState()
 
-  let number;
+  let number, circulatingSupplyNumber, burnPercentageNumber, decimalNumber;
 
-  function changeFunc() {
-    var selectBox = document.getElementById("selectBox");
-    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-    setLimitDisabler(selectedValue);
+  function changeFunc(whichDisabler) {
+    var selectBox = document.getElementById(whichDisabler);
+    
+    if (whichDisabler == "selectBox1") {
+      var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+      setLimitDisablerERC721(selectedValue);
+    }
+    if (whichDisabler == "selectBox2") {
+      var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+      setLimitDisablerERC20(selectedValue);
+    }
+    if (whichDisabler == "selectBox3") {
+      var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+      setERC20BurnDisabler(selectedValue)
+    }
     if (selectedValue == 2) {
       setMaxSupply(0);
     }
@@ -114,16 +127,20 @@ export default function Home() {
     }
   };
 
-  const contractERC20Create = async () => {
+  const createERC20 = async () => {
     try {
       const ERC20ContractAddress = await ERC20CreatorAddress[chainId]
-        .erc721Creator[0];
+        .erc20Creator[0];
       const ERC20Contract = new ethers.Contract(
         ERC20ContractAddress,
         ERC20CreatorAbi,
         provider
       );
-    } catch (error) {}
+      const contractConnectToSigner = ERC20Contract.connect(signer);
+      const tx = await contractConnectToSigner.create(name,symbol,maxCap,circulatingSupply,burnPercentage,decimals,{value: ethers.utils.parseEther("0.01")})
+    } catch (error) {
+      console.log(error)
+    }  
   };
 
   const [tabHandler, setTabHandler] = useState("tab-erc721");
@@ -240,12 +257,12 @@ export default function Home() {
                             enter amount:
                           </p6>
                           <div className="select navbar my-1">
-                            {limitDisabler == 2 ? (
+                            {limitDisablerERC721 == 2 ? (
                               <input
                                 style={{ width: "200px", marginRight: "4px" }}
                                 className="input"
                                 type="text"
-                                placeholder="Enter amount"
+                                placeholder="ERC721 Token is unlimited"
                                 value={number}
                                 onChange={(e) => setMaxSupply(0)}
                                 disabled
@@ -262,8 +279,8 @@ export default function Home() {
                             )}
                             <select
                               style={{ width: "120px", marginLeft: "4px" }}
-                              id="selectBox"
-                              onChange={() => changeFunc()}
+                              id="selectBox1"
+                              onChange={() => changeFunc("selectBox1")}
                             >
                               <option value={1}>Limit</option>
                               <option value={2}>Unlimit</option>
@@ -347,7 +364,7 @@ export default function Home() {
                               className="input"
                               type="text"
                               placeholder="Enter symbol"
-                              value={name}
+                              value={symbol}
                               onChange={(e) => setSymbol(e.target.value)}
                             />
                           </div>
@@ -355,13 +372,13 @@ export default function Home() {
                             If you want to set max supply for token enter amount:
                           </p6>
                           <div className="select navbar my-1">
-                            {limitDisabler == 2 ? (
+                            {limitDisablerERC20 == 2 ? (
                               <input
                                 style={{ width: "200px", marginRight: "4px" }}
                                 className="input"
                                 type="text"
                                 placeholder="Token has not max supply"
-                                value={number}
+                                value={0}
                                 onChange={(e) => setMaxSupply(0)}
                                 disabled
                               />
@@ -377,8 +394,8 @@ export default function Home() {
                             )}
                             <select
                               style={{ width: "120px", marginLeft: "4px" }}
-                              id="selectBox"
-                              onChange={() => changeFunc()}
+                              id="selectBox2"
+                              onChange={() => changeFunc("selectBox2")}
                             >
                               <option value={1}>Capped</option>
                               <option value={2}>Not capped</option>
@@ -390,8 +407,8 @@ export default function Home() {
                               className="input"
                               type="text"
                               placeholder="Enter circulating supply"
-                              value={name}
-                              onChange={(e) => setName(e.target.value)}
+                              value={circulatingSupplyNumber}
+                              onChange={(e) => setCirculatingSupply(e.target.value)}
                             />
                             <p style={{'fontSize':'13px' , 'color':'GrayText'}}>the amount that transfered to owner after creation of contract</p>
                             
@@ -399,14 +416,14 @@ export default function Home() {
                           <p>Burn a specific amount in each transfer:</p>
                           <div className="select navbar my-1">
                           
-                            {limitDisabler == 2 ? (
+                            {ERC20BurnDisabler == 2 ? (
                               <input
                                 style={{ width: "200px", marginRight: "4px" }}
                                 className="input"
                                 type="text"
-                                placeholder="Token has not max supply"
-                                value={number}
-                                onChange={(e) => setMaxSupply(0)}
+                                placeholder="Token is not burnable"
+                                value={0}
+                                onChange={(e) => setBurnPercentage(0)}
                                 disabled
                               />
                             ) : (
@@ -415,14 +432,14 @@ export default function Home() {
                                 className="input"
                                 type="text"
                                 placeholder="Enter burn percentage..."
-                                value={number}
-                                onChange={(e) => setMaxSupply(e.target.value)}
+                                value={burnPercentageNumber}
+                                onChange={(e) => setBurnPercentage(e.target.value)}
                               />
                             )}
                             <select
                               style={{ width: "120px", marginLeft: "4px" }}
-                              id="selectBox"
-                              onChange={() => changeFunc()}
+                              id="selectBox3"
+                              onChange={() => changeFunc("selectBox3")}
                             >
                               <option value={1}>Brunable</option>
                               <option value={2}>Not burn</option>
@@ -436,15 +453,15 @@ export default function Home() {
                               className="input"
                               type="text"
                               placeholder="Enter decimals"
-                              value={name}
-                              onChange={(e) => setName(e.target.value)}
+                              value={decimalNumber}
+                              onChange={(e) => setDecimals(e.target.value)}
                             />
                           </div>
                   
                     </div>
                   </div>
                   <button
-                    onClick={() => ""}
+                    onClick={() => createERC20()}
                     className="button is-dark is-outlined is-centered mr-4"
                   >
                     Approve
