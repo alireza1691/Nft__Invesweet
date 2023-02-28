@@ -288,6 +288,7 @@ export default function Home() {
                             </select>
                           </div>
                           <div className="  my-1">
+                            <h6 style={{'fontSize':'14px'}} >Price:</h6>
                             <input
                               className="input"
                               type="text"
@@ -296,6 +297,7 @@ export default function Home() {
                             />
                           </div>
                           <div className="  my-1">
+                          <h6 style={{'fontSize':'14px'}} >Description:</h6>
                             <input
                               className="input"
                               type="text"
@@ -304,6 +306,7 @@ export default function Home() {
                             />
                           </div>
                           <div className=" my-1">
+                          <h6 style={{'fontSize':'14px'}} >URL:</h6>
                             <input
                               className="input"
                               type="text"
@@ -311,6 +314,9 @@ export default function Home() {
                               onChange={(e) => setUrl(e.target.value)}
                             />
                           </div>
+                          {/* <figure class="image is-128x128">
+                            <img src={url}/>
+                          </figure> */}
                         </nav>
                       </div>
                       {/* <h6 className='mt-4'>You will receive:</h6> */}
