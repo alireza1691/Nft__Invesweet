@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@chainlink/contracts": "^0.5.1",
+    "@moralisweb3/evm-utils": "^2.14.3",
     "@next/font": "13.1.6",
     "bootstrap": "^5.3.0-alpha1",
     "bulma": "^0.9.4",

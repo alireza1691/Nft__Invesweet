@@ -10,7 +10,8 @@ import ERC20CreatorAbi from "../../Blockchain/ERC20Creator.json";
 import ERC721CreatorAbi from "../../Blockchain/ERC721Creator.json";
 // import { useMoralis, useWeb3Contract } from "react-moralis"
 
-// import Moralis from 'moralis';
+import Moralis from 'moralis';
+import { EvmChain } from '@moralisweb3/evm-utils';
 // import { EvmChain } from "@moralisweb3/evm-utils";
 
 import { _, fill } from "lodash";
@@ -23,7 +24,31 @@ import "bootstrap/dist/css/bootstrap.css";
 //   });
 
 export default function Home() {
+
+  const runApp = async () => {
+    try {
+      const address = ERC721CreatorAddress;
+  
+      const chain = EvmChain.ETHEREUM;
+  
+      await Moralis.start({
+          apiKey: apiKey,
+          // ...and any other configuration
+      });
+  
+      const response = await Moralis.EvmApi.events.getContractLogs({
+          address,
+          chain,
+      });
+  
+      console.log(response?.result);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  
   const chainId = "31337";
+  const apiKey = process.env.MORALIS_API_KEY
 
   const [isConnected, setIsConnected] = useState(false);
   const [user, setUser] = useState();
