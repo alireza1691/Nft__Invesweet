@@ -8,7 +8,9 @@ import ERC20CreatorAddress from "../../Blockchain/ERC20CreatorAddress.json";
 import ERC721CreatorAddress from "../../Blockchain/ERC721CreatorAddress.json";
 import ERC20CreatorAbi from "../../Blockchain/ERC20Creator.json";
 import ERC721CreatorAbi from "../../Blockchain/ERC721Creator.json";
-// import { useMoralis, useWeb3Contract } from "react-moralis"
+import { useMoralis, useWeb3Contract } from "react-moralis"
+// require ('dotenv').config()
+import { MoralisNextApi } from "@moralisweb3/next";
 
 import Moralis from 'moralis';
 import { EvmChain } from '@moralisweb3/evm-utils';
@@ -25,28 +27,38 @@ import "bootstrap/dist/css/bootstrap.css";
 
 export default function Home() {
 
+  const { web3, isWeb3Enabled } = useMoralis();
+  
+
   const runApp = async () => {
+
+    const abi = {ERC20CreatorAbi}; // Add ABI
+  
+    const address = await ERC20CreatorAddress[chainId]
+        .erc20Creator[0];
+    console.log(address);
+    const chain = EvmChain.ETHEREUM;
+
     try {
-      const address = ERC721CreatorAddress;
-  
-      const chain = EvmChain.ETHEREUM;
-  
+     
       await Moralis.start({
-          apiKey: apiKey,
+          apiKey: 'TsLS6Uwt4tfB5QoDEmhh82BVsIRK7zqdwPI9LmTyUmt4aLend9KxfZWfpfTc7iEF',
           // ...and any other configuration
       });
   
-      const response = await Moralis.EvmApi.events.getContractLogs({
+      const response = await Moralis.EvmApi.events.getContractEvents({
           address,
           chain,
+          abi,
       });
   
       console.log(response?.result);
-    } catch (error) {
-      console.error(error);
-    }
+  } catch (e) {
+      console.error(e);
   }
-  
+  }
+
+ 
   const chainId = "31337";
   const apiKey = process.env.MORALIS_API_KEY
 
@@ -70,6 +82,32 @@ export default function Home() {
   // const [chainId , setChainId] = useState()
 
   let number, circulatingSupplyNumber, burnPercentageNumber, decimalNumber;
+
+  // const { runContractFunction: create } = useWeb3Contract({
+  //   abi: ERC20CreatorAbi,
+  //   contractAddress: ERC20CreatorAddress[chainId].erc20Creator[0],
+  //   functionName: "create",
+  //   params: {name : name,
+  //     symbol : symbol,
+  //     maxCap : maxCap,
+  //     circulatingSupply : circulatingSupply,
+  //     burnPercent : burnPercentage,
+  //     decimals : decimals,
+  //   },
+  //   value : ethers.utils.parseEther("0.01")
+  // })
+  // const ERC20 = () => {
+  //   let err
+  //   try {
+  //     create
+  //   } catch (error) {
+  //     console.log(error);
+  //     err = error
+  //   }
+  //   console.log(err);
+    
+  // }
+  
 
   function changeFunc(whichDisabler) {
     var selectBox = document.getElementById(whichDisabler);
@@ -156,6 +194,7 @@ export default function Home() {
     try {
       const ERC20ContractAddress = await ERC20CreatorAddress[chainId]
         .erc20Creator[0];
+        console.log(ERC20ContractAddress);
       const ERC20Contract = new ethers.Contract(
         ERC20ContractAddress,
         ERC20CreatorAbi,
@@ -185,6 +224,11 @@ export default function Home() {
       {/* <div className={styles.container}> */}
       
       {/* <Image style={{'zIndex': '10', 'objectFit':'cover','fle':'fill'}}  src='/invesweett.png' layout="fill" objectFit='cover'/> */}
+      <Header 
+        conncetWalletHandler={conncetWalletHandler}
+        isConnected={isConnected} 
+      />
+      <button onClick={()=> runApp()}>RunApp</button>
       <div>
         <section>
           <div className="tabs is-fullwidth pt-3 mr-4 ml-5 is-centered has-text-white">

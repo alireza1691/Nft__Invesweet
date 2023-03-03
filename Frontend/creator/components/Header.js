@@ -21,10 +21,10 @@ const Header = ({conncetWalletHandler, isConnected}) =>{
               <nav className='navbar py-3' style={{'zIndex':'10','background':'rgba(2,0,36,1)'}}>
               {/* <img src={"/invesweett.png"} alt="Logo" width="90px" height="10px" className='mr-6'></img> */}
                 <div className="navbar-end" style={{'zIndex':'100'}}>
-                  {/* { isConnected ? (<button  className='button is-white is-outlined' onClick={() => conncetWalletHandler()} disabled>Connected</button>) : (<button onClick={() =>conncetWalletHandler()} className='button is-white is-outlined' >
+                  { isConnected ? (<button  className='button is-white is-outlined' onClick={() => conncetWalletHandler()} disabled>Connected</button>) : (<button onClick={() =>conncetWalletHandler()} className='button is-white is-outlined' >
                     Connect Wallet
-                  </button>) } */}
-                  <ConnectButton></ConnectButton>
+                  </button>) }
+                  {/* <ConnectButton></ConnectButton> */}
                 </div>
               </nav>
             // </div>
