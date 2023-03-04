@@ -19,6 +19,8 @@ import { EvmChain } from '@moralisweb3/evm-utils';
 import { _, fill } from "lodash";
 // import logo from "../public/invesweet.png"
 import Header from "../../components/Header";
+import ERC721CreatorBox from "../../components/CreateERC721Box"
+import ERC20CreatorBox from "../../components/CreateERC20Box"
 import "bootstrap/dist/css/bootstrap.css";
 
 // Moralis.start({
@@ -228,7 +230,6 @@ export default function Home() {
         conncetWalletHandler={conncetWalletHandler}
         isConnected={isConnected} 
       />
-      <button onClick={()=> runApp()}>RunApp</button>
       <div>
         <section>
           <div className="tabs is-fullwidth pt-3 mr-4 ml-5 is-centered has-text-white">
@@ -282,255 +283,14 @@ export default function Home() {
                   className={tabHandler == "tab-erc721" ? "" : "is-hidden"}
                   id="tab-erc721"
                 >
-                  <div className="field" >
-                    <label className="label">Create your collection</label>
-                    <div className="control"  style={{ "zIndex": "0" }}>
-                      {/* <h6 className='mt-4'>Selected token amount:</h6> */}
-                      <div>
-                        <nav className="navbar">
-                          <div className=" my-1">
-                            <h6 style={{ fontSize: "14px" }}>
-                              Write name and symbol of your collection:
-                            </h6>
-                            <input
-                              style={{ width: "200px" }}
-                              className="input"
-                              type="text"
-                              placeholder="Enter name"
-                              value={name}
-                              onChange={(e) => setName(e.target.value)}
-                            />
-                          </div>
-                          <div className=" my-1">
-                            <input
-                              style={{ width: "200px" }}
-                              className="input"
-                              type="text"
-                              placeholder="Enter symbol"
-                              value={symbol}
-                              onChange={(e) => setSymbol(e.target.value)}
-                            />
-                          </div>
-                          <p6>
-                            If you want to collection be limited choose and
-                            enter amount:
-                          </p6>
-                          <div className="select navbar my-1">
-                            {limitDisablerERC721 == 2 ? (
-                              <input
-                                style={{ width: "200px", marginRight: "4px" }}
-                                className="input"
-                                type="text"
-                                placeholder="ERC721 Token is unlimited"
-                                value={number}
-                                onChange={(e) => setMaxSupply(0)}
-                                disabled
-                              />
-                            ) : (
-                              <input
-                                style={{ width: "200px", marginRight: "4px" }}
-                                className="input"
-                                type="text"
-                                placeholder="Enter amount"
-                                value={number}
-                                onChange={(e) => setMaxSupply(e.target.value)}
-                              />
-                            )}
-                            <select
-                              style={{ width: "120px", marginLeft: "4px" }}
-                              id="selectBox1"
-                              onChange={() => changeFunc("selectBox1")}
-                            >
-                              <option value={1}>Limit</option>
-                              <option value={2}>Unlimit</option>
-                            </select>
-                          </div>
-                          <div className="  my-1">
-                            <h6 style={{'fontSize':'14px'}} >Price:</h6>
-                            <input
-                              className="input"
-                              type="text"
-                              placeholder="Enter price"
-                              onChange={(e) => setPrice(e.target.value)}
-                            />
-                          </div>
-                          <div className="  my-1">
-                          <h6 style={{'fontSize':'14px'}} >Description:</h6>
-                            <input
-                              className="input"
-                              type="text"
-                              placeholder="Enter description"
-                              onChange={(e) => setDescription(e.target.value)}
-                            />
-                          </div>
-                          <div className=" my-1">
-                          <h6 style={{'fontSize':'14px'}} >URL:</h6>
-                            <input
-                              className="input"
-                              type="text"
-                              placeholder="Enter image URL"
-                              onChange={(e) => setUrl(e.target.value)}
-                            />
-                          </div>
-                          {/* <figure class="image is-128x128">
-                            <img src={url}/>
-                          </figure> */}
-                        </nav>
-                      </div>
-                      {/* <h6 className='mt-4'>You will receive:</h6> */}
-                      {/* <div> */}
-                      {/* <nav className='navbar'>
-                        <div className="select navbar-end">
-                        <input className="input" type="text" placeholder="0" />
-                          <select>
-                            <option>USDC</option>
-                            <option>ETH</option>
-                          </select>
-                        </div>
-                        </nav> */}
-                      {/* </div> */}
-                      {/* <p className="help navbar-end">Maximim slippage:      1%</p> */}
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => contractERC721Create()}
-                    className="button is-dark is-outlined is-centered mr-4"
-                  >
-                    Approve
-                  </button>
+                  <ERC721CreatorBox setName={setName} setSymbol={setSymbol} setDescription={setDescription} setMaxSupply={setMaxSupply} setPrice={setPrice} setUrl={setUrl} contractERC721Create={contractERC721Create}/>
                   {/* <button onClick={() => approve} className='button is-dark is-centered' >Transact</button> */}
                 </div>
                 <div
                   className={tabHandler == "tab-erc20" ? "" : "is-hidden"}
                   id="tab-erc20"
                 >
-                  <div className="field">
-                    <label className="label">Create your ERC20 token:</label>
-                    <div className="control" style={{ "zIndex": "0" }}>
-                      {/* <h6 className='mt-4'>Selected token amount:</h6> */}
-                      <div>
-                        <nav className="navbar">
-                        <div className=" my-1">
-                            <h6 style={{ fontSize: "14px" }}>
-                              Write name and symbol of your collection:
-                            </h6>
-                            <input
-                              style={{ width: "200px" }}
-                              className="input"
-                              type="text"
-                              placeholder="Enter name"
-                              value={name}
-                              onChange={(e) => setName(e.target.value)}
-                            />
-                          </div>
-                          <div className=" my-1">
-                            <input
-                              style={{ width: "200px" }}
-                              className="input"
-                              type="text"
-                              placeholder="Enter symbol"
-                              value={symbol}
-                              onChange={(e) => setSymbol(e.target.value)}
-                            />
-                          </div>
-                          <p6>
-                            If you want to set max supply for token enter amount:
-                          </p6>
-                          <div className="select navbar my-1">
-                            {limitDisablerERC20 == 2 ? (
-                              <input
-                                style={{ width: "200px", marginRight: "4px" }}
-                                className="input"
-                                type="text"
-                                placeholder="Token has not max supply"
-                                // value={0}
-                                // onChange={(e) => setMaxSupply(0)}
-                                disabled
-                              />
-                            ) : (
-                              <input
-                                style={{ width: "200px", marginRight: "4px" }}
-                                className="input"
-                                type="text"
-                                placeholder="Enter max cap..."
-                                value={number}
-                                onChange={(e) => setMaxSupply(e.target.value)}
-                              />
-                            )}
-                            <select
-                              style={{ width: "120px", marginLeft: "4px" }}
-                              id="selectBox2"
-                              onChange={() => changeFunc("selectBox2")}
-                            >
-                              <option value={1}>Capped</option>
-                              <option value={2}>Not capped</option>
-                            </select>
-                          </div>
-                          <div className=" my-1">
-                            <input
-                              style={{ width: "200px" }}
-                              className="input"
-                              type="text"
-                              placeholder="Enter circulating supply"
-                              value={circulatingSupplyNumber}
-                              onChange={(e) => setCirculatingSupply(e.target.value)}
-                            />
-                            <p style={{'fontSize':'13px' , 'color':'GrayText'}}>the amount that transfered to owner after creation of contract</p>
-                            
-                          </div>
-                          <p>Burn a specific amount in each transfer:</p>
-                          <div className="select navbar my-1">
-                          
-                            {ERC20BurnDisabler == 2 ? (
-                              <input
-                                style={{ width: "200px", marginRight: "4px" }}
-                                className="input"
-                                type="text"
-                                placeholder="Token is not burnable"
-                                // value={0}
-                                // onChange={(e) => setBurnPercentage(0)}
-                                disabled
-                              />
-                            ) : (
-                              <input
-                                style={{ width: "200px", marginRight: "4px" }}
-                                className="input"
-                                type="text"
-                                placeholder="Enter burn percentage..."
-                                value={burnPercentageNumber}
-                                onChange={(e) => setBurnPercentage(e.target.value)}
-                              />
-                            )}
-                            <select
-                              style={{ width: "120px", marginLeft: "4px" }}
-                              id="selectBox3"
-                              onChange={() => changeFunc("selectBox3")}
-                            >
-                              <option value={1}>Brunable</option>
-                              <option value={2}>Not burn</option>
-                            </select>
-                          </div>
-                        </nav>
-                      </div>
-                      <div className=" my-1">
-                            <input
-                              style={{ width: "200px" }}
-                              className="input"
-                              type="text"
-                              placeholder="Enter decimals"
-                              value={decimalNumber}
-                              onChange={(e) => setDecimals(e.target.value)}
-                            />
-                          </div>
-                  
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => createERC20()}
-                    className="button is-dark is-outlined is-centered mr-4"
-                  >
-                    Approve
-                  </button>
+                  <ERC20CreatorBox setName={setName} setSymbol={setSymbol} setMaxSupply={setMaxSupply} setCirculatingSupply={setCirculatingSupply} setBurnPercentage={setBurnPercentage} setDecimals={setBurnPercentage} createERC20={createERC20}/>
                 </div>
                 <div
                   className={tabHandler == "tab-faucet" ? "" : "is-hidden"}
