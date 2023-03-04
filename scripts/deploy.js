@@ -23,7 +23,7 @@ async function main() {
   const tx = await Collection.wait(1)
   const CollectionV2 = tx.events[0].args[1]
   console.log(CollectionV2);
-  const signleNft = await ERC721Creator.mint(CollectionV2,{value:1000})
+  const singleNft = await ERC721Creator.mint(CollectionV2,{value:1000})
   const balanceAfterMint = await ERC721Creator.getBalance(deployer.address)
   console.log(balanceAfterMint.toString());
 
@@ -34,7 +34,7 @@ async function main() {
   // _____________________________________________________
 
 
-  console.log(signleNft);
+  console.log(singleNft);
 
 }
 

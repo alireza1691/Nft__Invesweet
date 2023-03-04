@@ -11,13 +11,24 @@ require ('dotenv').config()
 async function main() {
 
 try {
-    const abi = abiFile; // Add ABI
+    const abi = {
+        "type": "event",
+        "anonymous": false,
+        "name": "Mint",
+        "inputs": [
+          { "type": "address", "name": "mintBy", "indexed": true },
+          { "type": "address", "name": "collection", "indexed": true },
+          { "type": "uint256", "name": "tokenId", "indexed": false }
+        ]
+      }; // Add ABI
 
     const chainId = process.env.CHAIN_ID
 
     const address = addressFile[chainId].erc721Creator[0];
 
     const chain = EvmChain.ETHEREUM;
+
+    const topic = "Mint(address indexed mintBy , address indexed collection ,uint256 tokenId)"
 
     await Moralis.start({
         apiKey: process.env.MORALIS_API_KEY,
@@ -28,6 +39,7 @@ try {
         address,
         chain,
         abi,
+        topic
     });
 
     console.log(response?.result);
