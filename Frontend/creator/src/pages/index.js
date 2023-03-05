@@ -218,12 +218,21 @@ export default function Home() {
   };
 
   const mint = async () => {
+    // try {
     const contractAddress = ERC721CreatorAddress["5"].erc721Creator[0]
     const nftAddress = "0xCC699414A49a0d87e1c223be49A3CE38B5a082d4"
     const contract = new ethers.Contract(contractAddress,ERC721CreatorAbi,provider)
     const erc721V2Contract = new ethers.Contract(nftAddress,CollectionV2,provider)
-    const price = await erc721V2Contract.getPrice()
-    await contract.mint(nftAddress, {value: price})
+    console.log(erc721V2Contract);
+    // const price = await erc721V2Contract.price()
+    console.log("everything ok till line 228");
+    const code = await provider.getCode("0xCC699414A49a0d87e1c223be49A3CE38B5a082d4")
+    console.log(code);
+    await contract.connect(signer).mint(nftAddress, {value: 1000})
+    // } catch (error) {
+    //  console.log(error); 
+    // }
+    
   }
 
   const [tabHandler, setTabHandler] = useState("tab-erc721");

@@ -56,7 +56,7 @@ const Account = ({provider, mint}) =>{
                 <Card>
                     <Image loader={()=>imageURI} src={imageURI} height="200" width="200" />
                 </Card>
-            <button>Mint</button>
+            <button onClick={() => mint()}>Mint</button>
             </div>
         </div>
         
