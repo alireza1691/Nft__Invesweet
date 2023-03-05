@@ -8,6 +8,7 @@ import ERC20CreatorAddress from "../../Blockchain/ERC20CreatorAddress.json";
 import ERC721CreatorAddress from "../../Blockchain/ERC721CreatorAddress.json";
 import ERC20CreatorAbi from "../../Blockchain/ERC20Creator.json";
 import ERC721CreatorAbi from "../../Blockchain/ERC721Creator.json";
+import CollectionV2 from "../../Blockchain/CollectionV2.json"
 import { useMoralis, useWeb3Contract } from "react-moralis"
 // require ('dotenv').config()
 import { MoralisNextApi } from "@moralisweb3/next";
@@ -21,6 +22,8 @@ import { _, fill } from "lodash";
 import Header from "../../components/Header";
 import ERC721CreatorBox from "../../components/CreateERC721Box"
 import ERC20CreatorBox from "../../components/CreateERC20Box"
+import Account from "components/Account";
+import Mint from "components/Mint"
 import "bootstrap/dist/css/bootstrap.css";
 
 // Moralis.start({
@@ -171,10 +174,14 @@ export default function Home() {
         description: description.toString(),
         image: url.toString(),
       };
+
+      // Get address for both localhost and goerli network:
       const ContractAddress = await ERC721CreatorAddress[chainId]
         .erc721Creator[0];
+      const ContractAddressGoerli = await ERC721CreatorAddress["5"]
+        .erc721Creator[0];
       const contract = new ethers.Contract(
-        ContractAddress,
+        ContractAddressGoerli,
         ERC721CreatorAbi,
         provider
       );
@@ -209,6 +216,15 @@ export default function Home() {
       console.log(error)
     }  
   };
+
+  const mint = async () => {
+    const contractAddress = ERC721CreatorAddress["5"].erc721Creator[0]
+    const nftAddress = "0xCC699414A49a0d87e1c223be49A3CE38B5a082d4"
+    const contract = new ethers.Contract(contractAddress,ERC721CreatorAbi,provider)
+    const erc721V2Contract = new ethers.Contract(nftAddress,CollectionV2,provider)
+    const price = await erc721V2Contract.getPrice()
+    await contract.mint(nftAddress, {value: price})
+  }
 
   const [tabHandler, setTabHandler] = useState("tab-erc721");
   useEffect(() => {
@@ -249,16 +265,16 @@ export default function Home() {
                 <a style={{'fontSize':'16px','fontWeight':'bold'}}>Create Token</a>
               </li>
               <li
-                className={tabHandler == "tab-faucet" ? "is-active" : ""}
-                data-target="tab-faucet"
-                onClick={(e) => setTabHandler("tab-faucet")}
+                className={tabHandler == "tab-account" ? "is-active" : ""}
+                data-target="tab-account"
+                onClick={(e) => setTabHandler("tab-account")}
               >
                 <a style={{'fontSize':'16px','fontWeight':'bold'}}>Faucet</a>
               </li>
               <li
-                className={tabHandler == "tab-docs" ? "is-active" : ""}
-                data-target="tab-docs"
-                onClick={(e) => setTabHandler("tab-docs")}
+                className={tabHandler == "tab-mint" ? "is-active" : ""}
+                data-target="tab-mint"
+                onClick={(e) => setTabHandler("tab-mint")}
               >
                 <a style={{'fontSize':'16px','fontWeight':'bold'}}>Airdrop</a>
               </li>
@@ -293,46 +309,16 @@ export default function Home() {
                   <ERC20CreatorBox setName={setName} setSymbol={setSymbol} setMaxSupply={setMaxSupply} setCirculatingSupply={setCirculatingSupply} setBurnPercentage={setBurnPercentage} setDecimals={setBurnPercentage} createERC20={createERC20}/>
                 </div>
                 <div
-                  className={tabHandler == "tab-faucet" ? "" : "is-hidden"}
-                  id="tab-faucet"
+                  className={tabHandler == "tab-account" ? "" : "is-hidden"}
+                  id="tab-account"
                 >
-                  <div className="field" style={{ "zIndex": "0" }}>
-                    <label className="label">Claim test token</label>
-                  </div >
-                  <button
-                    onClick={() => ""}
-                    className="button is-dark is-outlined is-centered mt-2"
-                  >
-                    Submit
-                  </button>
-                  <p className="help">
-                    Note that these tokens have not any real value
-                  </p>
+                 <Account/>
                 </div>
                 <div
-                  className={tabHandler == "tab-docs" ? "" : "is-hidden"}
-                  id="tab-docs"
+                  className={tabHandler == "tab-mint" ? "" : "is-hidden"}
+                  id="tab-mint"
                 >
-                  <div className="field" style={{ "zIndex": "0" }}>
-                    <label className="label">Claim Airdrop</label>
-                  </div>
-                  <button
-                    onClick={() => ""}
-                    className="button is-dark is-outlined is-centered mt-2"
-                  >
-                    Check eligibility
-                  </button>
-
-                  <button
-                    onClick={() => ""}
-                    className="button is-dark is-outlined is-centered mt-2 ml-2"
-                    disabled
-                  >
-                    Claim
-                  </button>
-                  <p className="help">
-                    Before claim make sure you are eligible!
-                  </p>
+                 <Mint provider={provider} mint={mint}/>
                 </div>
               </div>
             </div>

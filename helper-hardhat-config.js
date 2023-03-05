@@ -38,6 +38,7 @@ const ProxyAdminERC721CreatorAddress = "./Frontend/creator/Blockchain/ProxyAdmin
 const ProxyAdminERC20CreatorAddress = "./Frontend/creator/Blockchain/ProxyAdminERC20CreatorAddress.json"
 const frontEndERC20CreatorAbiFile = "./Frontend/creator/Blockchain/"
 const frontEndERC721CreatorAbiFile = "./Frontend/creator/Blockchain/"
+const frontEndCollectionv2AbiFile = "./Frontend/creator/Blockchain/"
 const ProxyAbiFile = "./Frontend/creator/Blockchain/"
 const AdminProxyAbiFile = "./Frontend/creator/Blockchain/"
 
@@ -54,5 +55,6 @@ module.exports = {
     ProxyAdminERC721CreatorAddress,
     ProxyAdminERC20CreatorAddress,
     ProxyAbiFile,
-    AdminProxyAbiFile
+    AdminProxyAbiFile,
+    frontEndCollectionv2AbiFile
 }
