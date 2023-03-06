@@ -216,7 +216,8 @@ export default function Home() {
       console.log(error)
     }  
   };
-
+  //__________**********_____________
+  // not completed yet:
   const mint = async () => {
     // try {
     const contractAddress = ERC721CreatorAddress["5"].erc721Creator[0]
@@ -232,7 +233,7 @@ export default function Home() {
     // } catch (error) {
     //  console.log(error); 
     // }
-    
+    //
   }
 
   const [tabHandler, setTabHandler] = useState("tab-erc721");
