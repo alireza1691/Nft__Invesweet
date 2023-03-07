@@ -12,6 +12,7 @@ contract ERC721V1 is ERC721Upgradeable {
     uint256 private _price;
 
     function __ERC721_init_unchained(string memory name_, string memory symbol_) internal override onlyInitializing {
+        require(msg.value >= _price, "Insufficient fee");
         _name = name_;
         _symbol = symbol_;
     }
