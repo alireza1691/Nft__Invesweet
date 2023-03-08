@@ -7,11 +7,16 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract ERC721V1 is ERC721{
 
+    event Withdraw(address user, address contractAddress, uint256 value);
+
+    string private s_name;
+    string private s_symbol;
+    string private s_url;
+    address private _owner;
+    uint256 private counterID;
     uint256 private s_fee;
-
     uint256 private immutable i_maxSupply;
-
-    address private immutable i_owner;
+    // address private immutable i_owner;
 
        // Mapping from token ID to owner address
     mapping(uint256 => address) private _owners;
@@ -19,14 +24,17 @@ contract ERC721V1 is ERC721{
     // Mapping owner address to token count
     mapping(address => uint256) private _balances;
 
-    constructor (string memory _name,string memory _symbol, uint256 fee, uint256 maxSupply,address owner) ERC721(_name, _symbol){
+    constructor (string memory name,string memory symbol, uint256 fee, uint256 maxSupply,address owner, string memory imgUrl) ERC721(s_name, s_symbol){
+        s_name = name;
+        s_symbol = symbol;
         s_fee = fee;
         i_maxSupply = maxSupply;
-        i_owner = owner;
+        _owner = owner;
+        s_url = imgUrl;
     }
 
     modifier onlyOwner {
-        require(msg.sender == i_owner, "Only owner");
+        require(msg.sender == _owner, "Only owner");
         _;
     }
 
@@ -59,4 +67,28 @@ contract ERC721V1 is ERC721{
     function changeFee(uint256 newFee) external onlyOwner {
         s_fee = newFee;
     }
+
+    function withdraw () external payable {
+        (bool ok, ) = msg.sender.call{value: address(this).balance}("");
+        if (ok) {
+            emit Withdraw(msg.sender, address(this), address(this).balance);
+        }
+    }
+
+    function _baseURI() internal view virtual override returns (string memory) {
+        return s_url;
+    }
+    // should add only owner modifier
+    function setUri(string memory newUri) external onlyOwner {
+        s_url = newUri;
+    }
+
+    function transferOwnership(address newOwner) external onlyOwner {
+        _owner = newOwner;
+    }
+
+    function getBalance () external view returns(uint256) {
+        return address(this).balance;
+    }
+
 }
