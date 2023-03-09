@@ -13,6 +13,7 @@ contract Creator {
     address private s_owner;
     uint256 private s_ERC721Fee;
 
+    mapping (address => uint256) private balances;
     mapping (address => address[]) private addressToContracts;
     constructor() {
         s_owner = msg.sender;
@@ -25,8 +26,21 @@ contract Creator {
         emit ERC721Create(address(newNft), msg.sender, symbol);
         return address(newNft);
     }
+
     
     function getUserContracts(address user) external view returns(address[] memory){
         return addressToContracts[user];
     }
+
+    function getBalance() external view returns(uint256) {
+        return address(this).balance;
+    }
+    
+    function mint(address nftContractAddress) external payable {
+        ERC721V1 ContractInstance = ERC721V1(nftContractAddress);
+        uint256 price = ContractInstance.getPrice();
+        require(msg.value >= price);
+        ContractInstance.mint();
+    }
+
 }

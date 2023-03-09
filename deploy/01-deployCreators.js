@@ -21,7 +21,7 @@ module.exports = async () => {
         waitConfirmations: waitBlockConfirmations,
     })
 
-    const ERC721Creator = await deploy("ERC721Creator", {
+    const Creator = await deploy("Creator", {
         from: deployer,
         args: ERC721CreatorArguments,
         log: true,
@@ -29,14 +29,14 @@ module.exports = async () => {
     })
     //(string memory _name, string memory _symbol, uint256 _mintFee ,uint256 _maxSupply, address _owner, string memory _uri) ERC721(_name,_symbol)  {
 
-    const CollectionV2Arguments = ["test","tst",1,1000,deployer,"someURI"]
-    const CollectionV2 = await deploy("CollectionV2", {
-        from: deployer,
-        args: CollectionV2Arguments,
-        log: true,
-        waitConfirmations: waitBlockConfirmations,
+    // const CollectionV2Arguments = ["test","tst",1,1000,deployer,"someURI"]
+    // const CollectionV2 = await deploy("CollectionV2", {
+    //     from: deployer,
+    //     args: CollectionV2Arguments,
+    //     log: true,
+    //     waitConfirmations: waitBlockConfirmations,
     
-    })
+    // })
 
 }
 

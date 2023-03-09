@@ -7,15 +7,17 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract ERC721V1 is ERC721{
 
+    event Mint(address user,address nftContract, uint256 tokenId);
     event Withdraw(address user, address contractAddress, uint256 value);
 
     string private s_name;
     string private s_symbol;
     string private s_url;
     address private _owner;
-    uint256 private counterID;
+    uint256 private counterTokenID;
     uint256 private s_fee;
     uint256 private immutable i_maxSupply;
+    address private parentContract;
     // address private immutable i_owner;
 
        // Mapping from token ID to owner address
@@ -38,11 +40,19 @@ contract ERC721V1 is ERC721{
         _;
     }
 
+    function mint () external payable {
+        require(msg.value >= s_fee, "Msg.value less than NFT price");
+        (bool ok,) = parentContract.call{value: msg.value}("");
+        if (ok) {
+            _mint(msg.sender, counterTokenID);
+        counterTokenID ++;
+        }
+    }
+
     function _mint(address to, uint256 tokenId) internal virtual override{
         require(to != address(0), "ERC721: mint to the zero address");
         require(!_exists(tokenId), "ERC721: token already minted");
         require(tokenId <= i_maxSupply, "Max number minted");
-        require(msg.value >= s_fee, "Msg.value less than NFT price");
 
         _beforeTokenTransfer(address(0), to, tokenId, 1);
 
@@ -60,7 +70,7 @@ contract ERC721V1 is ERC721{
         _owners[tokenId] = to;
 
         emit Transfer(address(0), to, tokenId);
-
+        emit Mint(to, address(this), tokenId);
         _afterTokenTransfer(address(0), to, tokenId, 1);
     }
 
@@ -91,4 +101,8 @@ contract ERC721V1 is ERC721{
         return address(this).balance;
     }
 
+    function getPrice () external view returns(uint256) {
+        return s_fee;
+    }
+ 
 }
