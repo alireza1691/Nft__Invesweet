@@ -42,11 +42,13 @@ contract ERC721V1 is ERC721{
 
     function mint () external payable {
         require(msg.value >= s_fee, "Msg.value less than NFT price");
-        (bool ok,) = parentContract.call{value: msg.value}("");
+        require(counterTokenID <= i_maxSupply,"Maximun number was minted");
+        (bool ok,) = parentContract.call{value: (msg.value)/100}("");
         if (ok) {
             _mint(msg.sender, counterTokenID);
         counterTokenID ++;
         }
+        emit Mint(msg.sender, address(this), counterTokenID);
     }
 
     function _mint(address to, uint256 tokenId) internal virtual override{
@@ -70,7 +72,6 @@ contract ERC721V1 is ERC721{
         _owners[tokenId] = to;
 
         emit Transfer(address(0), to, tokenId);
-        emit Mint(to, address(this), tokenId);
         _afterTokenTransfer(address(0), to, tokenId, 1);
     }
 
@@ -104,5 +105,6 @@ contract ERC721V1 is ERC721{
     function getPrice () external view returns(uint256) {
         return s_fee;
     }
+
  
 }

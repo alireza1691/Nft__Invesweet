@@ -14,27 +14,28 @@ async function main() {
   console.log(Creator.address);
   console.log('ERC721 Successfully deployed');
 
-  const balanceBeforeMint = await Creator.getBalance(deployer.address)
-  console.log(balanceBeforeMint.toString());
+  // const balanceBeforeMint = await Creator.getBalance(deployer.address)
+  // console.log(balanceBeforeMint.toString());
 
 
 
   const Collection = await Creator.createERC721('test','tst',10,1000,"some uri")
   const tx = await Collection.wait(1)
-  const CollectionV2 = tx.events[0].args[1]
-  console.log(CollectionV2);
-  const singleNft = await Creator.mint(CollectionV2,{value:1000})
-  const balanceAfterMint = await Creator.getBalance(deployer.address)
-  console.log(balanceAfterMint.toString());
-
+  const CollectionV1Address = tx.events[0].args[0]
+  console.log(`here's collection address: ${CollectionV1Address}`);
+  const collectionContract = await ethers.getContractFactory("ERC721V1")
+  const collectionInstance = collectionContract.attach(CollectionV1Address)
+  console.log("getting contract instance...");
+  const singleNft = await collectionInstance.mint({value:1000})
+  const anotherNft = await collectionInstance.mint({value:1000})
+  const tx2 = await singleNft.wait(1)
+  const tx3 = await anotherNft.wait(1)
+  console.log(tx3.events[0]);
   // *********________ This way we can create instance for new contract: _____________*******************
   //
   // const CollectionV2Contract = await ethers.getContractAt("CollectionV2", CollectionV2)
   // console.log(CollectionV2Contract);
   // _____________________________________________________
-
-
-  console.log(singleNft);
 
 }
 
