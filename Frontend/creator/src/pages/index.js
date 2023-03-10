@@ -22,8 +22,9 @@ import ERC721CreatorBox from "../../components/CreateERC721Box"
 import ERC20CreatorBox from "../../components/CreateERC20Box"
 import Account from "components/Account";
 import Mint from "components/Mint"
-import popUp from "components/popUp";
+import PopUp from "components/popUp";
 import "bootstrap/dist/css/bootstrap.css";
+import { Modal, Input, Card } from "web3uikit";
 
 // Moralis.start({
 //   apiKey: 'YOUR_API_KEY',
@@ -286,7 +287,13 @@ export default function Home() {
                   className={tabHandler == "tab-erc721" ? "" : "is-hidden"}
                   id="tab-erc721"
                 >
-                  {/* <popUp popUpVisibility={true} /> */}
+                  <PopUp/>
+                  {/* <Modal isVisible={true}>
+                  <Card title={"something"} description={"another thing"} style={{"height":"260px","width":"260px", "left":"48px"}} onClick={""}>
+                    <Image loader={()=>"https://img.freepik.com/free-photo/wide-angle-shot-single-tree-growing-clouded-sky-during-sunset-surrounded-by-grass_181624-22807.jpg"} src={"https://img.freepik.com/free-photo/wide-angle-shot-single-tree-growing-clouded-sky-during-sunset-surrounded-by-grass_181624-22807.jpg"} height="260" width="260"/>
+                  </Card>
+                  <Input label="" name="" type=""/>
+                  </Modal> */}
                   <ERC721CreatorBox setName={setName} setSymbol={setSymbol} setDescription={setDescription} setMaxSupply={setMaxSupply} setPrice={setPrice} setUrl={setUrl} contractERC721Create={contractERC721Create}/>
                   {/* <button onClick={() => approve} className='button is-dark is-centered' >Transact</button> */}
                 </div>
