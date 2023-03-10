@@ -1,13 +1,10 @@
-# Sample Hardhat Project
+Invesweet
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+There is a contract with name: `ERC721Creator.sol` which is main contract and it'll create Nft contract with `ERC721V1.sol` name using `createERC721()` function inside it.
 
-Try running some of the following tasks:
+command lines:
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.js
-```
+_ compile: yarn hardhat compile
+_ run node (run files inside deploy folder): yarn hardhat node (for default network)
+_ run scripts : yarn hardhat run scripts/'filename' \_\_network 'network name'
+_ run tests: yarn hardhat test

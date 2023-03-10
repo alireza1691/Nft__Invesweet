@@ -3,7 +3,6 @@ pragma solidity ^0.8.17;
 
 import "./ERC721Upgreadable.sol";
 import "./ERC721V1.sol";
-import "./ERC20v2.sol";
 
 
 contract Creator {

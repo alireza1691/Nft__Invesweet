@@ -30,7 +30,7 @@ async function main() {
   const anotherNft = await collectionInstance.mint({value:1000})
   const tx2 = await singleNft.wait(1)
   const tx3 = await anotherNft.wait(1)
-  console.log(tx3.events[0]);
+  console.log(tx3.events[0].args[2].toString());
   // *********________ This way we can create instance for new contract: _____________*******************
   //
   // const CollectionV2Contract = await ethers.getContractAt("CollectionV2", CollectionV2)

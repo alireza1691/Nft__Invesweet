@@ -12,31 +12,31 @@ module.exports = async () => {
     log("----------------------------------------------------")
     const creationFee = ethers.utils.parseEther("0.01")
 
-    const ERC20CreatorArguments = [creationFee]
-    const ERC721CreatorArguments = []
-    const ERC20Creator = await deploy("ERC20Creator", {
-        from: deployer,
-        args: ERC20CreatorArguments,
-        log: true,
-        waitConfirmations: waitBlockConfirmations,
-    })
+    // const ERC20CreatorArguments = [creationFee]
+    // const ERC721CreatorArguments = []
+    // const ERC20Creator = await deploy("ERC20Creator", {
+    //     from: deployer,
+    //     args: ERC20CreatorArguments,
+    //     log: true,
+    //     waitConfirmations: waitBlockConfirmations,
+    // })
 
     const Creator = await deploy("Creator", {
         from: deployer,
-        args: ERC721CreatorArguments,
+        args: [],
         log: true,
         waitConfirmations: waitBlockConfirmations,
     })
     //(string memory _name, string memory _symbol, uint256 _mintFee ,uint256 _maxSupply, address _owner, string memory _uri) ERC721(_name,_symbol)  {
 
-    // const CollectionV2Arguments = ["test","tst",1,1000,deployer,"someURI"]
-    // const CollectionV2 = await deploy("CollectionV2", {
-    //     from: deployer,
-    //     args: CollectionV2Arguments,
-    //     log: true,
-    //     waitConfirmations: waitBlockConfirmations,
+    const CollectionV1Arguments = ["test","tst",1,1000,deployer,"someURI"]
+    const CollectionV2 = await deploy("ERC721V1", {
+        from: deployer,
+        args: CollectionV1Arguments,
+        log: true,
+        waitConfirmations: waitBlockConfirmations,
     
-    // })
+    })
 
 }
 

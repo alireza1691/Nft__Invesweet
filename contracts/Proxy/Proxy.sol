@@ -2,7 +2,7 @@
 pragma solidity ^0.8.17;
 
 // Transparent upgradeable proxy pattern
-import './library/StorageSlot.sol';
+import '../library/StorageSlot.sol';
 import './ProxyAdmin.sol';
 
 contract CounterV1 {

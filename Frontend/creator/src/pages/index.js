@@ -4,11 +4,9 @@ import styles from "../styles/Home.module.css";
 import "bulma/css/bulma.css";
 import { BigNumber, ethers } from "ethers";
 import { useState, useEffect, React } from "react";
-import ERC20CreatorAddress from "../../Blockchain/ERC20CreatorAddress.json";
-import ERC721CreatorAddress from "../../Blockchain/ERC721CreatorAddress.json";
-import ERC20CreatorAbi from "../../Blockchain/ERC20Creator.json";
-import ERC721CreatorAbi from "../../Blockchain/ERC721Creator.json";
-import CollectionV2 from "../../Blockchain/CollectionV2.json"
+import addresses from "../../Blockchain/addresses.json";
+import ERC721CreatorAbi from "../../Blockchain/Creator.json";
+import ERC721V1ABI from "../../Blockchain/ERC721V1.json"
 import { useMoralis, useWeb3Contract } from "react-moralis"
 // require ('dotenv').config()
 import { MoralisNextApi } from "@moralisweb3/next";
@@ -24,6 +22,7 @@ import ERC721CreatorBox from "../../components/CreateERC721Box"
 import ERC20CreatorBox from "../../components/CreateERC20Box"
 import Account from "components/Account";
 import Mint from "components/Mint"
+import popUp from "components/popUp";
 import "bootstrap/dist/css/bootstrap.css";
 
 // Moralis.start({
@@ -37,10 +36,10 @@ export default function Home() {
 
   const runApp = async () => {
 
-    const abi = {ERC20CreatorAbi}; // Add ABI
+    const abi = {ERC721CreatorAbi}; // Add ABI
   
-    const address = await ERC20CreatorAddress[chainId]
-        .erc20Creator[0];
+    const address = await addresses[chainId].
+        ERC721V1Creator[0];
     console.log(address);
     const chain = EvmChain.ETHEREUM;
 
@@ -84,35 +83,11 @@ export default function Home() {
   const [decimals, setDecimals] = useState(18);
   const [circulatingSupply, setCirculatingSupply] = useState(0);
   const [burnPercentage, setBurnPercentage] = useState(0);
+  const [popUpVisibility, setPopUpvisibility] = useState();
   // const [chainId , setChainId] = useState()
 
   let number, circulatingSupplyNumber, burnPercentageNumber, decimalNumber;
 
-  // const { runContractFunction: create } = useWeb3Contract({
-  //   abi: ERC20CreatorAbi,
-  //   contractAddress: ERC20CreatorAddress[chainId].erc20Creator[0],
-  //   functionName: "create",
-  //   params: {name : name,
-  //     symbol : symbol,
-  //     maxCap : maxCap,
-  //     circulatingSupply : circulatingSupply,
-  //     burnPercent : burnPercentage,
-  //     decimals : decimals,
-  //   },
-  //   value : ethers.utils.parseEther("0.01")
-  // })
-  // const ERC20 = () => {
-  //   let err
-  //   try {
-  //     create
-  //   } catch (error) {
-  //     console.log(error);
-  //     err = error
-  //   }
-  //   console.log(err);
-    
-  // }
-  
 
   function changeFunc(whichDisabler) {
     var selectBox = document.getElementById(whichDisabler);
@@ -176,12 +151,13 @@ export default function Home() {
       };
 
       // Get address for both localhost and goerli network:
-      const ContractAddress = await ERC721CreatorAddress[chainId]
-        .erc721Creator[0];
-      const ContractAddressGoerli = await ERC721CreatorAddress["5"]
-        .erc721Creator[0];
+      const ContractAddress = await addresses[chainId]
+        .ERC721V1Creator[0];
+      // If we ewant to use specififc network like goerli we can get address like that:
+      // const ContractAddressGoerli = await addresses["5"]
+      //   .ERC721V1Creator[0];
       const contract = new ethers.Contract(
-        ContractAddressGoerli,
+        ContractAddress,
         ERC721CreatorAbi,
         provider
       );
@@ -189,7 +165,7 @@ export default function Home() {
       await contractConnectToSigner.createCollection(
         name,
         symbol,
-        price,
+        ethers.utils.formatEther(price) ,
         maxSupply,
         uri
       );
@@ -221,10 +197,10 @@ export default function Home() {
   const mint = async () => {
 
     // try {
-    const contractAddress = ERC721CreatorAddress["5"].erc721Creator[0]
+    const contractAddress = addresses[chainId].ERC721Creator[0]
     const nftAddress = "0xCC699414A49a0d87e1c223be49A3CE38B5a082d4"
     const contract = new ethers.Contract(contractAddress,ERC721CreatorAbi,provider)
-    const erc721V2Contract = new ethers.Contract(nftAddress,CollectionV2,provider)
+    const erc721V2Contract = new ethers.Contract(nftAddress,ERC721V1ABI,provider)
     console.log(erc721V2Contract);
     // const price = await erc721V2Contract.price()
     console.log("everything ok till line 228");
@@ -310,6 +286,7 @@ export default function Home() {
                   className={tabHandler == "tab-erc721" ? "" : "is-hidden"}
                   id="tab-erc721"
                 >
+                  {/* <popUp popUpVisibility={true} /> */}
                   <ERC721CreatorBox setName={setName} setSymbol={setSymbol} setDescription={setDescription} setMaxSupply={setMaxSupply} setPrice={setPrice} setUrl={setUrl} contractERC721Create={contractERC721Create}/>
                   {/* <button onClick={() => approve} className='button is-dark is-centered' >Transact</button> */}
                 </div>
@@ -329,6 +306,7 @@ export default function Home() {
                   className={tabHandler == "tab-mint" ? "" : "is-hidden"}
                   id="tab-mint"
                 >
+                  
                  <Mint provider={provider} mint={mint}/>
                 </div>
               </div>

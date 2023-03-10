@@ -1,5 +1,6 @@
-const { ERC20CreatorAddress, ERC721CreatorAddress, frontEndERC20CreatorAbiFile , frontEndERC721CreatorAbiFile, ProxyERC721CreatorAddress, ProxyERC20CreatorAddress, ProxyAdminERC721CreatorAddress, ProxyAdminERC20CreatorAddress, ProxyAbiFile, AdminProxyAbiFile, frontEndCollectionv2AbiFile } = require("../helper-hardhat-config")
+const { addressFile, frontEndCreatorAbiFile, frontEndERC721V1AbiFile } = require("../helper-hardhat-config")
 const fs = require("fs")
+
 const { ethers, network } = require("hardhat")
 require("dotenv").config
 
@@ -13,62 +14,41 @@ module.exports = async () => {
 }
 
 async function updateAbi() {
-    const ERC20Creator = await ethers.getContract("ERC20Creator")
     const Creator = await ethers.getContract("Creator")
-    // const CollectionV2 = await ethers.getContract("CollectionV2")
-    // const Proxy = await ethers.getContract("Proxy")
-    // const ProxyAdmin = await ethers.getContract("ProxyAdmin")
-    // fs.writeFileSync(frontEndERC721CreatorAbiFile, ERC721Creator.interface.format(ethers.utils.FormatTypes.json))
-    // fs.writeFileSync(frontEndERC20CreatorAbiFile, ERC20Creator.interface.format(ethers.utils.FormatTypes.json))
+    const Nft = await ethers.getContract("ERC721V1")
+
     fs.writeFileSync(
-        `${frontEndERC721CreatorAbiFile}ERC721Creator.json`,
+        `${frontEndCreatorAbiFile}ERC721Creator.json`,
         Creator.interface.format(ethers.utils.FormatTypes.json)
     )
     fs.writeFileSync(
-        `${frontEndERC20CreatorAbiFile}ERC20Creator.json`,
-        ERC20Creator.interface.format(ethers.utils.FormatTypes.json)
+        `${frontEndERC721V1AbiFile}ERC721V1.json`,
+        Nft.interface.format(ethers.utils.FormatTypes.json)
     )
-    // fs.writeFileSync(
-    //     `${frontEndCollectionv2AbiFile}CollectionV2.json`,
-    //     CollectionV2.interface.format(ethers.utils.FormatTypes.json)
-    // )
-    // fs.writeFileSync(
-    //     `${ProxyAbiFile}ProxyAbi.json`,
-    //     Proxy.interface.format(ethers.utils.FormatTypes.json)
-    // )
-    // fs.writeFileSync(
-    //     `${AdminProxyAbiFile}ProxyAdminAbi.json`,
-    //     ProxyAdmin.interface.format(ethers.utils.FormatTypes.json)
-    // )
+
 }
 
 async function updateContractAddresses() {
     const chainId = network.config.chainId.toString()
     const ERC721Creator = await ethers.getContract("Creator")
-    const ERC20Creator = await ethers.getContract("ERC20Creator")
-    const ERC721CreatorAddressFile = JSON.parse(fs.readFileSync(ERC721CreatorAddress, "utf8"))
-    const ERC20CreatorAddressFile = JSON.parse(fs.readFileSync(ERC20CreatorAddress, "utf8"))
-    if (chainId in ERC721CreatorAddressFile) {
-        if (!ERC721CreatorAddressFile[chainId]["erc721Creator"].includes(ERC721Creator.address)) {
-            ERC721CreatorAddressFile[chainId]["erc721Creator"].push(ERC721Creator.address)
+    const ERC721V1 = await ethers.getContract("ERC721V1")
+    const addressesFile = JSON.parse(fs.readFileSync(addressFile, "utf8"))
+    if (chainId in addressesFile) {
+        if (!addressesFile[chainId]["ERC721Creator"].includes(ERC721Creator.address)) {
+            addressesFile[chainId]["ERC721Creator"].push(ERC721Creator.address)
+        }
+        if (!addressesFile[chainId]["ERC721V1"].includes(ERC721V1.address)) {
+            addressesFile[chainId]["ERC721V1"].push(ERC721V1.address)
         }
         
     } else {
-        ERC721CreatorAddressFile[chainId] = { erc721Creator: [ERC721Creator.address]} 
+        addressesFile[chainId] = { erc721Creator: [ERC721Creator.address]} 
+        addressesFile[chainId]= { erc721v1:[ERC721V1.address]} 
     }
 
-    if (chainId in ERC20CreatorAddressFile) {
-        if (!ERC20CreatorAddressFile[chainId]["erc20Creator"].includes(ERC20Creator.address)) {
-            ERC20CreatorAddressFile[chainId]["erc20Creator"].push(ERC20Creator.address)
-        }
-        
-    } else {
-        ERC20CreatorAddressFile[chainId]= { erc20Creator:[ERC20Creator.address]} 
-    }
-
-    fs.writeFileSync(ERC721CreatorAddress, JSON.stringify(ERC721CreatorAddressFile))
-    fs.writeFileSync(ERC20CreatorAddress, JSON.stringify(ERC20CreatorAddressFile))
-    console.log(ERC721CreatorAddressFile);
-    console.log(ERC20CreatorAddressFile);
+    fs.writeFileSync(addressFile, JSON.stringify(addressesFile))
+    // fs.writeFileSync(ERC20CreatorAddress, JSON.stringify(addressesFile))
+    console.log(addressesFile);
+    // console.log(addressesFile);
 }
 module.exports.tags = ["all", "frontend"]
