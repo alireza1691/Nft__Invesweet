@@ -25,6 +25,8 @@ import Mint from "components/Mint"
 import PopUp from "components/popUp";
 import "bootstrap/dist/css/bootstrap.css";
 import { Modal, Input, Card } from "web3uikit";
+import ERC721ABI from "../../Blockchain/ERC721ABI.json";
+import IERC721ABI from "../../Blockchain/IERC721ABI.json";
 
 // Moralis.start({
 //   apiKey: 'YOUR_API_KEY',
@@ -218,12 +220,19 @@ export default function Home() {
   const getUri = async (address) => {
     try {
       let contract = new ethers.Contract("0x23581767a106ae21c074b2276D25e5C3e136a68b",IERC721ABI, provider)
-      // let countToken
+      let countToken
       console.log(contract);
       let element
-      console.log(provider);
-      let code = await provider.getCode("0x23581767a106ae21c074b2276D25e5C3e136a68b")
-      console.log(code);
+      element = await contract.ownerOf(0)
+      // let events = contract.queryFilter("Transfer",,)
+      console.log(events);
+      // for (let index = 0; index < 9999999; index++) {
+      //   const element = await contract.ownerOf(index)
+      //   countToken = index+1
+      //   if (element == "0x0000000000000000000000000000000000000000") {
+      //     break
+      //   }
+      // }
       // for (let index = 0; element =! 0 ; index++) {
         // element = await contract.balanceOf("0x39A77B13BA2C5FA2249f7e5a4194582824D58c8E")
       //   countToken = index + 1
