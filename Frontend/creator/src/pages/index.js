@@ -35,37 +35,37 @@ export default function Home() {
   const { web3, isWeb3Enabled } = useMoralis();
   
 
-  const runApp = async () => {
+  // const runApp = async () => {
 
-    const abi = {ERC721CreatorAbi}; // Add ABI
+  //   const abi = {ERC721CreatorAbi}; // Add ABI
   
-    const address = await addresses[chainId].
-        ERC721V1Creator[0];
-    console.log(address);
-    const chain = EvmChain.ETHEREUM;
+  //   const address = await addresses[chainId].
+  //       ERC721V1Creator[0];
+  //   console.log(address);
+  //   const chain = EvmChain.ETHEREUM;
 
-    try {
+  //   try {
      
-      await Moralis.start({
-          apiKey: 'TsLS6Uwt4tfB5QoDEmhh82BVsIRK7zqdwPI9LmTyUmt4aLend9KxfZWfpfTc7iEF',
-          // ...and any other configuration
-      });
+  //     await Moralis.start({
+  //         apiKey: 'TsLS6Uwt4tfB5QoDEmhh82BVsIRK7zqdwPI9LmTyUmt4aLend9KxfZWfpfTc7iEF',
+  //         // ...and any other configuration
+  //     });
   
-      const response = await Moralis.EvmApi.events.getContractEvents({
-          address,
-          chain,
-          abi,
-      });
+  //     const response = await Moralis.EvmApi.events.getContractEvents({
+  //         address,
+  //         chain,
+  //         abi,
+  //     });
   
-      console.log(response?.result);
-  } catch (e) {
-      console.error(e);
-  }
-  }
+  //     console.log(response?.result);
+  // } catch (e) {
+  //     console.error(e);
+  // }
+  // }
 
  
   const chainId = "31337";
-  const apiKey = process.env.MORALIS_API_KEY
+  // const apiKey = process.env.MORALIS_API_KEY
 
   const [isConnected, setIsConnected] = useState(false);
   const [user, setUser] = useState();
@@ -214,6 +214,28 @@ export default function Home() {
     //
   }
 
+  
+  const getUri = async (address) => {
+    try {
+      let contract = new ethers.Contract("0x23581767a106ae21c074b2276D25e5C3e136a68b",IERC721ABI, provider)
+      // let countToken
+      console.log(contract);
+      let element
+      console.log(provider);
+      let code = await provider.getCode("0x23581767a106ae21c074b2276D25e5C3e136a68b")
+      console.log(code);
+      // for (let index = 0; element =! 0 ; index++) {
+        // element = await contract.balanceOf("0x39A77B13BA2C5FA2249f7e5a4194582824D58c8E")
+      //   countToken = index + 1
+      // }
+      console.log(element);
+
+    // console.log("something ...");
+    } catch (error) {
+      console.log(error);
+    }
+   
+  }
   const [tabHandler, setTabHandler] = useState("tab-erc721");
   useEffect(() => {
     console.log(tabHandler);
@@ -287,7 +309,7 @@ export default function Home() {
                   className={tabHandler == "tab-erc721" ? "" : "is-hidden"}
                   id="tab-erc721"
                 >
-                  <PopUp/>
+                  {/* <PopUp/> */}
                   {/* <Modal isVisible={true}>
                   <Card title={"something"} description={"another thing"} style={{"height":"260px","width":"260px", "left":"48px"}} onClick={""}>
                     <Image loader={()=>"https://img.freepik.com/free-photo/wide-angle-shot-single-tree-growing-clouded-sky-during-sunset-surrounded-by-grass_181624-22807.jpg"} src={"https://img.freepik.com/free-photo/wide-angle-shot-single-tree-growing-clouded-sky-during-sunset-surrounded-by-grass_181624-22807.jpg"} height="260" width="260"/>
@@ -314,7 +336,7 @@ export default function Home() {
                   id="tab-mint"
                 >
                   
-                 <Mint provider={provider} mint={mint}/>
+                 <Mint provider={provider} mint={mint} signer={signer} getUri = {getUri}/>
                 </div>
               </div>
             </div>

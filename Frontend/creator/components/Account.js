@@ -38,7 +38,7 @@ const Account = ({setName, setSymbol, setMaxSupply, setCirculatingSupply,setBurn
     return (
         
         <div>
-           <Card></Card>
+           <p>test</p>
         </div>
         
 

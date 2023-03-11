@@ -6,19 +6,22 @@ import 'bulma/css/bulma.css'
 import Link from 'next/link'
 import { React ,useState, useEffect } from 'react'
 import { Card } from 'web3uikit'
-import { Contract } from 'ethers'
+import { Contract, ethers } from 'ethers'
 import ERC721V1ABI from '../Blockchain/ERC721V1.json'
 import { getContractFactory } from '@nomiclabs/hardhat-ethers/types'
 import popUp from './popUp'
+import IERC721ABI from '../Blockchain/IERC721ABI.json'
+import { Provider } from '@ethersproject/providers'
+
 
 // export const [popUpVisibility, setPopUpvisibility] = useState(false);
 
-const Account = ({provider, mint}) =>{
+const Mint = ({provider, mint, signer, getUri}) =>{
 
 
     const [disabler1, setDisabler1] = useState('')
     const [disabler2, setDisabler2] = useState('')
-    const [contractAddress, setContractAddress] = useState()
+    const [contractAddress, setContractAddress] = useState("0x")
     const [isVisible, setIsVisible] = useState(false);
 
     let imageURI = "https://img.freepik.com/free-photo/wide-angle-shot-single-tree-growing-clouded-sky-during-sunset-surrounded-by-grass_181624-22807.jpg"
@@ -50,11 +53,11 @@ const Account = ({provider, mint}) =>{
       }
 
       function getUserOwnedContracts () {
-
+        console.log("test");
       }
 
       function handleCardClick() {
-        setIsVisible(true)
+        // setIsVisible(true)
         console.log(isVisible);
       }
       useEffect(() => {
@@ -62,16 +65,18 @@ const Account = ({provider, mint}) =>{
       },[contractAddress])
 
 
+
     return (
         <div>
         <div>
-          <popUp/>
+          {/* <popUp/> */}
             <div style={{"height":"360px","width":"300px"}}>
                 <Card title={"something"} description={"another thing"} style={{"height":"260px","width":"260px", "left":"48px"}} onClick={handleCardClick}>
                     <Image loader={()=>imageURI} src={imageURI} height="260" width="260" />
                 </Card>
-            <button className='button px-4 py-1 my-2' onClick={() => mint()} style={{"left":"140px"}} >Mint</button>
+            {/* <button className='button px-4 py-1 my-2' onClick={() => mint()} style={{"left":"140px"}} >Mint</button> */}
             <input className='input' style={{"left":"30px"}} placeholder={"Enter Contract Address..."} onChange={(event) =>setContractAddress(event.target.value)} ></input>
+            <button className='button px-4 py-1 my-2' style={{"left":"140px"}} onClick={()=> getUri(contractAddress)}>get Uri</button>
             </div>
         </div>
         </div>
@@ -80,7 +85,7 @@ const Account = ({provider, mint}) =>{
     )
   }
   
-  export default Account
+  export default Mint
 
   // module.exports = {
 
