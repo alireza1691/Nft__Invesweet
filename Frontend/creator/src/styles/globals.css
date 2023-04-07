@@ -158,4 +158,36 @@ footer {
   color: #4979ff;
   text-decoration: underline;
 }
+/* "marginLeft":"12px","marginRight":"60px","fontSize":"20px","color":"black","backgroundColor":"#EBEBDF","fontStyle":"normal","border":"solid","borderColor":"#DDDDCF","padding":"10px 10px","textDecorationLine":"blink","active":"white" */
+.dropDown {
+  /* margin-left: 12px; */
+  /* margin-right: 60px;
+  font-size: 20px;
+  color: #333;
+  background-color: #EBEBDF;
+  font-style: normal;
+  border: solid;
+  border-color: #DDDDCF;
+  text-decoration-line: none;
+  padding: 10px 10px; */
+  margin-bottom: 20px;
+
+}
+
+.dropDown :hover {
+  /* color: #ddd; */
+  background-color: #E9F3F7;
+  /* border: solid; */
+  border-radius: 10px;
+}
+.dropDown :visited {
+  /* background-color: #333; */
+}
+.dropDown :active {
+  background-color: #E8EFF2;
+}
+
+.dropDown .content {
+  font-size: large;
+}
 
