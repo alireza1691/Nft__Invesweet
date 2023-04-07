@@ -15,11 +15,13 @@ export default function Navbar() {
     <div className='dropDown'>
       {/* ,"fontSize":"20px","color":"black","backgroundColor":"#EBEBDF","fontStyle":"normal","border":"solid","borderColor":"#DDDDCF","padding":"10px 10px","textDecorationLine":"blink" */}
     <Link href='/'style={{"marginLeft":"12px","marginRight":"60px", "color": "#467889" ,"fontSize":"20px","textDecorationLine":"blink","padding":"10px 20px"}} >Home</Link>
-    <Link href='/' style={{"marginLeft":"12px","marginRight":"60px", "color": "#467889" ,"fontSize":"20px","textDecorationLine":"blink","padding":"10px 20px"}} >About</Link>
+    <Link href='/Create' style={{"marginLeft":"12px","marginRight":"60px", "color": "#467889" ,"fontSize":"20px","textDecorationLine":"blink","padding":"10px 20px"}} >Create</Link>
     <Link href='/' style={{"marginLeft":"12px","marginRight":"60px", "color": "#467889" ,"fontSize":"20px","textDecorationLine":"blink","padding":"10px 20px"}} >Orders</Link>
     
     </div>
-    <button style={{"marginBottom":"15px","marginLeft":"100px","width":"160px","height":"40px","fontFamily":"sans-serif","fontSize":"20px","fontWeight":"bold","borderRadius":"10px","color":"#467889","border":"none"}}>Connect</button>
+    <div  className='connectButton'  >
+    <button >Connect</button>
+    </div>
     {/* <ConnectButton ></ConnectButton> */}
     </nav>
   )

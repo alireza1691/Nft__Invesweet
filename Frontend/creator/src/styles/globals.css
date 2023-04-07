@@ -190,4 +190,49 @@ footer {
 .dropDown .content {
   font-size: large;
 }
+/* 
+{"marginBottom":"15px","marginLeft":"100px","width":"160px","height":"40px","fontFamily":"sans-serif","fontSize":"20px","fontWeight":"bold","borderRadius":"10px","color":"#467889","border":"none"} */
+
+.connectButton {
+}
+.connectButton button {
+  margin-bottom: 10px;
+  margin-left: 100px;
+  width: 160px;
+  /* width: 160px;
+  height: 40px; */
+  font-family: sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 10px;
+  color: #467889;
+  border: none;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.connectButton :hover {
+  background-color: #F1F1F1;
+  color: #3E4346;
+  font-weight: 50px;
+}
+
+/* .connectButton :visited {
+  background-color: #E8EFF2;
+  color: #ddd;
+} */
+
+.boxCreate {
+  background-color: wheat;
+  height: 200px;
+  width: 50%;
+  border-radius: 20px;
+  position: static;
+  justify-items: center;
+  flex-direction: column;
+  align-items: center;
+  
+}
 
