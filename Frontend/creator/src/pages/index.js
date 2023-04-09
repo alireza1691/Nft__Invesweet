@@ -9,9 +9,9 @@ import ERC721CreatorAbi from "../../Blockchain/Creator.json";
 import ERC721V1ABI from "../../Blockchain/ERC721V1.json"
 import { useMoralis, useWeb3Contract } from "react-moralis"
 // require ('dotenv').config()
-import { MoralisNextApi } from "@moralisweb3/next";
+// import { MoralisNextApi } from "@moralisweb3/next";
 
-import Moralis from 'moralis';
+// import Moralis from 'moralis';
 import { EvmChain } from '@moralisweb3/evm-utils';
 // import { EvmChain } from "@moralisweb3/evm-utils";
 
@@ -36,81 +36,6 @@ export default function Home() {
 
   const { web3, isWeb3Enabled } = useMoralis();
   
-
-  // const runApp = async () => {
-
-  //   const abi = {ERC721CreatorAbi}; // Add ABI
-  
-  //   const address = await addresses[chainId].
-  //       ERC721V1Creator[0];
-  //   console.log(address);
-  //   const chain = EvmChain.ETHEREUM;
-
-  //   try {
-     
-  //     await Moralis.start({
-  //         apiKey: 'TsLS6Uwt4tfB5QoDEmhh82BVsIRK7zqdwPI9LmTyUmt4aLend9KxfZWfpfTc7iEF',
-  //         // ...and any other configuration
-  //     });
-  
-  //     const response = await Moralis.EvmApi.events.getContractEvents({
-  //         address,
-  //         chain,
-  //         abi,
-  //     });
-  
-  //     console.log(response?.result);
-  // } catch (e) {
-  //     console.error(e);
-  // }
-  // }
-
- 
-  const chainId = "31337";
-  // const apiKey = process.env.MORALIS_API_KEY
-
-  const [isConnected, setIsConnected] = useState(false);
-  const [user, setUser] = useState();
-  const [provider, setProvider] = useState();
-  const [signer, setSigner] = useState();
-  const [name, setName] = useState("");
-  const [symbol, setSymbol] = useState("");
-  const [price, setPrice] = useState(0);
-  const [url, setUrl] = useState("");
-  const [description, setDescription] = useState("");
-  const [maxSupply, setMaxSupply] = useState(0);
-  const [limitDisablerERC721, setLimitDisablerERC721] = useState(1);
-  const [limitDisablerERC20, setLimitDisablerERC20] = useState(1);
-  const [ERC20BurnDisabler, setERC20BurnDisabler] = useState(1);
-  const [maxCap, setMaxCap] = useState(0);
-  const [decimals, setDecimals] = useState(18);
-  const [circulatingSupply, setCirculatingSupply] = useState(0);
-  const [burnPercentage, setBurnPercentage] = useState(0);
-  const [popUpVisibility, setPopUpvisibility] = useState();
-  // const [chainId , setChainId] = useState()
-
-  let number, circulatingSupplyNumber, burnPercentageNumber, decimalNumber;
-
-
-  function changeFunc(whichDisabler) {
-    var selectBox = document.getElementById(whichDisabler);
-    
-    if (whichDisabler == "selectBox1") {
-      var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-      setLimitDisablerERC721(selectedValue);
-    }
-    if (whichDisabler == "selectBox2") {
-      var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-      setLimitDisablerERC20(selectedValue);
-    }
-    if (whichDisabler == "selectBox3") {
-      var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-      setERC20BurnDisabler(selectedValue)
-    }
-    if (selectedValue == 2) {
-      setMaxSupply(0);
-    }
-  }
 
   const conncetWalletHandler = async () => {
     console.log("call");
@@ -251,117 +176,24 @@ export default function Home() {
   }, [tabHandler]);
 
   return (
-    <div
-      className=""
-      style={{
-        background:
-          "linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(50,0,84,1) 40%, rgba(0,130,157,1) 100%)",
-      }}
-    >
-      {/* <div className={styles.container}> */}
+    // <div
+    //   className=""
+    //   style={{
+    //     background:
+    //       "linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(50,0,84,1) 40%, rgba(0,130,157,1) 100%)",
+    //   }}
+    // >
+    //   {/* <div className={styles.container}> */}
       
-      {/* <Image style={{'zIndex': '10', 'objectFit':'cover','fle':'fill'}}  src='/invesweett.png' layout="fill" objectFit='cover'/> */}
-      <Header 
-        conncetWalletHandler={conncetWalletHandler}
-        isConnected={isConnected} 
-      />
-      <div>
-        <section>
-          <div className="tabs is-fullwidth pt-3 mr-4 ml-5 is-centered has-text-white">
-            <ul>
-              <li
-                className={tabHandler == "tab-erc721" ? "is-active" : ""}
-                data-target="tab-erc721"
-                onClick={(e) => setTabHandler("tab-erc721")}
-              >
-                <a style={{'fontSize':'16px','fontWeight':'bold'}}>Create NFT</a>
-              </li>
-              <li
-                className={tabHandler == "tab-erc20" ? "is-active" : ""}
-                data-target="tab-erc20"
-                onClick={(e) => setTabHandler("tab-erc20")}
-              >
-                <a style={{'fontSize':'16px','fontWeight':'bold'}}>Create Token</a>
-              </li>
-              <li
-                className={tabHandler == "tab-account" ? "is-active" : ""}
-                data-target="tab-account"
-                onClick={(e) => setTabHandler("tab-account")}
-              >
-                <a style={{'fontSize':'16px','fontWeight':'bold'}}>Faucet</a>
-              </li>
-              <li
-                className={tabHandler == "tab-mint" ? "is-active" : ""}
-                data-target="tab-mint"
-                onClick={(e) => setTabHandler("tab-mint")}
-              >
-                <a style={{'fontSize':'16px','fontWeight':'bold'}}>Airdrop</a>
-              </li>
-            </ul>
-          </div>
-        </section>
+    //   {/* <Image style={{'zIndex': '10', 'objectFit':'cover','fle':'fill'}}  src='/invesweett.png' layout="fill" objectFit='cover'/> */}
+      
+    // </div>
+    <div className="row">
+      <div className="column" style={{"backgroundColor":"white"}}><Image src="/logo.png" width={480} height={300} ></Image></div>
+      <div className="column" style={{"backgroundColor":"white"}}>
+        <h1 style={{"textAlign":"center"}}>Tokenize your assets</h1>
       </div>
-      <main className={styles.main}>
-        <div className="column is-one-third">
-          <section
-            style={{
-              zIndex: "20",
-              width: "400px",
-              justifyContent: "center",
-              justifyItems: "center",
-              borderRadius: "20px",
-            }}
-          >
-            <div className="box " >
-              <div id=" tab-content">
-                <div
-                  className={tabHandler == "tab-erc721" ? "" : "is-hidden"}
-                  id="tab-erc721"
-                >
-                  {/* <PopUp/> */}
-                  {/* <Modal isVisible={true}>
-                  <Card title={"something"} description={"another thing"} style={{"height":"260px","width":"260px", "left":"48px"}} onClick={""}>
-                    <Image loader={()=>"https://img.freepik.com/free-photo/wide-angle-shot-single-tree-growing-clouded-sky-during-sunset-surrounded-by-grass_181624-22807.jpg"} src={"https://img.freepik.com/free-photo/wide-angle-shot-single-tree-growing-clouded-sky-during-sunset-surrounded-by-grass_181624-22807.jpg"} height="260" width="260"/>
-                  </Card>
-                  <Input label="" name="" type=""/>
-                  </Modal> */}
-                  <ERC721CreatorBox setName={setName} setSymbol={setSymbol} setDescription={setDescription} setMaxSupply={setMaxSupply} setPrice={setPrice} setUrl={setUrl} contractERC721Create={contractERC721Create}/>
-                  {/* <button onClick={() => approve} className='button is-dark is-centered' >Transact</button> */}
-                </div>
-                <div
-                  className={tabHandler == "tab-erc20" ? "" : "is-hidden"}
-                  id="tab-erc20"
-                >
-                  <ERC20CreatorBox setName={setName} setSymbol={setSymbol} setMaxSupply={setMaxSupply} setCirculatingSupply={setCirculatingSupply} setBurnPercentage={setBurnPercentage} setDecimals={setBurnPercentage} createERC20={createERC20}/>
-                </div>
-                <div
-                  className={tabHandler == "tab-account" ? "" : "is-hidden"}
-                  id="tab-account"
-                >
-                 <Account/>
-                </div>
-                <div
-                  className={tabHandler == "tab-mint" ? "" : "is-hidden"}
-                  id="tab-mint"
-                >
-                  
-                 <Mint provider={provider} mint={mint} signer={signer} getUri = {getUri}/>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          className="has-text-black"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by Alireza Haghshenas
-        </a>
-      </footer>
+      <div className="column" style={{"backgroundColor":"#aaa"}}>Column</div>
     </div>
     // </div>
   );

@@ -1,5 +1,10 @@
 //SPDX-License-Identifier: MIT
 
+/// @title A main contract which will create ERC721 Contract for users depending on entered inputs.
+/// @author Alireza Haghshenas --> Github: alireza1691
+/// @notice Explain to an end user what this does
+/// @dev Explain to a developer any extra details
+
 pragma solidity ^0.8.17;
 
 import "./CollectionV2.sol";
