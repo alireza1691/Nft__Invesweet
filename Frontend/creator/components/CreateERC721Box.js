@@ -134,4 +134,3 @@ const CreateERC721Box = ({setName, setSymbol, setDescription, setMaxSupply, setP
   }
   
   export default CreateERC721Box
-  

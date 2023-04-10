@@ -1,7 +1,15 @@
 import { Button } from 'bootstrap'
 import React from 'react'
+import Navbar from 'components/Navbar'
 
 export default function Create() {
+
+  const { user, signer , provider , isConnected } = Navbar
+   function log(params) {
+    console.log(user);
+    console.log(signer);
+   }
+   log()
   return (
     <div className='boxCreate'>
     <div>

@@ -2,8 +2,51 @@ import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Button, ConnectButton } from 'web3uikit'
+import { useState } from 'react'
 
-const Navbar = () => {
+const Navbar = ({setUser ,setSigner , setProvider ,setIsConnected}) => {
+
+
+  // const [ isConnected, setIsConnected] = useState(false)
+  // const [ user, setUser] = useState()
+  // const [ provider, setProvider] = useState()
+  // const [ signer, setSigner] = useState()
+
+
+
+
+  const conncetWalletHandler = async () => {
+    console.log("call");
+    if (
+      typeof window !== "undefined" &&
+      typeof window.ethereum !== "undefined"
+    ) {
+      try {
+        const accounts = await ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        setIsConnected(true);
+        setUser(accounts[0]);
+        console.log(`${accounts[0]} connected!`);
+        let connectedProvider = new ethers.providers.Web3Provider(
+          window.ethereum
+        );
+        setProvider(connectedProvider);
+        console.log(connectedProvider);
+
+        // let signer = connectedProvider.getSigner()
+        const _signer = connectedProvider.getSigner(accounts[0]);
+        setSigner(_signer);
+        console.log(_signer);
+
+        const chainId = await _signer.getChainId();
+        console.log("chain id", chainId);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
 
   // function openForm() {
   //   // document.getElementById("myForm").style.display = "block";
@@ -33,7 +76,7 @@ const Navbar = () => {
     
     </div>
     <div  className='connectButton'  >
-    <button>Connect</button>
+    <button onClick={() =>conncetWalletHandler()}>Connect</button>
     
     </div>
     </nav>

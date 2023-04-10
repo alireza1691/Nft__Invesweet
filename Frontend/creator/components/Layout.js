@@ -2,12 +2,12 @@ import React, { Children } from 'react'
 import Navbar from './Navbar'
 import Footer from './Footer'
 
-const Layout = ({ children }) =>{
+const Layout = ({ children ,setUser ,setSigner , setProvider ,setIsConnected}) =>{
 
 // export default function Layout({ children }) {
   return (
     <div className='content'>
-        <Navbar/>
+        <Navbar  setUser={setUser} setSigner={setSigner} setProvider={setProvider} setIsConnected={setIsConnected}  />
         { children }
         <Footer/>
     </div>
