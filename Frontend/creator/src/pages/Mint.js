@@ -1,7 +1,7 @@
 import { Button } from 'bootstrap'
 import React from 'react'
 
-function Create() {
+export default function Mint() {
   return (
     <div className='boxCreate'>
         <div>
@@ -24,4 +24,3 @@ function Create() {
   )
 }
 
-export default Create

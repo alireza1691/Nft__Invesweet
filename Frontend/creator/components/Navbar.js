@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Button, ConnectButton } from 'web3uikit'
 
-export default function Navbar() {
+const Navbar = () => {
 
   // function openForm() {
   //   // document.getElementById("myForm").style.display = "block";
@@ -42,3 +42,5 @@ export default function Navbar() {
 
   )
 }
+
+export default Navbar
