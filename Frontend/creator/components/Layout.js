@@ -2,7 +2,7 @@ import React, { Children } from 'react'
 import Navbar from './Navbar'
 import Footer from './Footer'
 
-const Layout = ({ children ,setUser ,setSigner , setProvider ,setIsConnected}) =>{
+const Layout = ({ children ,setUser ,setSigner , setProvider ,setIsConnected ,signer}) =>{
 
 // export default function Layout({ children }) {
   return (

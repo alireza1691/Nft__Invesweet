@@ -3,11 +3,12 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Button, ConnectButton } from 'web3uikit'
 import { useState } from 'react'
+import { ethers } from 'ethers'
 
-const Navbar = ({setUser ,setSigner , setProvider ,setIsConnected}) => {
+const Navbar = ({setUser ,setSigner , setProvider }) => {
 
 
-  // const [ isConnected, setIsConnected] = useState(false)
+  const [ isConnected, setIsConnected] = useState(false)
   // const [ user, setUser] = useState()
   // const [ provider, setProvider] = useState()
   // const [ signer, setSigner] = useState()
@@ -71,13 +72,14 @@ const Navbar = ({setUser ,setSigner , setProvider ,setIsConnected}) => {
     <Link href='/'style={{"marginLeft":"12px","marginRight":"30px", "color": "#467889" ,"fontSize":"20px","textDecorationLine":"blink","padding":"10px 20px"}} >Home</Link>
     <Link href='/Create' style={{"marginLeft":"12px","marginRight":"30px", "color": "#467889" ,"fontSize":"20px","textDecorationLine":"blink","padding":"10px 20px"}} >Create</Link>
     <Link href='/Mint'style={{"marginLeft":"12px","marginRight":"30px", "color": "#467889" ,"fontSize":"20px","textDecorationLine":"blink","padding":"10px 20px"}} >Mint</Link>
-    <Link href='/' style={{"marginLeft":"12px","marginRight":"30px", "color": "#467889" ,"fontSize":"20px","textDecorationLine":"blink","padding":"10px 20px"}} >Dashboard</Link>
+    <Link href='/Dashboard' style={{"marginLeft":"12px","marginRight":"30px", "color": "#467889" ,"fontSize":"20px","textDecorationLine":"blink","padding":"10px 20px"}} >Dashboard</Link>
     <Link href='/'style={{"marginLeft":"12px","marginRight":"30px", "color": "#467889" ,"fontSize":"20px","textDecorationLine":"blink","padding":"10px 20px"}} >About</Link>
     
     </div>
     <div  className='connectButton'  >
-    <button onClick={() =>conncetWalletHandler()}>Connect</button>
-    
+      { isConnected ? (<button style={{"backgroundColor":"#467889","color":"#E9F3F7"}} disabled>Connected</button>) :
+    (<button onClick={() =>conncetWalletHandler()}>Connect</button>)
+  }
     </div>
     </nav>
 

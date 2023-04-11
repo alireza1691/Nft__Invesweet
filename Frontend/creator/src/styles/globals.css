@@ -392,3 +392,66 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+.imageMove {
+
+  position: relative;
+  animation: mymove 4s infinite;
+  /* animation-direction: alternate; */
+  /* animation-duration: 3s; */
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+
+
+  transform:
+  rotateX(51deg)
+  rotateZ(43deg);
+transform-style: preserve-3d;
+border-radius: 32px;
+box-shadow:
+  1px 1px 0 1px #f9f9fb,
+  -1px 0 28px 0 rgba(34, 33, 81, 0.01),
+  28px 28px 28px 0 rgba(34, 33, 81, 0.25);
+transition:
+  .4s ease-in-out transform,
+  .4s ease-in-out box-shadow;
+
+}
+/* @keyframes mymove {
+  from {left: 200px;}
+  to {left: 0px;animation-play-state: paused}
+} */
+
+.imageMove :hover {
+  transform:
+  translate3d(0px, -16px, 0px)
+  rotateX(51deg)
+  rotateZ(43deg);
+  box-shadow:
+  1px 1px 0 1px #f9f9fb,
+  -1px 0 28px 0 rgba(34, 33, 81, 0.01),
+  54px 54px 28px -10px rgba(34, 33, 81, 0.15);
+}
+
+
+.coin {
+  position: relative;
+  animation: coinAnimate 1s infinite;
+  height: 250px;
+  width: 250px;
+  /* animation-direction: alternate; */
+  /* animation-duration: 3s; */
+  /* animation-fill-mode: forwards; */
+  /* animation-iteration-count: 1; */
+  animation-direction: alternate-reverse;
+}
+
+@keyframes coinAnimate {
+  from {left: 0px; transform: rotateY(40deg);}
+  to {left: 0px; transform: rotateY(50deg);}
+}
+
+/* #myCoin {
+  transform: rotateY(360deg);
+  -webkit-transform: rotateY(180deg);
+} */

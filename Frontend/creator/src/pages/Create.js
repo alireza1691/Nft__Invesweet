@@ -2,11 +2,10 @@ import { Button } from 'bootstrap'
 import React from 'react'
 import Navbar from 'components/Navbar'
 
-export default function Create() {
+export default function Create({signer}) {
 
-  const { user, signer , provider , isConnected } = Navbar
-   function log(params) {
-    console.log(user);
+   function log() {
+
     console.log(signer);
    }
    log()
@@ -26,9 +25,9 @@ export default function Create() {
                 <a href="#">Unlimit</a>
             </div>
         </div> */}
-        <label style={{"marginTop":"8px"}} class="switch">
+        <label style={{"marginTop":"8px"}} className="switch">
           <input type="checkbox"/>
-          <span class="slider round"></span>
+          <span className="slider round"></span>
         </label>
         <input className='input' placeholder='Enter image URL...' style={{"color":"black","width":"50%","margin":"5px"}} ></input>
         <div className='submitbtn'>

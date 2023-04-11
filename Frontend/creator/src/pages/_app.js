@@ -15,7 +15,7 @@ import { useState } from 'react';
 export default function App({ Component, pageProps }) {
 
 
-  const [ isConnected, setIsConnected] = useState(false)
+  // const [ isConnected, setIsConnected] = useState(false)
   const [ user, setUser] = useState()
   const [ provider, setProvider] = useState()
   const [ signer, setSigner] = useState()
@@ -25,8 +25,8 @@ export default function App({ Component, pageProps }) {
 
   return(
     <MoralisProvider /* appId={APP_ID} serverUrl={SERVER_URL} */initializeOnMount={false}>
-    <Layout  setUser={setUser} setSigner={setSigner} setProvider={setProvider} setIsConnected={setIsConnected} >
-      <Component {...pageProps} />
+    <Layout  setUser={setUser} setSigner={setSigner} setProvider={setProvider} signer={signer} >
+      <Component {...pageProps} signer={signer}/>
     </Layout>
     </MoralisProvider>
 
