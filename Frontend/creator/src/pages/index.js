@@ -193,25 +193,28 @@ export default function Home({signer}) {
     //   {/* <Image style={{'zIndex': '10', 'objectFit':'cover','fle':'fill'}}  src='/invesweett.png' layout="fill" objectFit='cover'/> */}
       
     // </div>
-    <div>
+    <div style={{"height":"1024px"}} >
     <div className="row">
       <div className="column" style={{"backgroundColor":"white"}}>
         <div style={{"marginTop":"100px"}}>
           <h1 style={{"textAlign":"center","color":"#467889","fontFamily":"'Courier New', Courier, monospace","fontSize":"45px","fontWeight":"bold","width":"90%"}}>Tokenize your assets</h1>
+          <p style={{"fontSize":"20px","fontWeight":"600","color":"#467889","marginTop":"50px","fontFamily":"monospace","borderRadius":"10px","padding":"10px","textAlign":"center"}} >Tokenize your asset, make your tickets, create your collection</p>
           {/* <p style={{"fontSize":"20px","fontWeight":"600","color":"#467889","marginTop":"50px","fontFamily":"monospace","backgroundColor":"#E9F3F7","borderRadius":"10px","padding":"10px"}} >Tokenize each asset you need as NFT</p> */}
         </div>
         
         </div>
       
       <div className="column" style={{"backgroundColor":"white"}}>
-        <Image src="/coin.png" width={100} height={100} className="coin" ></Image>
+        <div className="logoHover" >
+        <Image src="/logo.png" width={480} height={300} className="logoHover" style={{"paddingLeft":"30px"}}></Image>
+        </div>
       </div>
     </div>
     <div style={{"marginTop":"50px"}} className="row">
       <div className="column" style={{"backgroundColor":"white"}}>
         <div style={{"textAlign":"center"}}>
-        <p style={{"fontSize":"20px","fontWeight":"600","color":"#467889","marginTop":"50px","fontFamily":"monospace","backgroundColor":"#E9F3F7","borderRadius":"10px","padding":"10px"}} >Tokenize each asset you need as NFT</p>
-          <h1></h1>
+        <p style={{"fontSize":"20px","fontWeight":"600","color":"#467889","marginTop":"50px","fontFamily":"monospace","backgroundColor":"#E9F3F7","borderRadius":"10px","padding":"10px"}} >Main aim of Invesweet is increaseing Nft usage in real life. Users can create own collections depends on what they need.</p>
+
         </div>
         
         </div>
@@ -219,8 +222,14 @@ export default function Home({signer}) {
         
       </div>
       <div className="column" style={{"backgroundColor":"white"}}>
-        <div className="imageMove" ></div>
-        <Image src="/logo.png" width={480} height={300} className="imageMove" ></Image>
+      </div>
+    </div>
+    <div className="row">
+      <div className="column" style={{"backgroundColor":"white"}}>
+      </div>
+      
+      <div className="column" style={{"backgroundColor":"white"}}>
+        <p style={{"fontSize":"20px","fontWeight":"600","color":"#467889","marginTop":"50px","fontFamily":"monospace","backgroundColor":"#E9F3F7","borderRadius":"10px","padding":"10px"}} >Some test text</p>
       </div>
     </div>
     

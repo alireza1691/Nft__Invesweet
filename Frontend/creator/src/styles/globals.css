@@ -455,3 +455,25 @@ transition:
   transform: rotateY(360deg);
   -webkit-transform: rotateY(180deg);
 } */
+
+.logoHover {
+  transform:
+  perspective(800px)
+  rotateY(-15deg) scale(0.9)
+  rotateX(10deg);
+  filter: blur(2px);
+  opacity: 0.8;
+  transition: 0.6s ease all;
+
+}
+
+.logoHover :hover {
+  transform:
+  perspective(800px)
+  rotateY(10deg)
+  translateY(-50px)
+  rotateX(10deg)
+  scale(1.1);
+  filter: blur(0);
+  opacity: 1;
+}
