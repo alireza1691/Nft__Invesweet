@@ -10,6 +10,7 @@ import ERC721V1ABI from "../../Blockchain/ERC721V1.json"
 import { useMoralis, useWeb3Contract } from "react-moralis"
 // require ('dotenv').config()
 // import { MoralisNextApi } from "@moralisweb3/next";
+//
 
 // import Moralis from 'moralis';
 import { EvmChain } from '@moralisweb3/evm-utils';
