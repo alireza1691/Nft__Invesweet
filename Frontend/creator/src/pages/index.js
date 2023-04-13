@@ -198,8 +198,8 @@ export default function Home({signer}) {
     <div className="row">
       <div className="column" style={{"backgroundColor":"white"}}>
         <div style={{"marginTop":"100px"}}>
-          <h1 style={{"textAlign":"center","color":"#467889","fontFamily":"'Courier New', Courier, monospace","fontSize":"45px","fontWeight":"bold","width":"90%"}}>Tokenize your assets</h1>
-          <p style={{"fontSize":"20px","fontWeight":"600","color":"#467889","marginTop":"50px","fontFamily":"monospace","borderRadius":"10px","padding":"10px","textAlign":"center"}} >Tokenize your asset, make your tickets, create your collection</p>
+          <h1 style={{"textAlign":"center","color":"#467889","fontFamily":"impact","fontSize":"65px","fontWeight":"bold","width":"90%","textShadow":"0px 3px 0px #b2a98f, 0px 14px 10px rgba(0,0,0,0.15),0px 10px 2px rgba(0,0,0,0.1),0px 34px 30px rgba(0,0,0,0.1)"}}>Tokenize your assets/products</h1>
+          <p style={{"fontSize":"20px","fontWeight":"600","color":"#467889","marginTop":"50px","fontFamily":"monospace","borderRadius":"10px","padding":"10px","textAlign":"left","textShadow":"2px 4px 3px rgba(0,0,0,0.1)"}} >Tokenize your asset, make your tickets, create your collection</p>
           {/* <p style={{"fontSize":"20px","fontWeight":"600","color":"#467889","marginTop":"50px","fontFamily":"monospace","backgroundColor":"#E9F3F7","borderRadius":"10px","padding":"10px"}} >Tokenize each asset you need as NFT</p> */}
         </div>
         
@@ -211,10 +211,11 @@ export default function Home({signer}) {
         </div>
       </div>
     </div>
-    <div style={{"marginTop":"50px"}} className="row">
+    <div style={{"marginTop":"150px"}} className="row">
       <div className="column" style={{"backgroundColor":"white"}}>
-        <div style={{"textAlign":"center"}}>
-        <p style={{"fontSize":"20px","fontWeight":"600","color":"#467889","marginTop":"50px","fontFamily":"monospace","backgroundColor":"#E9F3F7","borderRadius":"10px","padding":"10px"}} >Main aim of Invesweet is increaseing Nft usage in real life. Users can create own collections depends on what they need.</p>
+        <div style={{"textAlign":"justify",
+      "alignItems":"center"}}>
+        <p style={{"fontSize":"20px","fontWeight":"600","color":"#467889","marginTop":"50px","fontFamily":"monospace","backgroundColor":"#E9F3F7","borderRadius":"10px","padding":"10px"}} >Main aim of Invesweet is increaseing NFT usage in real life. Users are able to create own collections depends on what they need.</p>
 
         </div>
         
@@ -228,12 +229,26 @@ export default function Home({signer}) {
     <div className="row">
       <div className="column" style={{"backgroundColor":"white"}}>
       </div>
-      
       <div className="column" style={{"backgroundColor":"white"}}>
-        <p style={{"fontSize":"20px","fontWeight":"600","color":"#467889","marginTop":"50px","fontFamily":"monospace","backgroundColor":"#E9F3F7","borderRadius":"10px","padding":"10px"}} >Some test text</p>
+      <div className="coinHover">
+      <Image src="/coin.png" width={150} height={100} style={{"marginTop":"50px"}} className="coinHover"  ></Image>
+      </div>
+      </div>
+      <div className="column" style={{"backgroundColor":"white"}}>
+      <p style={{"fontSize":"20px","fontWeight":"600","color":"#467889","marginTop":"50px","fontFamily":"monospace","backgroundColor":"#E9F3F7","borderRadius":"10px","padding":"10px"}} >You can share your mint link to your users/costumers that they can mint their own NFTs which is your collection</p>
       </div>
     </div>
-    
+    <div className="row">
+      <div className="column" style={{"backgroundColor":"white"}}>
+      <p style={{"fontSize":"20px","fontWeight":"600","color":"#467889","marginTop":"50px","fontFamily":"monospace","backgroundColor":"#E9F3F7","borderRadius":"10px","padding":"10px"}} >
+        Your collection could be your art, your product or maybe tokenized product, a ticket and anything that you might need to create and a your community/costumers should mint.
+      </p>
+      </div>
+      <div className="column" style={{"backgroundColor":"white"}}>
+      </div>
+      <div className="column" style={{"backgroundColor":"white"}}>
+      </div>
+    </div>
     </div>
   );
 }
