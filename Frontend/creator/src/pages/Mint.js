@@ -1,12 +1,21 @@
 import { Button } from 'bootstrap'
+// import e from 'express'
 import React from 'react'
+import { useState } from 'react'
+// import fs from 'fs';
+// import * as fs from 'fs';
+// var fs = require('fs');
 
 export default function Mint() {
+
+// const [contractRoute, setContractRoute] = useState()
+// let contractAddress
+
   return (
     <div className='boxCreate'>
         <div>
             <h6 style={{"color":"#467889","fontWeight":"bold","fontSize":"18px"}}>Create your NFTs</h6>
-            <input className='input' placeholder='Enter/Paste contract address...' style={{"color":"black","width":"50%","margin":"5px"}} ></input>
+            <input className='input' placeholder='Enter/Paste contract address...' style={{"color":"black","width":"50%","margin":"5px"}} onChange={(e) => setContractRoute(e.target.value)}></input>
             {/* <button style={{"border":"solid","width":"80px","padding":"5px 10px","margin":"10px","borderRadius":"5px","marginTop":"7px"}} >hi</button> */}
             {/* <div class="dropdown">
                 <button class="dropbtn">Max</button>
