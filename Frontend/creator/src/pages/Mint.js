@@ -1,15 +1,27 @@
 import { Button } from 'bootstrap'
 // import e from 'express'
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 // import fs from 'fs';
 // import * as fs from 'fs';
 // var fs = require('fs');
 
 export default function Mint() {
 
-// const [contractRoute, setContractRoute] = useState()
-// let contractAddress
+  const router = useRouter()
+
+  const [contractRoute, setContractRoute] = useState()
+  // let contractAddress
+
+  function enterContractAddress() {
+    router.push(`/mint/${contractRoute}`)
+  }
+
+  useEffect (() => {
+    console.log(contractRoute);
+
+  },[contractRoute])
 
   return (
     <div className='boxCreate'>
@@ -25,7 +37,7 @@ export default function Mint() {
                 </div>
             </div> */}
             <div className='submitbtn'>
-            <button >Submit</button>
+            <button onClick={enterContractAddress()} >Submit</button>
             </div>
         </div>
         

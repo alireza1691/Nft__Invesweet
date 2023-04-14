@@ -230,18 +230,16 @@ export default function Home({signer}) {
       <div className="column" style={{"backgroundColor":"white"}}>
       </div>
       <div className="column" style={{"backgroundColor":"white"}}>
-      <div className="coinHover">
-      <Image src="/coin.png" width={150} height={100} style={{"marginTop":"50px"}} className="coinHover"  ></Image>
-      </div>
+      <div className="coinHover"> </div>
       </div>
       <div className="column" style={{"backgroundColor":"white"}}>
-      <p style={{"fontSize":"20px","fontWeight":"600","color":"#467889","marginTop":"50px","fontFamily":"monospace","backgroundColor":"#E9F3F7","borderRadius":"10px","padding":"10px"}} >You can share your mint link to your users/costumers that they can mint their own NFTs which is your collection</p>
+      <p style={{"fontSize":"20px","fontWeight":"600","color":"#467889","marginTop":"50px","fontFamily":"monospace","backgroundColor":"#E9F3F7","borderRadius":"10px","padding":"10px"}} >After generate NFT contract users can share mint link to own users/costumers that they can mint their own NFTs using generated NFT contract </p>
       </div>
     </div>
     <div className="row">
       <div className="column" style={{"backgroundColor":"white"}}>
       <p style={{"fontSize":"20px","fontWeight":"600","color":"#467889","marginTop":"50px","fontFamily":"monospace","backgroundColor":"#E9F3F7","borderRadius":"10px","padding":"10px"}} >
-        Your collection could be your art, your product or maybe tokenized product, a ticket and anything that you might need to create and a your community/costumers should mint.
+        Generated contract could be art collection , virual product or maybe tokenized product, ticket and anything that you might need to create/supply and a your community/costumers is able to mint them.
       </p>
       </div>
       <div className="column" style={{"backgroundColor":"white"}}>
