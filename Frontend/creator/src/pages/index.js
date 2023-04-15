@@ -207,7 +207,7 @@ export default function Home({signer}) {
       
       <div className="column" style={{"backgroundColor":"white"}}>
         <div className="logoHover" >
-        <Image src="/logo.png" width={480} height={300} className="logoHover" style={{"paddingLeft":"30px"}}></Image>
+        <Image src="/logo.png" width={480} height={300} className="logoHover" style={{"paddingLeft":"30px"}} alt="logo loading..." ></Image>
         </div>
       </div>
     </div>

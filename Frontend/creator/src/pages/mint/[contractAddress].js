@@ -1,40 +1,58 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useRouter } from 'next/router'
 
-export const getStaticPaths = async () => {
-    const res = await fetch("https://jsonplaceholder.typicode.com/photos")
-    const data = await res.json()
+// export const getStaticPaths = async () => {
+//     const res = await fetch("https://jsonplaceholder.typicode.com/photos")
+//     const data = await res.json()
 
-    const paths = data.map(product => {
-        return {
-            params: {id: product.id.toString()}
-        }
-    })
-    return {
-        paths,
-        fallback: false
-    }
+//     const paths = data.map(product => {
+//         return {
+//             params: {id: product.id.toString()}
+//         }
+//     })
+//     return {
+//         paths,
+//         fallback: false
+//     }
 
    
-}
+// }
 
-export const getStaticProps = async (context) => {
+// export const getStaticProps = async (context) => {
 
-    const id = context.params.id 
-    const res = await fetch("https://jsonplaceholder.typicode.com/photos/"+ id)
-    const data = await res.json()
-    return {
-        props: { product: data}
-    }
-}
+//     const id = context.params.id 
+//     const res = await fetch("https://jsonplaceholder.typicode.com/photos/"+ id)
+//     const data = await res.json()
+//     return {
+//         props: { product: data}
+//     }
+// }
+function Details() {
+    const [contractAddress, setContractAddress] = useState()
+    const router = useRouter()
 
-function Details({ product }) {
-  return (      
+    useState(()=>{
+        const contractA = router.query.contractAddress
+        setContractAddress(contractA)
+    },[])
+
+
+    // function log() {
+    //     const name = router.query.contractAddress
+    //     console.log(name);
+    // }
+    // log()
+  return ( 
+    <div className='boxCreate'>
     <div>
-        <h1>{product.title}</h1>
-        <p>{product.url}</p>
-        <p>{product.thumbnailUrl}</p>
-        <p>{product.id}</p>
+        <h6 style={{"color":"#467889","fontWeight":"bold","fontSize":"18px"}}>Mint</h6>
+        <h6 style={{"color":"#467889","fontWeight":"bold","fontSize":"18px"}}>Contract address: {contractAddress}</h6>
+        <div className='submitbtn'>
+        <button onClick={()=>enterContractAddress()} >Mint</button>
+        </div>
     </div>
+    
+</div>
   )
 }
 
