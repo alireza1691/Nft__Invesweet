@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@chainlink/contracts": "^0.5.1",
+    "@moralisweb3/common-evm-utils": "^2.18.4",
     "@moralisweb3/evm-utils": "^2.14.3",
     "@moralisweb3/next": "^2.14.3",
     "@next/font": "13.1.6",
