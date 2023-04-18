@@ -73,7 +73,7 @@ const Navbar = ({setUser ,setSigner , setProvider }) => {
     <Link href='/Create' style={{"marginLeft":"12px","marginRight":"30px", "color": "#467889" ,"fontSize":"20px","textDecorationLine":"blink","padding":"10px 20px"}} >Create</Link>
     <Link href='/Mint'style={{"marginLeft":"12px","marginRight":"30px", "color": "#467889" ,"fontSize":"20px","textDecorationLine":"blink","padding":"10px 20px"}} >Mint</Link>
     <Link href='/Dashboard' style={{"marginLeft":"12px","marginRight":"30px", "color": "#467889" ,"fontSize":"20px","textDecorationLine":"blink","padding":"10px 20px"}} >Dashboard</Link>
-    <Link href='/'style={{"marginLeft":"12px","marginRight":"30px", "color": "#467889" ,"fontSize":"20px","textDecorationLine":"blink","padding":"10px 20px"}} >About</Link>
+    <Link href='/About'style={{"marginLeft":"12px","marginRight":"30px", "color": "#467889" ,"fontSize":"20px","textDecorationLine":"blink","padding":"10px 20px"}} >About</Link>
     
     </div>
     <div  className='connectButton'  >
