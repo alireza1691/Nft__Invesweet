@@ -28,8 +28,8 @@ async function main() {
   const CreatorContractBalance = await provider.getBalance(ERC721Creator.address)
   console.log(ethers.utils.formatEther(CreatorContractBalance).toString());
 
-  const NftInstant = (await ethers.getContractAt("ERC721V2")).attach(newContractAddress).connect(deployer)
-  console.log(NftInstant.deployed);
+//   const NftInstant = (await ethers.getContractFactory("ERC721V2")).attach(newContractAddress).connect(deployer)
+//   console.log(NftInstant.deployed);
   console.log(await provider.getCode(newContractAddress));
 
   
