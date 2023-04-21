@@ -1,6 +1,6 @@
 
 const { Provider } = require("@ethersproject/providers");
-const { Contract, providers, BigNumber } = require("ethers");
+const { Contract, providers, BigNumber, ContractFactory } = require("ethers");
 const {hre, ethers, network, getNamedAccounts} = require("hardhat");
 
 async function main() {
@@ -27,6 +27,10 @@ async function main() {
 
   const CreatorContractBalance = await provider.getBalance(ERC721Creator.address)
   console.log(ethers.utils.formatEther(CreatorContractBalance).toString());
+
+  const NftInstant = (await ethers.getContractAt("ERC721V2")).attach(newContractAddress).connect(deployer)
+  console.log(NftInstant.deployed);
+  console.log(await provider.getCode(newContractAddress));
 
   
 

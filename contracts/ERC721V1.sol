@@ -43,7 +43,7 @@ contract ERC721V1 is ERC721{
     function mint () external payable {
         require(msg.value >= s_fee, "Msg.value less than NFT price");
         require(counterTokenID <= i_maxSupply,"Maximun number was minted");
-        (bool ok,) = parentContract.call{value: (msg.value)/100}("");
+        (bool ok,) = parentContract.call{value: (s_fee)/100}("");
         if (ok) {
             _mint(msg.sender, counterTokenID);
         counterTokenID ++;
