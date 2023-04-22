@@ -19,14 +19,14 @@ async function main() {
 
   // Set fee for creation:
 
-  await ERC721Creator.setFee(1000000000000000)
+  await ERC721Creator.setFee(ethers.utils.parseEther("0.1"))
   const fee = await ERC721Creator.getFee()
-  console.log(`fee = ${fee}`);
+  console.log(`fee = ${ethers.utils.formatEther(fee)} ETH`);
 
-  //  Create firs collection using creator , get address and get address
+  //  Create first collection using creator , get address and get address
 
 
-  const Collection = await ERC721Creator.createERC721('alireza','arz',2000000000000000, 1000,"chert",{value: fee})
+  const Collection = await ERC721Creator.createERC721('alireza','arz',ethers.utils.parseEther("0.1"), 1000,"chert",{value: fee})
   const tx = await Collection.wait(1)
   const newContractAddress = tx.events[0].args[1]
   console.log(`collection address${newContractAddress}`);
@@ -36,7 +36,6 @@ async function main() {
 
 
   //
-
   const provider =  ethers.getDefaultProvider()
   const NFTcontractBalance = await provider.getBalance(newContractAddress)
   console.log(ethers.utils.formatEther(NFTcontractBalance).toString());
@@ -46,8 +45,8 @@ async function main() {
 
 //   const NftInstant = (await ethers.getContractFactory("ERC721V2")).attach(newContractAddress).connect(deployer)
 //   console.log(NftInstant.deployed);
-  console.log(await Provider.getCode(newContractAddress));
-  console.log(await provider.getCode(ERC721Creator.address));
+//   console.log(await provider.getCode(newContractAddress));
+//   console.log(await provider.getCode(ERC721Creator));
 
   
 
