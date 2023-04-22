@@ -3,9 +3,10 @@ pragma solidity ^0.8.17;
 
 // import "./ERC721Upgreadable.sol";
 import "./ERC721V1.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 
-contract Creator {
+contract Creator is Ownable {
     
     event ERC721Create(address indexed contractAddress, address indexed owner, string symbol);
 
@@ -42,4 +43,13 @@ contract Creator {
         ContractInstance.mint();
     }
 
+    function setFee(uint256 newFee) external onlyOwner {
+        s_ERC721Fee = newFee;
+    }
+
+    // Getter funcs:
+
+    function getFee() external view returns(uint256) {
+        return s_ERC721Fee;
+    }
 }
