@@ -2,7 +2,6 @@
 const { Provider } = require("@ethersproject/providers");
 const { Contract, providers, BigNumber, ContractFactory } = require("ethers");
 const {hre, ethers, network, getNamedAccounts} = require("hardhat");
-const collectionAbi = require ('../contracts/ABI/ERC721V1ABI')
 const compiledContract = require('../artifacts/contracts/ERC721V1.sol/ERC721V1.json')
 
 async function main() {
@@ -30,8 +29,8 @@ async function main() {
 
   const Collection = await ERC721Creator.createERC721('alireza','arz',ethers.utils.parseEther("0.1"), 10000000000,"chert",{value: fee})
   const tx = await Collection.wait(1)
-  const newContractAddress = tx.events[0].args[1]
-  console.log(`collection address${newContractAddress}`);
+  const newContractAddress = tx.events[0].args.contractAddress
+  console.log(newContractAddress);
 
   const balanceAfter = await ERC721Creator.getBalance()
   console.log(`creator balance after${ethers.utils.formatEther(balanceAfter).toString()}`);
@@ -39,13 +38,16 @@ async function main() {
 
   //
   const provider =  ethers.getDefaultProvider()
-  const collectionContract = ContractFactory.fromSolidity(compiledContract [deployer])
+  const collectionContract = (await ethers.getContractFactory("ERC721V1")).attach(newContractAddress)
 //   const NFTcontractBalance = await provider.getBalance(newContractAddress)
-    const NFTcontractBalance = collectionContract.getBalance()
-  console.log(ethers.utils.formatEther(NFTcontractBalance).toString());
+    const NFTcontractBalance = await collectionContract.getBalance()
+  console.log("Balance before mint",ethers.utils.formatEther(NFTcontractBalance).toString());
 
-  const CreatorContractBalance = await provider.getBalance(ERC721Creator.address)
-  console.log(ethers.utils.formatEther(CreatorContractBalance).toString());
+    const mintPrice = await collectionContract.getPrice()
+    const mintTx = await collectionContract.mint({value: mintPrice})
+
+    const NFTcontractBalanceAfterMint = await collectionContract.getBalance()
+    console.log("Balance after mint",ethers.utils.formatEther(NFTcontractBalanceAfterMint).toString());
 
 //   const NftInstant = (await ethers.getContractFactory("ERC721V2")).attach(newContractAddress).connect(deployer)
 //   console.log(NftInstant.deployed);
