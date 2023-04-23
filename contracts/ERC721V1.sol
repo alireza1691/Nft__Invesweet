@@ -17,7 +17,7 @@ contract ERC721V1 is ERC721{
     uint256 private counterTokenID;
     uint256 private s_fee;
     uint256 private immutable i_maxSupply;
-    address private parentContract;
+    address payable private parentContract;
     // address private immutable i_owner;
 
        // Mapping from token ID to owner address
@@ -33,6 +33,7 @@ contract ERC721V1 is ERC721{
         i_maxSupply = maxSupply;
         _owner = owner;
         s_url = imgUrl;
+        parentContract = payable(msg.sender);
     }
 
     modifier onlyOwner {
@@ -44,6 +45,7 @@ contract ERC721V1 is ERC721{
         require(msg.value >= s_fee, "Msg.value less than NFT price");
         require(counterTokenID <= i_maxSupply,"Maximun number was minted");
         (bool ok,) = parentContract.call{value: (s_fee)/100}("");
+        // (bool ok) = parentContract.send((s_fee)/100);
         if (ok) {
             _mint(msg.sender, counterTokenID);
         counterTokenID ++;

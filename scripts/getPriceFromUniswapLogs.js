@@ -14,50 +14,6 @@ async function main() {
   // Get instance of creator, then show it's address and balance
 
   const ERC721Creator = await ethers.getContract("Creator")
-  console.log(`creator address ${ERC721Creator.address}`);
-  const balanceBefore = await ERC721Creator.getBalance()
-  console.log(`creator balance before${ethers.utils.formatEther(balanceBefore).toString()}`);
-
-  // Set fee for creation:
-
-  await ERC721Creator.setFee(ethers.utils.parseEther("0.1"))
-  const fee = await ERC721Creator.getFee()
-  console.log(`fee = ${ethers.utils.formatEther(fee)} ETH`);
-
-  //  Create first collection using creator , get address and get address
-
-
-  const Collection = await ERC721Creator.createERC721('alireza','arz',ethers.utils.parseEther("0.1"), 10000000000,"chert",{value: fee})
-  const tx = await Collection.wait(1)
-  const newContractAddress = tx.events[0].args.contractAddress
-  console.log(newContractAddress);
-
-  const balanceAfter = await ERC721Creator.getBalance()
-  console.log(`creator balance after${ethers.utils.formatEther(balanceAfter).toString()}`);
-
-
-  //
-  const provider =  ethers.getDefaultProvider()
-  const collectionContract = (await ethers.getContractFactory("ERC721V1")).attach(newContractAddress)
-//   const NFTcontractBalance = await provider.getBalance(newContractAddress)
-    const NFTcontractBalance = await collectionContract.getBalance()
-  console.log("Balance before mint",ethers.utils.formatEther(NFTcontractBalance).toString());
-
-    const mintPrice = await collectionContract.getPrice()
-    const mintTx = await collectionContract.mint({value: mintPrice})
-
-    const NFTcontractBalanceAfterMint = await collectionContract.getBalance()
-    console.log("Balance after mint",ethers.utils.formatEther(NFTcontractBalanceAfterMint).toString());
-
-//   const NftInstant = (await ethers.getContractFactory("ERC721V2")).attach(newContractAddress).connect(deployer)
-//   console.log(NftInstant.deployed);
-//   console.log(await provider.getCode(newContractAddress));
-//   console.log(await provider.getCode(ERC721Creator));
-
-  
-
-  
-
 
 }
 
