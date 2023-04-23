@@ -2,6 +2,8 @@
 const { Provider } = require("@ethersproject/providers");
 const { Contract, providers, BigNumber, ContractFactory } = require("ethers");
 const {hre, ethers, network, getNamedAccounts} = require("hardhat");
+const collectionAbi = require ('../contracts/ABI/ERC721V1ABI')
+const compiledContract = require('../artifacts/contracts/ERC721V1.sol/ERC721V1.json')
 
 async function main() {
 
@@ -26,7 +28,7 @@ async function main() {
   //  Create first collection using creator , get address and get address
 
 
-  const Collection = await ERC721Creator.createERC721('alireza','arz',ethers.utils.parseEther("0.1"), 1000,"chert",{value: fee})
+  const Collection = await ERC721Creator.createERC721('alireza','arz',ethers.utils.parseEther("0.1"), 10000000000,"chert",{value: fee})
   const tx = await Collection.wait(1)
   const newContractAddress = tx.events[0].args[1]
   console.log(`collection address${newContractAddress}`);
@@ -37,7 +39,9 @@ async function main() {
 
   //
   const provider =  ethers.getDefaultProvider()
-  const NFTcontractBalance = await provider.getBalance(newContractAddress)
+  const collectionContract = ContractFactory.fromSolidity(compiledContract [deployer])
+//   const NFTcontractBalance = await provider.getBalance(newContractAddress)
+    const NFTcontractBalance = collectionContract.getBalance()
   console.log(ethers.utils.formatEther(NFTcontractBalance).toString());
 
   const CreatorContractBalance = await provider.getBalance(ERC721Creator.address)
