@@ -27,7 +27,7 @@ async function main() {
   //  Create first collection using creator , get address and get address
 
 
-  const Collection = await ERC721Creator.createERC721('alireza','arz',ethers.utils.parseEther("0.1"), 10000000000,"chert",{value: fee})
+  const Collection = await ERC721Creator.createERC721('alireza','arz',ethers.utils.parseEther("0.1"), 1000,"chert",{value: fee})
   const tx = await Collection.wait(1)
   const newContractAddress = tx.events[0].args.contractAddress
   console.log(newContractAddress);
@@ -44,13 +44,12 @@ async function main() {
   console.log("Balance before mint",ethers.utils.formatEther(NFTcontractBalance).toString());
 
     const mintPrice = await collectionContract.getPrice()
-    const mintTx = await collectionContract.mint({value: mintPrice})
+    const mintTx = await ERC721Creator.mint(newContractAddress,{value: mintPrice})
+    // await mintTx.wait(1)
+    // console.log(mintTx);
 
     const NFTcontractBalanceAfterMint = await collectionContract.getBalance()
     console.log("Balance after mint",ethers.utils.formatEther(NFTcontractBalanceAfterMint).toString());
-
-
-  
     const balanceAfterMint = await ERC721Creator.getBalance()
     console.log(`creator balance after Mint${ethers.utils.formatEther(balanceAfterMint).toString()}`);
 

@@ -42,14 +42,14 @@ contract ERC721V1 is ERC721{
     }
 
     function mint () external payable {
-        require(msg.value >= s_fee, "Msg.value less than NFT price");
+        // require(msg.value >= s_fee, "Msg.value less than NFT price");
         require(counterTokenID <= i_maxSupply,"Maximun number was minted");
-        (bool ok,) = parentContract.call{value: (s_fee)/100}("");
-        // (bool ok) = parentContract.send((s_fee)/100);
-        if (ok) {
+        // (bool ok,) = parent.call{value: (msg.value)}("");
+        // // (bool ok) = parentContract.send((s_fee)/100);
+        // if (ok) {
             _mint(msg.sender, counterTokenID);
         counterTokenID ++;
-        }
+        // }
         emit Mint(msg.sender, address(this), counterTokenID);
     }
 
@@ -107,6 +107,9 @@ contract ERC721V1 is ERC721{
     function getPrice () external view returns(uint256) {
         return s_fee;
     }
+    // function getParentContract() external view returns(address) {
+    //     return parentContract;
+    // }
 
  
 }
