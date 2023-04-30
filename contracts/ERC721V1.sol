@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 
 
-/// @title A ERC721 Contract wich deploys by invesweet creator contract 
+/// @title A ERC721 standard contract(NFT) but with some changes.
 /// @author Alireza Haghshenas
-/// @notice Explain to an end user what this does
-/// @dev Explain to a developer any extra details
+/// @notice This contract deploys by invesweet creator contract.
+/// @dev Mint function should call by creator contract, not directly in this contract
 
 pragma solidity ^0.8.17;
 
