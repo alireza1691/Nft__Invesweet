@@ -16,6 +16,7 @@ contract ERC721V1 is ERC721{
     event Mint(address user,address nftContract, uint256 tokenId);
     event Withdraw(address user, address contractAddress, uint256 value);
 
+    // variables
     string private s_name;
     string private s_symbol;
     string private s_url;
