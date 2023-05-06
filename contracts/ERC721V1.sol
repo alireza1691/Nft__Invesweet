@@ -42,6 +42,7 @@ contract ERC721V1 is ERC721{
         parentContract = payable(msg.sender);
     }
 
+    // modifiers
     modifier onlyOwner {
         require(msg.sender == _owner, "Only owner");
         _;
