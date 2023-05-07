@@ -21,14 +21,15 @@ async function main() {
 
   // Set fee for creation:
 
-  await ERC721Creator.setFee(ethers.utils.parseEther("0.1"))
-  const fee = await ERC721Creator.getFee()
-  console.log(`fee = ${ethers.utils.formatEther(fee)} ETH`);
+  await ERC721Creator.setFee(0,ethers.utils.parseEther("0.1"))
+  await ERC721Creator.setFee(1,10)
+  await ERC721Creator.setFee(2,50)
+  // console.log(`fee = ${ethers.utils.formatEther(fee)} ETH`);
 
   //  Create first collection using creator , get address and get address
 
 
-  const Collection = await ERC721Creator.createERC721('alireza','arz',ethers.utils.parseEther("0.1"), 1000,"chert",{value: fee})
+  const Collection = await ERC721Creator.createERC721('alireza','arz',ethers.utils.parseEther("0.05"), 1000,"chert",{value: ethers.utils.parseEther("0.1")})
   const tx = await Collection.wait(1)
   const newContractAddress = tx.events[0].args.contractAddress
   console.log(newContractAddress);

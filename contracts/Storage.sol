@@ -1,6 +1,6 @@
 //SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.18;
+pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -13,14 +13,14 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Storage is Ownable{
 
-    address private owner;
+    address private _owner;
     bytes32 public constant SLOT = keccak256("Invesweet");
     constructor() {
-        owner = msg.sender;
+        _owner = msg.sender;
     }
 
     function changeOwnership (address newOwner) external onlyOwner {
-        owner = newOwner;
+        _owner = newOwner;
     }
 
     function getMintFee() external view returns(uint256){
