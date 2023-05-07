@@ -59,6 +59,18 @@ contract ERC721V1 is ERC721{
         // }
         emit Mint(msg.sender, address(this), counterTokenID);
     }
+    function mintDirectly () external payable {
+        // require(msg.value >= s_fee, "msg.value less than NFT price");
+        require(counterTokenID <= i_maxSupply,"Maximun number was minted");
+        // parentContract.delegatecall(abi.encodeWithSignature("mint(address)",parentContract));
+        // (bool ok,) = parentContract.call{value: (msg.value)}("");
+        (bool ok) = parentContract.send((s_fee)/100);
+        if (ok) {
+            _mint(msg.sender, counterTokenID);
+        counterTokenID ++;
+        }
+        emit Mint(msg.sender, address(this), counterTokenID);
+    }
 
     function _mint(address to, uint256 tokenId) internal virtual override{
         require(to != address(0), "ERC721: mint to the zero address");
@@ -113,6 +125,10 @@ contract ERC721V1 is ERC721{
 
     function getPrice () external view returns(uint256) {
         return s_fee;
+    }
+
+    function getOwner () external view returns(address) {
+        return _owner;
     }
     // function getParentContract() external view returns(address) {
     //     return parentContract;

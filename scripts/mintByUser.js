@@ -1,6 +1,7 @@
 
 const { Provider } = require("@ethersproject/providers");
 const { Contract, providers, BigNumber, ContractFactory } = require("ethers");
+const { formatEther } = require("ethers/lib/utils");
 const {hre, ethers, network, getNamedAccounts} = require("hardhat");
 const compiledContract = require('../artifacts/contracts/ERC721V1.sol/ERC721V1.json')
 
@@ -45,6 +46,7 @@ async function main() {
 
     const mintPrice = await collectionContract.getPrice()
     const mintTx = await ERC721Creator.mint(newContractAddress,{value: mintPrice})
+    // const mintDirectly = await collectionContract.mintDirectly({value: mintPrice})
     // await mintTx.wait(1)
     // console.log(mintTx);
 
@@ -52,6 +54,8 @@ async function main() {
     console.log("Balance after mint",ethers.utils.formatEther(NFTcontractBalanceAfterMint).toString());
     const balanceAfterMint = await ERC721Creator.getBalance()
     console.log(`creator balance after Mint${ethers.utils.formatEther(balanceAfterMint).toString()}`);
+    const collectionOnwerBalance = await ERC721Creator.getUserBalance(accounts[0].address)
+    console.log(formatEther(collectionOnwerBalance.toString()));
 
 
 }

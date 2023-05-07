@@ -15,6 +15,7 @@ contract Creator is Ownable {
 
     mapping (address => uint256) private balances;
     mapping (address => address[]) private addressToContracts;
+    // mapping (address => address) private contractToOwner;
     constructor() {
         s_owner = msg.sender;
     }
@@ -24,6 +25,7 @@ contract Creator is Ownable {
         require(msg.value >= s_ERC721Fee, "create exceeds fee");
         ERC721V1 newNft = new ERC721V1(name, symbol ,mintFee, maxSupply, msg.sender, imageURL);
         emit ERC721Create(address(newNft), msg.sender, symbol);
+        // contractToOwner[address(newNft)] = msg.sender;
         return address(newNft);
     }
 
@@ -36,11 +38,15 @@ contract Creator is Ownable {
         return address(this).balance;
     }
     
-    function mint(address nftContractAddress) external payable {
-        ERC721V1 ContractInstance = ERC721V1(nftContractAddress);
+    // function mint(address nftContractAddress) external payable {
+    function mint(ERC721V1 ContractInstance) external payable {
+
+        // ERC721V1 ContractInstance = ERC721V1(nftContractAddress);
         uint256 price = ContractInstance.getPrice();
         require(msg.value >= price);
         ContractInstance.mint();
+        address owner = ContractInstance.getOwner();
+        balances[owner] += msg.value;
     }
 
     function setFee(uint256 newFee) external onlyOwner {
@@ -51,5 +57,9 @@ contract Creator is Ownable {
 
     function getFee() external view returns(uint256) {
         return s_ERC721Fee;
+    }
+
+    function getUserBalance (address who) external view returns(uint256) {
+        return balances[who];
     }
 }
