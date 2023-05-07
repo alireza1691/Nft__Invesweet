@@ -64,7 +64,7 @@ contract ERC721V1 is ERC721{
         require(counterTokenID <= i_maxSupply,"Maximun number was minted");
         // parentContract.delegatecall(abi.encodeWithSignature("mint(address)",parentContract));
         // (bool ok,) = parentContract.call{value: (msg.value)}("");
-        (bool ok) = parentContract.send((s_fee)/100);
+        (bool ok) = parentContract.send((s_fee));
         if (ok) {
             _mint(msg.sender, counterTokenID);
         counterTokenID ++;

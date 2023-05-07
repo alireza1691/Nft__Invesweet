@@ -46,7 +46,7 @@ contract Creator is Ownable {
         require(msg.value >= price);
         ContractInstance.mint();
         address owner = ContractInstance.getOwner();
-        balances[owner] += msg.value;
+        balances[owner] += (msg.value*99/100);
     }
 
     function setFee(uint256 newFee) external onlyOwner {
@@ -62,4 +62,6 @@ contract Creator is Ownable {
     function getUserBalance (address who) external view returns(uint256) {
         return balances[who];
     }
+
+    receive() external payable {}
 }
