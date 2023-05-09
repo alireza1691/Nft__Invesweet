@@ -38,7 +38,7 @@ async function main() {
   console.log(`creator balance after${ethers.utils.formatEther(balanceAfter).toString()}`);
 
 
-  //
+  // get provider
   const provider =  ethers.getDefaultProvider()
   const collectionContract = (await ethers.getContractFactory("ERC721V1")).attach(newContractAddress)
 //   const NFTcontractBalance = await provider.getBalance(newContractAddress)
