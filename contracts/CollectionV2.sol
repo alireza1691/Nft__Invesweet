@@ -3,7 +3,7 @@
 /// @title An standard ERC721 token with Invesweet specific features
 /// @author Alireza Haghshenas @alireza1691
 /// @notice this contract is contract to generate ERC721 tokens
-/// @dev Mint function can not called directly, it should call from creator
+/// @dev Mint function can not called directly, it should call from creator contract
 
 pragma solidity ^0.8.17;
 
