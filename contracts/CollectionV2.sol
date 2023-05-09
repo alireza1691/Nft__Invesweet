@@ -4,7 +4,6 @@
 /// @author Alireza Haghshenas @alireza1691
 /// @notice this contract is contract to generate ERC721 tokens
 /// @dev Mint function can not called directly, it should call from creator
-/// ss
 
 pragma solidity ^0.8.17;
 
