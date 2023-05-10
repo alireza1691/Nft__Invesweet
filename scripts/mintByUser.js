@@ -57,6 +57,11 @@ async function main() {
     console.log(`creator balance after Mint${ethers.utils.formatEther(balanceAfterMint).toString()}`);
     const collectionOnwerBalance = await ERC721Creator.getUserBalance(accounts[0].address)
     console.log(formatEther(collectionOnwerBalance.toString()));
+    const balance = await ERC721Creator.getUserBalance(accounts[0].address)
+    console.log("balance of collection owner in creator contract:",formatEther(balance.toString()));
+    await ERC721Creator.withdraw(balance)
+    const balanceAfterWithdraw = await ERC721Creator.getBalance()
+    console.log("balanceAfterWithdraw :",formatEther(balanceAfterWithdraw.toString()));
 
 
 }

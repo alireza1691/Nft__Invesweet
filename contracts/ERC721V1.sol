@@ -64,20 +64,20 @@ contract ERC721V1 is ERC721{
         // }
         emit Mint(msg.sender, address(this), counterTokenID);
     }
-    function mintDirectly () external payable {
-        // require(msg.value >= s_fee, "msg.value less than NFT price");
-        require(counterTokenID <= i_maxSupply,"Maximun number was minted");
-        require(msg.value >= s_fee,"fee exceeds entered amount");
-        // parentContract.delegatecall(abi.encodeWithSignature("mint(address)",parentContract));
-        // (bool ok,) = parentContract.call{value: (msg.value)}("");
-        (bool ok) = parentContract.send((s_fee));
-        if (ok) {
-            _mint(msg.sender, counterTokenID);
-        counterTokenID ++;
-        }
-        sumMintFees += msg.value;
-        emit Mint(msg.sender, address(this), counterTokenID);
-    }
+    // function mintDirectly () external payable {
+    //     // require(msg.value >= s_fee, "msg.value less than NFT price");
+    //     require(counterTokenID <= i_maxSupply,"Maximun number was minted");
+    //     require(msg.value >= s_fee,"fee exceeds entered amount");
+    //     // parentContract.delegatecall(abi.encodeWithSignature("mint(address)",parentContract));
+    //     // (bool ok,) = parentContract.call{value: (msg.value)}("");
+    //     (bool ok) = parentContract.send((s_fee));
+    //     if (ok) {
+    //         _mint(msg.sender, counterTokenID);
+    //     counterTokenID ++;
+    //     }
+    //     sumMintFees += msg.value;
+    //     emit Mint(msg.sender, address(this), counterTokenID);
+    // }
 
     function _mint(address to, uint256 tokenId) internal virtual override{
         require(to != address(0), "ERC721: mint to the zero address");
