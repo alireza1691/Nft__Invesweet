@@ -141,6 +141,5 @@ contract Creator is Ownable {
             require(ok,"Call failed");
         }
     }
-
     receive() external payable {}
 }
