@@ -39,7 +39,7 @@ async function main() {
 
 
   // get provider
-  const provider =  ethers.getDefaultProvider()
+  // const provider =  ethers.getDefaultProvider()
   const collectionContract = (await ethers.getContractFactory("ERC721V1")).attach(newContractAddress)
 //   const NFTcontractBalance = await provider.getBalance(newContractAddress)
     const NFTcontractBalance = await collectionContract.getBalance()
@@ -47,9 +47,9 @@ async function main() {
 
     const mintPrice = await collectionContract.getPrice()
     const mintTx = await ERC721Creator.mint(newContractAddress,{value: mintPrice})
-    const mintDirectly = await collectionContract.mintDirectly({value: mintPrice})
+    // const mintDirectly = await collectionContract.mintDirectly({value: mintPrice})
     // await mintTx.wait(1)
-    // console.log(mintTx);
+    console.log("mintPrice:",formatEther( mintPrice.toString()));
 
     const NFTcontractBalanceAfterMint = await collectionContract.getBalance()
     console.log("Balance after mint",ethers.utils.formatEther(NFTcontractBalanceAfterMint).toString());
@@ -57,7 +57,6 @@ async function main() {
     console.log(`creator balance after Mint${ethers.utils.formatEther(balanceAfterMint).toString()}`);
     const collectionOnwerBalance = await ERC721Creator.getUserBalance(accounts[0].address)
     console.log(formatEther(collectionOnwerBalance.toString()));
-    console.log("helloooo");
 
 
 }

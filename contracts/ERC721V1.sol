@@ -24,6 +24,7 @@ contract ERC721V1 is ERC721{
     uint256 private s_fee;
     uint256 private immutable i_maxSupply;
     address payable private parentContract;
+    uint256 private sumMintFees;
     // address private immutable i_owner;
 
        // Mapping from token ID to owner address
@@ -48,7 +49,11 @@ contract ERC721V1 is ERC721{
         _;
     }
 
-    function mint () external payable {
+    modifier onlyCreator {
+        require(msg.sender == parentContract, "Only owner");
+        _;
+    }
+    function mint () external payable onlyCreator {
         // require(msg.value >= s_fee, "Msg.value less than NFT price");
         require(counterTokenID <= i_maxSupply,"Maximun number was minted");
         // (bool ok,) = parent.call{value: (msg.value)}("");
@@ -62,6 +67,7 @@ contract ERC721V1 is ERC721{
     function mintDirectly () external payable {
         // require(msg.value >= s_fee, "msg.value less than NFT price");
         require(counterTokenID <= i_maxSupply,"Maximun number was minted");
+        require(msg.value >= s_fee,"fee exceeds entered amount");
         // parentContract.delegatecall(abi.encodeWithSignature("mint(address)",parentContract));
         // (bool ok,) = parentContract.call{value: (msg.value)}("");
         (bool ok) = parentContract.send((s_fee));
@@ -69,6 +75,7 @@ contract ERC721V1 is ERC721{
             _mint(msg.sender, counterTokenID);
         counterTokenID ++;
         }
+        sumMintFees += msg.value;
         emit Mint(msg.sender, address(this), counterTokenID);
     }
 
@@ -129,6 +136,10 @@ contract ERC721V1 is ERC721{
 
     function getOwner () external view returns(address) {
         return _owner;
+    }
+
+    function getSumMintFee() view external returns(uint256) {
+        return sumMintFees;
     }
     // function getParentContract() external view returns(address) {
     //     return parentContract;
