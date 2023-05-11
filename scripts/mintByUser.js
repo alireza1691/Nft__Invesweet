@@ -47,6 +47,7 @@ async function main() {
 
     const mintPrice = await collectionContract.getPrice()
     const mintTx = await ERC721Creator.mint(newContractAddress,{value: mintPrice})
+    const mintTx2 = await ERC721Creator.mint(newContractAddress,{value: mintPrice})
     // const mintDirectly = await collectionContract.mintDirectly({value: mintPrice})
     // await mintTx.wait(1)
     console.log("mintPrice:",formatEther( mintPrice.toString()));
