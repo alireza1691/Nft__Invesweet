@@ -10,11 +10,11 @@ export default function About() {
         </h6>
         <p>
             
-        Invesweet is a decentralized platform which offers tokenized services.our aim is to increase token’s usage in real life. nowadays there are many tokens such as ERC20 ERC721 and so on which most of them are not valuable and have not any usage.
+        Invesweet is a decentralized platform that offers tokenized services. we aim to increase digital asset usage or in other words tokenization usage in real life. nowadays there are many tokens such as fungible and non-fungible (NFT) most of which have no real value and have not any usage.
 
-        since most users trade tokens and NFTs just for case increasing value, not usage and most of them lose their money , that's exactly the right time to provide efficient services about tokens and build a platform with ability to create tokens with real usage, not expecting to increase price.
+Since most users trade tokens and NFTs just for case increasing value, it causes financial loss to users, and it creates an unpleasant imagination about tokens and people might think that they are useless. This is where Invesweet comes in with an innovative idea and wants to solve this problem by providing efficient services regarding tokens and creating a platform capable of creating tokens with real usage, without expecting a price increase.
 
-        here is when Invesweet offers various solutions.
+
 
         </p>
     </div>
