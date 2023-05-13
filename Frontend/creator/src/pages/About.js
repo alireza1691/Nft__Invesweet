@@ -30,10 +30,22 @@ Since most users trade tokens and NFTs just for case increasing value, it causes
       </div>
       <div className="column" style={{"backgroundColor":"white"}}>
         <h6>
-            Investors:
+            FAQ:
         </h6>
         <p>
-        Some text for test
+        Q1: What problem will INVESWEET solve?
+
+        Q2: What invesweet offers?
+
+        Q3: How?
+
+        Q4: Example of usage
+
+        Q5:
+
+        Q6:
+
+
         </p>
       </div>
     </div>
