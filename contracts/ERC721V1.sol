@@ -11,7 +11,7 @@ pragma solidity ^0.8.17;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
-contract ERC721V1 is ERC721{
+contract ERC721V1 is ERC721URIStorage{
 
     event Mint(address user,address nftContract, uint256 tokenId);
     event Withdraw(address user, address contractAddress, uint256 value);
@@ -60,7 +60,8 @@ contract ERC721V1 is ERC721{
         // (bool ok,) = parent.call{value: (msg.value)}("");
         // // (bool ok) = parentContract.send((s_fee)/100);
         // if (ok) {
-            _mint(msg.sender, counterTokenID);
+        _mint(msg.sender, counterTokenID);
+        _setTokenURI(counterTokenID, s_url);
         counterTokenID ++;
         // }
         emit Mint(msg.sender, address(this), counterTokenID);
