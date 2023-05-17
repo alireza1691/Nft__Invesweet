@@ -48,7 +48,7 @@ useEffect (() => {
         </label>
         <input className='input' placeholder='Enter image URL...' style={{"color":"black","width":"50%","margin":"5px"}} onChange={(e) => setImageUrl(e.target.value)} ></input>
         <div className='submitbtn'>
-        <button >Submit</button>
+        <button onClick={() => generate()}>Submit</button>
         </div>
     </div>
     
