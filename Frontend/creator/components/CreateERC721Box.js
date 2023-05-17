@@ -7,6 +7,9 @@ import Link from 'next/link'
 import { React ,useState, useEffect } from 'react'
 
 
+// creator address on mumbai:    0xaff6b98ea4dff833ca91dda2c3c0e9c6a5b090aa
+// ERC721V1 address on mumbai:   
+
 
 const CreateERC721Box = ({setName, setSymbol, setDescription, setMaxSupply, setPrice, setUrl, contractERC721Create}) =>{
 

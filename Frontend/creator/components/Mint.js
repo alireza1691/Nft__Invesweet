@@ -14,6 +14,9 @@ import IERC721ABI from '../Blockchain/IERC721ABI.json'
 import { Provider } from '@ethersproject/providers'
 
 
+// creator address on mumbai:    0xaff6b98ea4dff833ca91dda2c3c0e9c6a5b090aa
+// ERC721V1 address on mumbai:   
+
 // export const [popUpVisibility, setPopUpvisibility] = useState(false);
 
 const Mint = ({provider, mint, signer, getUri}) =>{

@@ -13,7 +13,7 @@ import { useMoralis, useWeb3Contract } from "react-moralis"
 //
 
 // import Moralis from 'moralis';
-import { EvmChain } from '@moralisweb3/evm-utils';
+// import { EvmChain } from '@moralisweb3/evm-utils';
 // import { EvmChain } from "@moralisweb3/evm-utils";
 
 import { _, fill } from "lodash";

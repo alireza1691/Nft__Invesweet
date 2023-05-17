@@ -14,7 +14,7 @@ import "@openzeppelin/contracts/utils/Base64.sol";
 
 error ERC721Metadata__URI_QueryFor_NonExistentToken();
 
-contract ERC721V1 is ERC721URIStorage{
+contract ERC721V1Multi is ERC721URIStorage{
 
     event Mint(address user,address nftContract, uint256 tokenId);
     event Withdraw(address user, address contractAddress, uint256 value);

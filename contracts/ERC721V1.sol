@@ -137,9 +137,7 @@ contract ERC721V1 is ERC721URIStorage{
     function getSumMintFee() view external returns(uint256) {
         return sumMintFees;
     }
-    // function getParentContract() external view returns(address) {
-    //     return parentContract;
-    // }
+ 
     function getUri(uint256 tokenId) view external returns(string memory){
         return tokenURI(tokenId);
     }
