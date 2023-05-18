@@ -4,6 +4,8 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { xor } from 'lodash'
+import { ethers } from 'ethers'
+// import ERC721V1ABI from '../../Blockchain/ERC721abi.json'
 // import fs from 'fs';
 // import * as fs from 'fs';
 // var fs = require('fs');
@@ -23,6 +25,10 @@ export default function Mint() {
   function enterContractAddress() {
     // add require
     router.push(`/mint/${contractAdd}`)
+  }
+
+  async function mint () {
+    const contractInstant = new ethers.Contract()
   }
 
   useEffect (() => {
@@ -57,7 +63,7 @@ export default function Mint() {
                 </div>
             </div> */}
             { disabler ? <div className='submitbtnDisabled'>
-            <button disabled >Submit</button>
+            <button disabled onClick={() => mint()}>Submit</button>
             </div> :
             <div className='submitbtn'>
             <button onClick={()=>enterContractAddress()} >Submit</button>

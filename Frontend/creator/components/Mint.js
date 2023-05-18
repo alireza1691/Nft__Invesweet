@@ -19,7 +19,7 @@ import { Provider } from '@ethersproject/providers'
 
 // export const [popUpVisibility, setPopUpvisibility] = useState(false);
 
-const Mint = ({provider, mint, signer, getUri}) =>{
+const mint = ({provider, mint, signer, getUri}) =>{
 
 
     const [disabler1, setDisabler1] = useState('')
@@ -88,7 +88,7 @@ const Mint = ({provider, mint, signer, getUri}) =>{
     )
   }
   
-  export default Mint
+  export default mint
 
   // module.exports = {
 

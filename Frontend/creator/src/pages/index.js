@@ -21,7 +21,7 @@ import { _, fill } from "lodash";
 import ERC721CreatorBox from "../../components/CreateERC721Box"
 import ERC20CreatorBox from "../../components/CreateERC20Box"
 import Account from "components/Account";
-import Mint from "components/Mint"
+import Mint from "components/mint"
 import PopUp from "components/popUp";
 import "bootstrap/dist/css/bootstrap.css";
 import { Modal, Input, Card } from "web3uikit";
