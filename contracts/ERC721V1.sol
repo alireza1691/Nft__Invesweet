@@ -67,12 +67,7 @@ contract ERC721V1 is ERC721URIStorage{
         emit Mint(msg.sender, address(this), counterTokenID);
     }
 
-
-    function burn (uint256 tokenId) external {
-        _burn(tokenId);
-        verfiyBurn[msg.sender] += 1;
-    }
-
+    
 
     function _mint(address to, uint256 tokenId) internal virtual override{
         require(to != address(0), "ERC721: mint to the zero address");
@@ -176,6 +171,10 @@ contract ERC721V1 is ERC721URIStorage{
 
     function checkVerifyNum (address who) external view returns(uint256) {
         return verfiyBurn[who];
+    }
+
+    function baseURI() external view returns(string memory) {
+        return _baseURI();
     }
 
  

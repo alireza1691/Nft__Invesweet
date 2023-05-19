@@ -5,12 +5,13 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { xor } from 'lodash'
 import { ethers } from 'ethers'
-// import ERC721V1ABI from '../../Blockchain/ERC721abi.json'
+import { Contract } from 'web3uikit'
+import ERC721V1ABI from '../../Blockchain/ERC721V1.json'
 // import fs from 'fs';
 // import * as fs from 'fs';
 // var fs = require('fs');
 
-export default function Mint() {
+export default function Mint({ setUrl, setName, signer, setAddr}) {
 
   const router = useRouter()
 
@@ -18,12 +19,24 @@ export default function Mint() {
   const [contractAdd, setContractAdd] = useState('')
   const [message, setMessage] = useState('Enter Address...')
 
-  function setAddress(param) {
-    address = param
-  }
+  // function setAddress(param) {
+  //   address = param
+  // }
 
-  function enterContractAddress() {
+  // addr:   0x5af0b1dd6759b01f4341175e947b3bca905a7cab
+
+
+  async function enterContractAddress() {
     // add require
+    // setAddr(contractAdd)
+    const inst = new ethers.Contract(contractAdd, ERC721V1ABI, signer)
+    console.log(inst);
+    const name = await inst.name()
+    console.log( name);
+    setName(name)
+    const uri = await inst.symbol()
+    console.log(uri.toString());
+    setUrl(uri)
     router.push(`/mint/${contractAdd}`)
   }
 

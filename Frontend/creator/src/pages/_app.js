@@ -18,6 +18,9 @@ export default function App({ Component, pageProps }) {
   const [ user, setUser] = useState()
   const [ provider, setProvider] = useState()
   const [ signer, setSigner] = useState()
+  const [ url, setUrl] = useState()
+  const [ name, setName] = useState()
+  // const [ addr, setAddr] = useState()
 
 
 
@@ -25,7 +28,7 @@ export default function App({ Component, pageProps }) {
   return(
     <MoralisProvider /* appId={APP_ID} serverUrl={SERVER_URL} */initializeOnMount={false}>
     <Layout  setUser={setUser} setSigner={setSigner} setProvider={setProvider} signer={signer} >
-      <Component {...pageProps} signer={signer}/>
+      <Component {...pageProps} signer={signer} setUrl={setUrl} setName={setName} name={name} url={url} />
     </Layout>
     </MoralisProvider>
 
