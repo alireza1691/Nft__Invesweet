@@ -19,7 +19,7 @@ import { Card } from 'web3uikit'
 //         fallback: false
 //     }
 
-   
+   //
 // }
 
 // export const getStaticProps = async (context) => {
