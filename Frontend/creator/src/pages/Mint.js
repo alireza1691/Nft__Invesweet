@@ -29,14 +29,15 @@ export default function Mint({ setUrl, setName, signer, setAddr}) {
   async function enterContractAddress() {
     // add require
     // setAddr(contractAdd)
-    const inst = new ethers.Contract(contractAdd, ERC721V1ABI, signer)
-    console.log(inst);
-    const name = await inst.name()
-    console.log( name);
-    setName(name)
-    const uri = await inst.symbol()
-    console.log(uri.toString());
-    setUrl(uri)
+    // console.log(signer);
+    // const inst = new ethers.Contract(contractAdd, ERC721V1ABI, signer)
+    // console.log(inst);
+    // const name = await inst.getOwner()
+    // console.log( name);
+    // setName(name)
+    // const uri = await inst.symbol()
+    // console.log(uri.toString());
+    // setUrl(uri)
     router.push(`/mint/${contractAdd}`)
   }
 

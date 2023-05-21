@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import ERC721V1ABI from '../../../Blockchain/ERC721V1.json'
+import CreatorABI from '../../../Blockchain/Creator.json'
 import { ethers } from 'ethers'
 import { Card } from 'web3uikit'
 
@@ -38,49 +39,60 @@ function mintInterface({signer, name, url}) {
 
     const [tokenName, setTokenName] = useState()
     const [tokenSymbol, setTokenSymbol] = useState()
-    const [contractAddress, setContractAddress] = useState()
+    const [contractAdd, setContractAddress] = useState()
     const [_url, _setURL] = useState()
     const router = useRouter()
+    const { aspath } = useRouter()
 
     const address = router.query.contractAddress
 
+    const generatorContractAddress = "0xAfF6B98EA4dff833CA91Dda2C3c0e9c6A5B090aA"
+
     async function urlGetter() {
+      console.log(address);
       const contractInst = new ethers.Contract( address, ERC721V1ABI, signer) 
       console.log(contractInst);
-      const url_ = await contractInst.baseURI()
-      console.log(url_.toString());
-      _setURL(url_.toString())
+      const url_ = await contractInst.tokenURI(1)
+      console.log(url_);
+      // _setURL(url_.toString())
     }
 
     async function imageURI() {
       console.log(address);
       // const _contractAddress = router.query.contractAddress
       const contractInst = new ethers.Contract( address, ERC721V1ABI, signer)
-      const _name = await contractInst.name()
-      setTokenName(_name)
-      const _symbol = await contractInst.baseURI()
-      imgUrl = _symbol
+      const price = await contractInst.getPrice()
+      // const _name = await contractInst.baseURI()
+      // setTokenName(_name)
+      // const _symbol = await contractInst.baseURI()
+      // imgUrl = _symbol
       // setTokenSymbol(_symbol)
       // console.log(_name);
       // console.log(_symbol);
-      return imgUrl
+      // return imgUrl
     }
 
     async function mint () {
       console.log(address);
       console.log(signer);
       try {
-        const contractInstant = new ethers.Contract( address, ERC721V1ABI, signer)
-      const price = await contractInstant.getPrice()
-      console.log(price.toString());
-      await contractInstant.mint({value: price ,gasLimit: "0x2710", gasPrice: ethers.utils.parseUnits("1.0", "gwei").toHexString()})
+        const contractInstant = new ethers.Contract( generatorContractAddress, CreatorABI, signer)
+        const nftContractInstance = new ethers.Contract( address, ERC721V1ABI, signer)
+      const price = await nftContractInstance.getPrice()
+      // console.log(price.toString());
+      await contractInstant.mint(address,{value: price ,gasLimit: "50000", gasPrice: ethers.utils.parseUnits("1000.0", "gwei").toHexString()})
+      console.log( ethers.utils.parseUnits("10.0", "gwei").toHexString());
+      // gasLimit: "0x2710",
       } catch (error) {
         console.log(error);
       }
       
     }
 
-    useEffect(() => {
+    useEffect( () => {
+      // console.log("hello");
+      // setContractAddress(address)
+      // console.log(address);
       // console.log(address);
       // imageURI()
       const interval = setInterval(() => {
@@ -88,7 +100,7 @@ function mintInterface({signer, name, url}) {
         // console.log(name);
         // console.log(url);
         // console.log(router.query.contractAddress);
-      }, 100000);
+      }, 1000);
     },[])
 
     // useState(()=>{

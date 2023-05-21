@@ -174,7 +174,7 @@ contract ERC721V1 is ERC721URIStorage{
     }
 
     function baseURI() external view returns(string memory) {
-        return _baseURI();
+        return s_url;
     }
 
  
