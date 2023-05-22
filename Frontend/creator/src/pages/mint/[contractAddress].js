@@ -73,6 +73,7 @@ function mintInterface({signer, name, url}) {
     }
 
     async function mint () {
+      // ** This function will revert by smart contract
       console.log(address);
       console.log(signer);
       try {
