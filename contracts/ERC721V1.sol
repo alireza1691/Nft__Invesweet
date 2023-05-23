@@ -8,7 +8,7 @@
 
 pragma solidity ^0.8.17;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+// import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 
@@ -129,6 +129,9 @@ contract ERC721V1 is ERC721URIStorage{
         return owner;
     }
 
+    function getCreator () external view returns (address) {
+        return creatorContract;
+    }
     function getSumMintFee() view external returns(uint256) {
         return sumMintFees;
     }

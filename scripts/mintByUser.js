@@ -53,7 +53,7 @@ async function main() {
     console.log("mintPrice:",formatEther( mintPrice.toString()));
 
     const NFTcontractBalanceAfterMint = await collectionContract.getBalance()
-    console.log("Balance after mint",ethers.utils.formatEther(NFTcontractBalanceAfterMint).toString());
+    console.log("Nft contract balance after mint",ethers.utils.formatEther(NFTcontractBalanceAfterMint).toString(), "(should be zero)");
     const balanceAfterMint = await ERC721Creator.getBalance()
     console.log(`creator balance after Mint${ethers.utils.formatEther(balanceAfterMint).toString()}`);
     const collectionOnwerBalance = await ERC721Creator.getUserBalance(accounts[0].address)

@@ -5,6 +5,7 @@ import ERC721V1ABI from '../../../Blockchain/ERC721V1.json'
 import CreatorABI from '../../../Blockchain/Creator.json'
 import { ethers } from 'ethers'
 import { Card } from 'web3uikit'
+import { BlockForkEvent } from '@ethersproject/abstract-provider'
 
 // export const getStaticPaths = async () => {
 //     const res = await fetch("https://jsonplaceholder.typicode.com/photos")
@@ -79,9 +80,10 @@ function mintInterface({signer, name, url}) {
       try {
         const contractInstant = new ethers.Contract( generatorContractAddress, CreatorABI, signer)
         const nftContractInstance = new ethers.Contract( address, ERC721V1ABI, signer)
-      const price = await nftContractInstance.getPrice()
+        const price = await nftContractInstance.getPrice()
+      
       // console.log(price.toString());
-      await contractInstant.mint(address,{value: price ,gasLimit: "50000", gasPrice: ethers.utils.parseUnits("1000.0", "gwei").toHexString()})
+      await contractInstant.mint(address,{value: price ,gasLimit: "100000", gasPrice: ethers.utils.parseUnits("5", "gwei").toHexString()})
       console.log( ethers.utils.parseUnits("10.0", "gwei").toHexString());
       // gasLimit: "0x2710",
       } catch (error) {
