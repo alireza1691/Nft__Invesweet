@@ -1,5 +1,5 @@
 const {ethers} = require ("hardhat")
-const {expect, assert} = require ("chai")
+const {expect, assert, Assertion} = require ("chai")
 
 
 describe("All", function () {
@@ -36,6 +36,18 @@ describe("All", function () {
       console.log(parentAdd);
       expect(parentAdd).to.equal(creatorContract.address);
     });
+
+    it("it should check balance after", async function () {
+      const existBalance = await creatorContract.getBalance()
+      expect(existBalance.toString()).to.equal("10");
+    })
+
+    it("Should mint and get token ID", async function () {
+      await (creatorContract.connect(signer1)).mint(mintedCollectionaddress,{value: 10})
+      // const tokenId1Owner = await creatorContract.ownerOf(1)
+      // expect(tokenId1Owner).to.equal(signer1.address);
+
+    })
 
   });
 

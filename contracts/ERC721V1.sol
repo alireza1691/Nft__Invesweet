@@ -22,7 +22,7 @@ contract ERC721V1 is ERC721URIStorage{
     // variables
     string private s_url;
     address private owner;
-    uint256 private counterTokenID;
+    uint256 private counterTokenID = 1;
     uint256 private fee;
     uint256 private immutable maxSupply;
     address payable private creatorContract;
