@@ -19,6 +19,7 @@ describe("All", function () {
     const creationTX = await signer1WithCreator.createERC721("test","tst",10,100,"test URL",{value: 10})
     const creationTXMined = await creationTX.wait(1)
     mintedCollectionaddress = await creationTXMined.events[0].args.contractAddress
+    nftContract = nftContractFactory.attach(mintedCollectionaddress)
     // nftContract = await .createERC721("test","tst",10,100,"test URL")
     // console.log(creatorContract);
     console.log(mintedCollectionaddress);
@@ -31,8 +32,7 @@ describe("All", function () {
 
 
     it("Should check if parent of created contract was correct", async function () {
-      const nftIns = await nftContractFactory.attach(mintedCollectionaddress)
-      const parentAdd = await nftIns.getCreator()
+      const parentAdd = await nftContract.getCreator()
       console.log(parentAdd);
       expect(parentAdd).to.equal(creatorContract.address);
     });
@@ -43,11 +43,31 @@ describe("All", function () {
     })
 
     it("Should mint and get token ID", async function () {
-      await (creatorContract.connect(signer1)).mint(mintedCollectionaddress,{value: 10})
-      // const tokenId1Owner = await creatorContract.ownerOf(1)
-      // expect(tokenId1Owner).to.equal(signer1.address);
+      await (nftContract.connect(signer1)).mint({value: 10})
+      const balance = await nftContract.balanceOf(signer1.address)
+      const tokenId1Owner = await nftContract.ownerOf(0)
+      expect(tokenId1Owner).to.equal(signer1.address);
+      expect(balance.toNumber()).to.equal(1);
 
     })
+
+    it("Should return test url", async function () {
+      await (nftContract.connect(signer1)).mint({value: 10})
+      // const url = await nftContract.getUri(0)
+      const url = await nftContract.baseURI()
+      expect(url).to.equal("test URL");
+
+    })
+    // it("Should mint and get token ID", async function () {
+      
+    //   expect(balance.toNumber()).to.equal(1);
+
+    // })
+    // it("Should mint and get token ID", async function () {
+      
+    //   expect(balance.toNumber()).to.equal(1);
+
+    // })
 
   });
 

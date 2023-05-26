@@ -16,22 +16,23 @@ error ERC721Metadata__URI_QueryFor_NonExistentToken();
 
 contract ERC721V1 is ERC721URIStorage{
 
+    // Events
     event Mint(address user,address nftContract, uint256 tokenId);
     event Withdraw(address user, address contractAddress, uint256 value);
 
-    // variables
+    // Variables
     string private s_url;
     address private owner;
-    uint256 private counterTokenID = 1;
+    uint256 private counterTokenID = 0;
     uint256 private fee;
     uint256 private immutable maxSupply;
     address payable private creatorContract;
     uint256 private sumMintFees;
 
-    // Mapping from token ID to owner address
+    // Mappings
     mapping(uint256 => address) private _owners;
-
-    // Mapping owner address to token count
+    mapping(uint256 => address) private _tokenApprovals;
+    mapping(address => mapping(address => bool)) private _operatorApprovals;
     mapping(address => uint256) private _balances;
     mapping(address => uint256) private verfiyBurn;
     mapping(uint256 => string) private _tokenURIs;
@@ -55,44 +56,19 @@ contract ERC721V1 is ERC721URIStorage{
         require(msg.sender == creatorContract, "Only owner");
         _;
     }
-    function mint () external payable onlyCreator {
-        // require(msg.value >= s_fee, "Msg.value less than NFT price");
+
+    // External functions
+    function mint() external payable {
         require(counterTokenID <= maxSupply,"Maximun number was minted");
-        // (bool ok,) = parent.call{value: (msg.value)}("");
-        // // (bool ok) = parentContract.send((s_fee)/100);
-        // if (ok) {
+         (bool ok) = creatorContract.send((fee)/100);
+          if (ok) {
         _mint(msg.sender, counterTokenID);
-        // _setTokenURI(counterTokenID, s_url);
-        counterTokenID ++;
-        // }
-        emit Mint(msg.sender, address(this), counterTokenID);
+        _setTokenURI(counterTokenID, s_url);
+         counterTokenID ++;
+        
+     }
     }
 
-    
-
-    function _mint(address to, uint256 tokenId) internal virtual override{
-        require(to != address(0), "ERC721: mint to the zero address");
-        require(!_exists(tokenId), "ERC721: token already minted");
-        require(tokenId <= maxSupply, "Max number minted");
-
-        _beforeTokenTransfer(address(0), to, tokenId, 1);
-        _tokenURIs[tokenId] = _baseURI();
-        // Check that tokenId was not minted by `_beforeTokenTransfer` hook
-        require(!_exists(tokenId), "ERC721: token already minted");
-
-        unchecked {
-            // Will not overflow unless all 2**256 token ids are minted to the same owner.
-            // Given that tokens are minted one by one, it is impossible in practice that
-            // this ever happens. Might change if we allow batch minting.
-            // The ERC fails to describe this case.
-            _balances[to] += 1;
-        }
-
-        _owners[tokenId] = to;
-
-        emit Transfer(address(0), to, tokenId);
-        _afterTokenTransfer(address(0), to, tokenId, 1);
-    }
 
     function changeFee(uint256 newFee) external onlyOwner {
         fee = newFee;
@@ -114,10 +90,7 @@ contract ERC721V1 is ERC721URIStorage{
         owner = newOwner;
     }
 
-    function _baseURI() internal view virtual override returns (string memory) {
-        return s_url;
-    }
-
+   
     function getBalance () external view returns(uint256) {
         return address(this).balance;
     }
@@ -133,12 +106,17 @@ contract ERC721V1 is ERC721URIStorage{
     function getCreator () external view returns (address) {
         return creatorContract;
     }
+
+    
+
+    // View functions
     function getSumMintFee() view external returns(uint256) {
         return sumMintFees;
     }
-    // function getParentContract() external view returns(address) {
-    //     return parentContract;
-    // }
+
+    function getParentContract() external view returns(address) {
+        return creatorContract;
+    }
     function getUri(uint256 tokenId) view external returns(string memory){
         return tokenURI(tokenId);
     }
@@ -180,6 +158,10 @@ contract ERC721V1 is ERC721URIStorage{
     function baseURI() external view returns(string memory) {
         return s_url;
     }
+     function _baseURI() internal view virtual override returns (string memory) {
+        return s_url;
+    }
+
 
  
 }

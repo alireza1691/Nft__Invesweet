@@ -4,23 +4,14 @@ import Main from "../pages/index"
 import { MoralisProvider } from "react-moralis"
 import Layout from 'components/Layout';
 import { useState } from 'react';
-// import { NotificationProvider } from "web3uikit"
-
-// let {connectWallethandler, isConnected} = Main
-
-// const APP_ID = process.env.NEXT_PUBLIC_APP_ID
-// const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL
-
 export default function App({ Component, pageProps }) {
 
 
-  // const [ isConnected, setIsConnected] = useState(false)
   const [ user, setUser] = useState()
   const [ provider, setProvider] = useState()
   const [ signer, setSigner] = useState()
   const [ url, setUrl] = useState()
   const [ name, setName] = useState()
-  // const [ addr, setAddr] = useState()
 
 
 

@@ -118,15 +118,15 @@ contract Creator is Ownable {
     }
     
     // function mint(address nftContractAddress) external payable {
-    function mint(ERC721V1 ContractInstance) external payable {
+    // function mint(ERC721V1 ContractInstance) external payable {
 
-        // ERC721V1 ContractInstance = ERC721V1(nftContractAddress);
-        uint256 price = ContractInstance.getPrice();
-        require(msg.value >= price);
-        ContractInstance.mint();
-        address owner = ContractInstance.getOwner();
-        balances[owner] += (msg.value * (1000 - mintFee) ) /1000;
-    }
+    //     // ERC721V1 ContractInstance = ERC721V1(nftContractAddress);
+    //     uint256 price = ContractInstance.getPrice();
+    //     require(msg.value >= price);
+    //     ContractInstance.mint(msg.sender);
+    //     address owner = ContractInstance.getOwner();
+    //     balances[owner] += (msg.value * (1000 - mintFee) ) /1000;
+    // }
 
     // Getter funcs:
     function getUserBalance (address who) external view returns(uint256) {
