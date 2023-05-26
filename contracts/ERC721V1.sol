@@ -34,6 +34,7 @@ contract ERC721V1 is ERC721URIStorage{
     // Mapping owner address to token count
     mapping(address => uint256) private _balances;
     mapping(address => uint256) private verfiyBurn;
+    mapping(uint256 => string) private _tokenURIs;
 
 
     constructor (string memory name,string memory symbol, uint256 mintCost, uint256 maximumSupply,address contractOwner, string memory imgUrl) ERC721(name, symbol){
@@ -61,7 +62,7 @@ contract ERC721V1 is ERC721URIStorage{
         // // (bool ok) = parentContract.send((s_fee)/100);
         // if (ok) {
         _mint(msg.sender, counterTokenID);
-        _setTokenURI(counterTokenID, s_url);
+        // _setTokenURI(counterTokenID, s_url);
         counterTokenID ++;
         // }
         emit Mint(msg.sender, address(this), counterTokenID);
@@ -75,7 +76,7 @@ contract ERC721V1 is ERC721URIStorage{
         require(tokenId <= maxSupply, "Max number minted");
 
         _beforeTokenTransfer(address(0), to, tokenId, 1);
-
+        _tokenURIs[tokenId] = _baseURI();
         // Check that tokenId was not minted by `_beforeTokenTransfer` hook
         require(!_exists(tokenId), "ERC721: token already minted");
 
