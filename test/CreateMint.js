@@ -1,5 +1,5 @@
 const {ethers} = require ("hardhat")
-const {expect, assert, Assertion} = require ("chai")
+const {expect, assert, Assertion, revertedWith} = require ("chai")
 const { it, describe } = require("mocha")
 // const { solidity } =  require("ethereum-waffle")
 const chai = require('chai')
@@ -49,7 +49,7 @@ describe("All", function () {
     it("Should mint and get token ID", async function () {
       await (nftContract.connect(signer1)).mint({value: 100})
       const balance = await nftContract.balanceOf(signer1.address)
-      const tokenId1Owner = await nftContract.ownerOf(0)
+      const tokenId1Owner = await nftContract.ownerOf(1)
       expect(tokenId1Owner).to.equal(signer1.address);
       expect(balance.toNumber()).to.equal(1);
 
@@ -72,24 +72,46 @@ describe("All", function () {
      })
 
     it("Should revert if value isn't enough", async function () {
-      await (nftContract.connect(signer1)).mint({value: 500})
-      // await expect(
-      //   (nftContract.connect(signer1)).mint({value: 100})
-      //   ).to.be.revertedWith(
-      //     "Insufficient mint fee"
-      //   );
+      // await (nftContract.connect(signer1)).mint({value: 500})
+       await expect(
+        (nftContract.connect(signer1)).mint({value: 50})
+        ).to.be.revertedWith(
+          "Insufficient mint fee"
+        );
   
     })
-    // it("Should mint and get token ID", async function () {
-      
-    //   expect(balance.toNumber()).to.equal(1);
+    it("Should revert if someone want mint more tham max supply", async function () {
+      const createTx = await signer1WithCreator.createERC721("test","tst",100,3,"test URL",{value: 1000})
+      const minedTx = await createTx.wait(1)
+      const addressOfCreated = await minedTx.events[0].args.contractAddress
+      const nftInst = nftContractFactory.attach(addressOfCreated)
+      // Since we set max supply = 3, to reach max supply we mint as much as max supply (3)
+      for (let index = 0; index < 3; index++) {
+        await nftInst.mint({value: 100})
+      }
+      // Now we expect the function will be reverted.
+      await expect(nftInst.mint({value: 100})).to.be.rejectedWith("Maximun number was minted");
 
-    // })
-    // it("Should mint and get token ID", async function () {
+    })
+    it("Should revert if msg.value of creation tx was less than fee", async function () {
       
-    //   expect(balance.toNumber()).to.equal(1);
+      // expect(balance.toNumber()).to.equal(1);
 
-    // })
+    })
+
+    /*
+    withdraw in both
+    get uri
+    check balance
+    check owner
+
+    */
+
+
+
+
+
+
     // it("Should mint and get token ID", async function () {
       
     //   expect(balance.toNumber()).to.equal(1);
