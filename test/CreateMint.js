@@ -1,12 +1,15 @@
 const {ethers} = require ("hardhat")
 const {expect, assert, Assertion} = require ("chai")
-
+const { it, describe } = require("mocha")
+// const { solidity } =  require("ethereum-waffle")
+const chai = require('chai')
 
 describe("All", function () {
 
   let creatorContract, nftContract, deployer, signer1, signer2, signer1WithCreator, nftContractFactory, mintedCollectionaddress
 
   beforeEach(async function () {
+
     const addresses = await ethers.getSigners()
     deployer = addresses[0]
     signer1 = addresses[1]
@@ -15,8 +18,8 @@ describe("All", function () {
     creatorContract = await creatorContractFactory.deploy()
     nftContractFactory = await ethers.getContractFactory("ERC721V1")
     signer1WithCreator =  creatorContract.connect(signer1)
-    await creatorContract.setFee(0,10)
-    const creationTX = await signer1WithCreator.createERC721("test","tst",10,100,"test URL",{value: 10})
+    await creatorContract.setFee(0,1000)
+    const creationTX = await signer1WithCreator.createERC721("test","tst",100,100,"test URL",{value: 1000})
     const creationTXMined = await creationTX.wait(1)
     mintedCollectionaddress = await creationTXMined.events[0].args.contractAddress
     nftContract = nftContractFactory.attach(mintedCollectionaddress)
@@ -24,6 +27,7 @@ describe("All", function () {
     // console.log(creatorContract);
     console.log(mintedCollectionaddress);
   })
+
 
 
 
@@ -38,12 +42,12 @@ describe("All", function () {
     });
 
     it("it should check balance after", async function () {
-      const existBalance = await creatorContract.getBalance()
-      expect(existBalance.toString()).to.equal("10");
+      const existBalance = await creatorContract.balance()
+      expect(existBalance.toString()).to.equal("1000");
     })
 
     it("Should mint and get token ID", async function () {
-      await (nftContract.connect(signer1)).mint({value: 10})
+      await (nftContract.connect(signer1)).mint({value: 100})
       const balance = await nftContract.balanceOf(signer1.address)
       const tokenId1Owner = await nftContract.ownerOf(0)
       expect(tokenId1Owner).to.equal(signer1.address);
@@ -52,11 +56,29 @@ describe("All", function () {
     })
 
     it("Should return test url", async function () {
-      await (nftContract.connect(signer1)).mint({value: 10})
+      await (nftContract.connect(signer1)).mint({value: 100})
       // const url = await nftContract.getUri(0)
       const url = await nftContract.baseURI()
       expect(url).to.equal("test URL");
 
+    })
+    it("Should increase balance of creator and ERC721 both", async function () {
+      await (nftContract.connect(signer1)).mint({value: 100})
+      const balance1 = await nftContract.balance()
+      const balance2 = await creatorContract.balance()
+      expect(balance1.toString()).to.equal("99")
+      // Before mint balnce of creator was 1000 because of cration
+      expect(balance2.toString()).to.equal("1001")
+     })
+
+    it("Should revert if value isn't enough", async function () {
+      await (nftContract.connect(signer1)).mint({value: 500})
+      // await expect(
+      //   (nftContract.connect(signer1)).mint({value: 100})
+      //   ).to.be.revertedWith(
+      //     "Insufficient mint fee"
+      //   );
+  
     })
     // it("Should mint and get token ID", async function () {
       
@@ -68,6 +90,22 @@ describe("All", function () {
     //   expect(balance.toNumber()).to.equal(1);
 
     // })
+    // it("Should mint and get token ID", async function () {
+      
+    //   expect(balance.toNumber()).to.equal(1);
+
+    // })
+    // it("Should mint and get token ID", async function () {
+      
+    //   expect(balance.toNumber()).to.equal(1);
+
+    // })
+    // it("Should mint and get token ID", async function () {
+      
+    //   expect(balance.toNumber()).to.equal(1);
+
+    // })
+
 
   });
 

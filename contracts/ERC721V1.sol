@@ -60,6 +60,7 @@ contract ERC721V1 is ERC721URIStorage{
     // External functions
     function mint() external payable {
         require(counterTokenID <= maxSupply,"Maximun number was minted");
+        require(msg.value >= fee,"Insufficient mint fee");
          (bool ok) = creatorContract.send((fee)/100);
           if (ok) {
         _mint(msg.sender, counterTokenID);
@@ -91,7 +92,7 @@ contract ERC721V1 is ERC721URIStorage{
     }
 
    
-    function getBalance () external view returns(uint256) {
+    function balance () external view returns(uint256) {
         return address(this).balance;
     }
 
@@ -107,7 +108,7 @@ contract ERC721V1 is ERC721URIStorage{
         return creatorContract;
     }
 
-    
+
 
     // View functions
     function getSumMintFee() view external returns(uint256) {
