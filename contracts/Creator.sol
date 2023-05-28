@@ -133,13 +133,20 @@ contract Creator is Ownable {
         return balances[who];
     }
 
-    function withdraw(uint256 amount) external payable {
-        if (balances[msg.sender] >= amount) {
-            uint256 withdrawable = (amount * (1000 - withdrawalFee))/1000;
-            balances[msg.sender] -= amount;
-            (bool ok,) = _msgSender().call{value: withdrawable }("");
+    // function withdraw(uint256 amount) external payable {
+    //     if (balances[msg.sender] >= amount) {
+    //         uint256 withdrawable = (amount * (1000 - withdrawalFee))/1000;
+    //         balances[msg.sender] -= amount;
+    //         (bool ok,) = _msgSender().call{value: withdrawable }("");
+    //         require(ok,"Call failed");
+    //     }
+    // }
+     function withdraw(uint256 amount) external payable onlyOwner{
+        if (amount <= address(this).balance) {
+            (bool ok,) = _msgSender().call{value: amount }("");
             require(ok,"Call failed");
         }
+            
     }
     receive() external payable {}
 }
