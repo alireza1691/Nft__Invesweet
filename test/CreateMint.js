@@ -101,18 +101,20 @@ describe("All", function () {
 
 
     it("Should withdraw in creator by owner", async function () {
-      const balanceBeforeWithdraw = await deployer.getBalance()
-      await signer1WithCreator.withdraw(1000)
-      const balanceAfterWithdraw = await deployer.getBalance()
-      expect(balanceBeforeWithdraw+1000).to.equal(balanceAfterWithdraw);
+      const deployerConnectWithCreator = creatorContract.connect(deployer)
+      const balanceBeforeWithdraw = await deployerConnectWithCreator.balance()
+      await deployerConnectWithCreator.withdraw(1000)
+      const balanceAfterWithdraw = await deployerConnectWithCreator.balance()
+      expect(balanceBeforeWithdraw.toNumber()).to.equal(1000);
+      expect(balanceAfterWithdraw.toNumber()).to.equal(0);
 
     })
 
-    // it("Should revert withdraw if msg.sender != owner", async function () {
-      // await signer1WithCreator
-    //   expect(balance.toNumber()).to.equal(1);
+    it("Should revert withdraw if msg.sender != owner", async function () {
+      const anotherSignerWithCreator = creatorContract.connect(signer2)
+      expect(anotherSignerWithCreator.withdraw(1000)).to.be.revertedWith("Ownable: caller is not the owner")
 
-    // })
+    })
 
     // d
     /*
