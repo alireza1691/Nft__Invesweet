@@ -94,11 +94,25 @@ describe("All", function () {
 
     })
     it("Should revert if msg.value of creation tx was less than fee", async function () {
-      
-      // expect(balance.toNumber()).to.equal(1);
+      // If msg.value < 1000 should revert.
+      await expect(signer1WithCreator.createERC721("test","tst",100,100,"test URL",{value: 900})).to.be.revertedWith("create requires fee")
 
     })
 
+
+    it("Should withdraw in creator by owner", async function () {
+      const balanceBeforeWithdraw = await deployer.getBalance()
+      await signer1WithCreator.withdraw(1000)
+      const balanceAfterWithdraw = await deployer.getBalance()
+      expect(balanceBeforeWithdraw+1000).to.equal(balanceAfterWithdraw);
+
+    })
+
+    // it("Should revert withdraw if msg.sender != owner", async function () {
+      // await signer1WithCreator
+    //   expect(balance.toNumber()).to.equal(1);
+
+    // })
 
     // d
     /*
@@ -114,11 +128,6 @@ describe("All", function () {
 
 
 
-    // it("Should mint and get token ID", async function () {
-      
-    //   expect(balance.toNumber()).to.equal(1);
-
-    // })
     // it("Should mint and get token ID", async function () {
       
     //   expect(balance.toNumber()).to.equal(1);

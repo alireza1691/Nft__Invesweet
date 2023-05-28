@@ -101,7 +101,7 @@ contract Creator is Ownable {
     }
 
     function createERC721(string memory name, string memory symbol, uint256 price, uint256 maxSupply, string memory imageURL) payable external returns(address) {
-        require(msg.value >= deployCost, "create exceeds fee");
+        require(msg.value >= deployCost, "create requires fee");
         ERC721V1 newNft = new ERC721V1(name, symbol ,price , maxSupply, msg.sender, imageURL);
         emit ERC721Create(address(newNft), msg.sender, symbol);
         // contractToOwner[address(newNft)] = msg.sender;
