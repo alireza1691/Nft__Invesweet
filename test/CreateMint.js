@@ -116,6 +116,26 @@ describe("All", function () {
 
     })
 
+      it("Should withdraw the mint costs by the owner address and send 1% fee to creator contract", async function () {
+      const inst = nftContract.connect(signer2)
+      await inst.mint({value: 100})
+      await inst.mint({value: 100})
+      await inst.mint({value: 100})
+      const balanceAfterMints = await inst.balance()
+      await (nftContract.connect(signer1)).withdraw()
+      const balanceAfterWithdraw = await inst.balance()
+      const creatorBalance = await creatorContract.balance()
+      expect(balanceAfterMints.toNumber()).to.equal(297);
+      expect(balanceAfterWithdraw.toNumber()).to.equal(0);
+      expect(creatorBalance.toNumber()).to.equal(1003);  
+    })
+
+      // it("Should mint and get token ID", async function () {
+      
+    //   expect(balance.toNumber()).to.equal(1);
+
+    // })
+
     // d
     /*
     withdraw in both
