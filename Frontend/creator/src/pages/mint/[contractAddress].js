@@ -6,6 +6,10 @@ import CreatorABI from "../../../Blockchain/Creator.json";
 import { ethers } from "ethers";
 import { Card } from "web3uikit";
 import { BlockForkEvent } from "@ethersproject/abstract-provider";
+import address from "../../../Blockchain/addresses.json"
+
+// const chainId = (process.env.CHAIN_ID)
+// const ERC721address = address[chainId].ERC721V1[0]
 
 // export const getStaticPaths = async () => {
 //     const res = await fetch("https://jsonplaceholder.typicode.com/photos")
@@ -108,18 +112,18 @@ function mintInterface({ signer, name, url }) {
         <h6 style={{ color: "#467889", fontWeight: "bold", fontSize: "18px" }}>
           Contract address: {address}
         </h6>
-        <Card
+        {/* <Card
           title={"Selected NFT"}
           description={""}
           style={{ height: "260px", width: "260px", left: "48px" }}
           onClick={""}
         >
           <Image loader={() => imageURI} src={url} height="260" width="260" />
-        </Card>
+        </Card> */}
         <div className="submitbtn">
           <button onClick={() => mint()}>Mint</button>
-          <button onClick={() => urlGetter()}>getURL</button>
-          <p>{_url}</p>
+          {/* <button onClick={() => urlGetter()}>getURL</button>
+          <p>{_url}</p> */}
         </div>
       </div>
     </div>
