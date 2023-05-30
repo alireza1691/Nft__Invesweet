@@ -3,7 +3,7 @@ import CreatorC from "../../Blockchain/Creator.json";
 import { ethers } from "ethers";
 
 export default function Create({ signer }) {
-  // creator address on mumbai:    0xaff6b98ea4dff833ca91dda2c3c0e9c6a5b090aa
+  // creator address on mumbai:    0x46035ac7e3bd5aa9150276c38fd19947e897259e
 
   const [name, setName] = useState("");
   const [symbol, setSymbol] = useState("");
@@ -17,11 +17,11 @@ export default function Create({ signer }) {
 
   async function generate() {
     const contractInstance = new ethers.Contract(
-      "0xaff6b98ea4dff833ca91dda2c3c0e9c6a5b090aa",
+      "0x46035ac7e3bd5aa9150276c38fd19947e897259e",
       CreatorC,
       signer
     );
-    await contractInstance.createERC721(name, symbol, price, maxSupply, imgUrl);
+    await contractInstance.createERC721(name, symbol, price , maxSupply, imgUrl,{value: ethers.utils.parseEther("0.01")});
   }
 
   return (
@@ -75,6 +75,7 @@ export default function Create({ signer }) {
         <div className="submitbtn">
           <button onClick={() => generate()}>Submit</button>
         </div>
+        <p style={{"fontSize":"12px", "fontFamily":"sans-serif"}}>To send transaction you may need test token, <a href="https://mumbaifaucet.com/">claim test token </a></p>
       </div>
     </div>
   );
