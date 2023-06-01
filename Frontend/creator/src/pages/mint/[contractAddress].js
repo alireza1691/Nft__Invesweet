@@ -63,7 +63,7 @@ function mintInterface({ signer, name, url }) {
   const router = useRouter();
   const { aspath } = useRouter();
 
-  const address = router.query.contractAddress;
+  let address = router.query.contractAddress;
 
   const nftAddress = "0x32d0503eb825825cefe4541a364910661588e9c5"
 
@@ -146,3 +146,12 @@ function mintInterface({ signer, name, url }) {
 }
 
 export default mintInterface;
+
+export async function getServerSideProps(){
+  return{
+    props: {
+      
+    }
+  }
+  // address = router.query.contractAddress;
+}

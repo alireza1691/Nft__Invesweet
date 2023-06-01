@@ -14,18 +14,10 @@ export default function About() {
         >
           <h6>Introduction:</h6>
           <p>
-            Invesweet is a decentralized platform that offers tokenized
-            services. we aim to increase digital asset usage or in other words
-            tokenization usage in real life. nowadays there are many tokens such
-            as fungible and non-fungible (NFT) most of which have no real value
-            and have not any usage. Since most users trade tokens and NFTs just
-            for case increasing value, it causes financial loss to users, and it
-            creates an unpleasant imagination about tokens and people might
-            think that they are useless. This is where Invesweet comes in with
-            an innovative idea and wants to solve this problem by providing
-            efficient services regarding tokens and creating a platform capable
-            of creating tokens with real usage, without expecting a price
-            increase.
+          Invesweet is a decentralized platform that offers tokenized services. we aim to increase digital asset usage or in other words tokenization usage in real life. nowadays there are many tokens such as fungible and non-fungible (NFT) most of which have no real value and have not any usage.
+Since most users trade tokens and NFTs just for case increasing value, it causes financial loss to users, and it creates an unpleasant imagination about tokens and people might think that they are useless. This is where Invesweet comes in with an innovative idea and wants to solve this problem by providing efficient services regarding tokens and creating a platform capable of creating tokens with real usage, without expecting a price increase.
+
+
           </p>
         </div>
 
@@ -35,7 +27,7 @@ export default function About() {
           <p>
             Invesweet V1 is the first version of Invesweet platform contract
             which deploys on testnet. our aim for V1 is get feedback about
-            contracts prformance, usage of tokens, gas efficiency, UI/UX, safety
+            smart contracts prformance, usage of tokens, gas efficiency, UI/UX, safety
             and security.
           </p>
         </div>
