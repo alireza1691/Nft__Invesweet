@@ -56,7 +56,7 @@ function withdrawByAuthorized(address tokenAddress,uint256 amount) external {
         require(ok,"failed");
 }
 
-function transfer(address tokenAddress, address to, uint256 amount) external{
+function internalTransfer(address tokenAddress, address to, uint256 amount) external{
     uint256 balance = tokenAddressToOwnerToBalance[tokenAddress][msg.sender];
     if (balance >= amount) {
         tokenAddressToOwnerToBalance[tokenAddress][msg.sender] -= amount;
@@ -64,13 +64,14 @@ function transfer(address tokenAddress, address to, uint256 amount) external{
     }
 }
 
-function cheque(address tokenAddress, address to, uint256 amount) external{
+function externalTransfer(address tokenAddress, address to, uint256 amount) external{
     tokenAddressToOwnerToBalance[tokenAddress][msg.sender] -= amount;
     tokenAddressToOwnerToBalance[tokenAddress][to] += (amount * 995)/1000;
 }
 function authorize(address authorizedAddress) external {
     authorizedAddressesToMainAddress[authorizedAddress]= msg.sender;
 }
+// remove authorize should add
 
 // View funcs
 function balance(address tokenAddress, address userAddress) public view returns (uint256) {
