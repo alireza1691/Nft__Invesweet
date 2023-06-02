@@ -7,4 +7,8 @@ contract Token is ERC20 {
     constructor(string memory _name, string memory _symbol,address addressForMint) ERC20(_name,_symbol){
         _mint(addressForMint, 100e18);
     }
+    
+    function mint(uint256 amount)external {
+        _mint(msg.sender, amount);
+    }
 }
