@@ -42,44 +42,67 @@ function deposit(address tokenAddress, uint256 amount) external {
     tokenAddressToOwnerToBalance[tokenAddress][msg.sender] += amount;
 }
 
+// NT stands for: native token
+function depositNT() external payable {
+    tokenAddressToOwnerToBalance[address(0)][msg.sender] += msg.value;
+}
+
+
 // Withdrawal of assets if amount less than balance or equal.
-function  withdraw (address tokenAddress, uint256 amount) external{
-    uint256 balance = tokenAddressToOwnerToBalance[tokenAddress][msg.sender];
-    if (balance < amount) {
-        revert();
-    }
+function withdraw (address tokenAddress, uint256 amount) external{
+    require(tokenAddressToOwnerToBalance[tokenAddress][msg.sender] >= amount,"Insufficient balance");
     tokenAddressToOwnerToBalance[tokenAddress][msg.sender] -= amount;
     (bool ok) = IERC20(tokenAddress).transfer(msg.sender, amount);
-    require(ok,"failed");
+    require(ok,"Withdraw failed");
+}
+
+
+function withdrawNT(uint256 amount) external payable {
+    require(tokenAddressToOwnerToBalance[address(0)][msg.sender] > amount,"Insufficient balance");
+    tokenAddressToOwnerToBalance[address(0)][msg.sender] -= amount;
+    (bool ok,) = msg.sender.call{value: amount}("");
+    require(ok,"Withdraw failed");
 }
 
 // Withdrawal just for addresses who authorized by another address and they have access to another address assets.
-function withdrawByAuthorized(address tokenAddress,uint256 amount) external {
+// AD stands for: authorized address
+function withdrawByAD(address tokenAddress,uint256 amount) external {
         address main = getAuthorized(msg.sender);
         uint256 mainAddressBalance = tokenAddressToOwnerToBalance[tokenAddress][main];
-        if (mainAddressBalance < amount ) {
-            revert();
-        }
+        require (mainAddressBalance > amount,"Insufficient balance" );
         tokenAddressToOwnerToBalance[tokenAddress][main] -= amount;
         (bool ok) = IERC20(tokenAddress).transfer(msg.sender, amount);
-        require(ok,"failed");
+        require(ok,"Withdraw failed");
 }
 
-function internalTransfer(address tokenAddress, address to, uint256 amount) external{
-    uint256 balance = tokenAddressToOwnerToBalance[tokenAddress][msg.sender];
-    if (balance >= amount) {
-        tokenAddressToOwnerToBalance[tokenAddress][msg.sender] -= amount;
-        IERC20(tokenAddress).transfer(to, (amount * 995)/1000);
-    }
+function withdrawNTByAD(uint256 amount) external {
+        address main = getAuthorized(msg.sender);
+        uint256 mainAddressBalance = tokenAddressToOwnerToBalance[address(0)][main];
+        require (mainAddressBalance > amount,"Insufficient balance" );
+        tokenAddressToOwnerToBalance[address(0)][main] -= amount;
+        (bool ok, ) = msg.sender.call{value: (amount*995)/1000 }("");
+        require(ok,"Withdraw failed");
 }
 
 function externalTransfer(address tokenAddress, address to, uint256 amount) external{
+    require(tokenAddressToOwnerToBalance[tokenAddress][msg.sender] >= amount, "Insufficient balance");
+    tokenAddressToOwnerToBalance[tokenAddress][msg.sender] -= amount;
+    bool ok = IERC20(tokenAddress).transfer(to, (amount * 995)/1000);
+    require(ok,"Transaction failed");
+}
+
+function internallTransfer(address tokenAddress, address to, uint256 amount) external{
     tokenAddressToOwnerToBalance[tokenAddress][msg.sender] -= amount;
     tokenAddressToOwnerToBalance[tokenAddress][to] += (amount * 995)/1000;
 }
 
 function authorize(address authorizedAddress) external {
     authorizedAddressesToMainAddress[authorizedAddress]= msg.sender;
+}
+
+function removeAuthorize(address authorizedAddress) external {
+    require(authorizedAddressesToMainAddress[authorizedAddress] == msg.sender, "You have not any authorized address");
+        authorizedAddressesToMainAddress[authorizedAddress] = address(0);
 }
 // remove authorize should add
 
