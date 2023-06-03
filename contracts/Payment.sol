@@ -17,8 +17,14 @@ contract Payment is Ownable{
     constructor() {
         
     }
+
+    // struct item {
+    //     address holders;
+    //     uint256 price;
+    //     string name;
+    // }
     mapping (address => mapping( uint256 => uint256 )) balanceOfItem;
-    mapping (address => uint) name;
+    mapping (uint256 => string) itemName;
     mapping (uint256 => uint256) itemToPrice;
 
     function pay(uint256 itemIndex) payable external {
@@ -27,17 +33,37 @@ contract Payment is Ownable{
         balanceOfItem[msg.sender][itemIndex] += 1;
     }
 
-    function addItem (uint256 price) external onlyOwner returns( uint256 itemIndex) {
+    function addItem (uint256 price,string memory name) external onlyOwner returns( uint256 itemIndex) {
         itemIndex = itemCounter;
         itemToPrice[itemCounter] = price;
+        itemName[itemCounter] = name;
         itemCounter++;
 
+    }
+
+    function withdraw() external onlyOwner{
+        (bool ok,) = msg.sender.call{value: address(this).balance}("");
+        require(ok, "Withdraw failed!");
     }
 
     function getPrice(uint256 itemIndex) view public returns (uint256 price) {
         price = itemToPrice[itemIndex];
     }
 
+    function getCounter() view external returns (uint256) {
+        return itemCounter;
+    }
+
+    function getItemName(uint256 itemIndex) view public returns (string memory) {
+        return itemName[itemIndex];
+    }
+
+    function checkPurchasedItem(address user, uint256 itemIndex) view public returns (uint256) {
+        return balanceOfItem[user][itemIndex];
+    }
+    
+
+    receive() external payable{}
 }
 
 

@@ -23,19 +23,26 @@ contract SafeTreasury is Ownable{
 
 
     */
-// struct Token {
-//     mapping (address => uint256) userBalance;
-// }
 
+// Mappings:
+
+// Mapping to get the address who authorized another address. We need this when an authorzied address wants to withdraw or transfer funcds of another address.
 mapping (address => address) authorizedAddressesToMainAddress;
+// Mapping to get token balance of each address (token address => user address => balance)
 mapping (address => mapping(address => uint256)) tokenAddressToOwnerToBalance;
 
+
+// External functions:
+
+// Depist token to contract and increase balance of the address.
+/// @dev Before calling this function, to transfer ERC20 token in smart contract we need to approve the amount that smart contract can spend token.
 function deposit(address tokenAddress, uint256 amount) external {
     (bool ok) = IERC20(tokenAddress).transferFrom(msg.sender, address(this), amount);
     require(ok,"Transaction failed");
     tokenAddressToOwnerToBalance[tokenAddress][msg.sender] += amount;
 }
 
+// Withdrawal of assets if amount less than balance or equal.
 function  withdraw (address tokenAddress, uint256 amount) external{
     uint256 balance = tokenAddressToOwnerToBalance[tokenAddress][msg.sender];
     if (balance < amount) {
@@ -45,6 +52,8 @@ function  withdraw (address tokenAddress, uint256 amount) external{
     (bool ok) = IERC20(tokenAddress).transfer(msg.sender, amount);
     require(ok,"failed");
 }
+
+// Withdrawal just for addresses who authorized by another address and they have access to another address assets.
 function withdrawByAuthorized(address tokenAddress,uint256 amount) external {
         address main = getAuthorized(msg.sender);
         uint256 mainAddressBalance = tokenAddressToOwnerToBalance[tokenAddress][main];
@@ -68,6 +77,7 @@ function externalTransfer(address tokenAddress, address to, uint256 amount) exte
     tokenAddressToOwnerToBalance[tokenAddress][msg.sender] -= amount;
     tokenAddressToOwnerToBalance[tokenAddress][to] += (amount * 995)/1000;
 }
+
 function authorize(address authorizedAddress) external {
     authorizedAddressesToMainAddress[authorizedAddress]= msg.sender;
 }
