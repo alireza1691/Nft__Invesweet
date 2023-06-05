@@ -42,6 +42,7 @@ function deposit(address tokenAddress, uint256 amount) external {
     tokenAddressToOwnerToBalance[tokenAddress][msg.sender] += amount;
 }
 
+// Deposit native toke of the chain and the amount is msg.value.
 // NT stands for: native token
 function depositNT() external payable {
     tokenAddressToOwnerToBalance[address(0)][msg.sender] += msg.value;
@@ -56,7 +57,8 @@ function withdraw (address tokenAddress, uint256 amount) external{
     require(ok,"Withdraw failed");
 }
 
-
+// Withdrawal of native token of the current chain.
+// This withdrawal is same as previous one but we set token address as
 function withdrawNT(uint256 amount) external payable {
     require(tokenAddressToOwnerToBalance[address(0)][msg.sender] > amount,"Insufficient balance");
     tokenAddressToOwnerToBalance[address(0)][msg.sender] -= amount;
