@@ -77,6 +77,7 @@ function withdrawByAD(address tokenAddress,uint256 amount) external {
         require(ok,"Withdraw failed");
 }
 
+// Same as previous one this function will withdraw user balance but this one uses for withdraw native token of chain.
 function withdrawNTByAD(uint256 amount) external {
         address main = getAuthorized(msg.sender);
         uint256 mainAddressBalance = tokenAddressToOwnerToBalance[address(0)][main];
@@ -86,6 +87,7 @@ function withdrawNTByAD(uint256 amount) external {
         require(ok,"Withdraw failed");
 }
 
+// Transfer asset from this smart contract to another address
 function externalTransfer(address tokenAddress, address to, uint256 amount) external{
     require(tokenAddressToOwnerToBalance[tokenAddress][msg.sender] >= amount, "Insufficient balance");
     tokenAddressToOwnerToBalance[tokenAddress][msg.sender] -= amount;
@@ -93,26 +95,33 @@ function externalTransfer(address tokenAddress, address to, uint256 amount) exte
     require(ok,"Transaction failed");
 }
 
+// Transfer asset inside contract without withdrawing fund from this smart contract.
+// It decreases the balance of sender address and increases balance of receiver address.
 function internallTransfer(address tokenAddress, address to, uint256 amount) external{
     tokenAddressToOwnerToBalance[tokenAddress][msg.sender] -= amount;
     tokenAddressToOwnerToBalance[tokenAddress][to] += (amount * 995)/1000;
 }
 
+// With this function an address can authorize another address to have access its assets.
 function authorize(address authorizedAddress) external {
     authorizedAddressesToMainAddress[authorizedAddress]= msg.sender;
 }
 
+// This function will remove authorized address. 
 function removeAuthorize(address authorizedAddress) external {
     require(authorizedAddressesToMainAddress[authorizedAddress] == msg.sender, "You have not any authorized address");
         authorizedAddressesToMainAddress[authorizedAddress] = address(0);
 }
-// remove authorize should add
 
-// View funcs
+// View funcs:
+
+// Show token balance of an address using token address and user address.
 function balance(address tokenAddress, address userAddress) public view returns (uint256) {
     return tokenAddressToOwnerToBalance[tokenAddress][userAddress];
 }
 
+// To get an address that authorized another address.
+// If returns address(0),'from' address not authorized by any address.
 function getAuthorized(address from) view public returns (address) {
     return authorizedAddressesToMainAddress[from];
 }
