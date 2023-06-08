@@ -13,7 +13,7 @@ async function main() {
   console.log(deployer.address,'\n',user.address);
 
   // Get instance of creator, then show it's address and balance
-
+  const zeroAddress = "0x0000000000000000000000000000000000000000"
   const tokenContract = await ethers.getContract("Token")
   const tokenAddress =  tokenContract.address
     console.log("token address:",tokenAddress);
@@ -22,11 +22,27 @@ async function main() {
   const safeT = await ethers.getContract("SafeTreasury")
   await tokenContract.connect(deployer).approve(safeT.address, 100)
   await safeT.connect(deployer).deposit(tokenAddress, 100)
-  const balanceAfterDeposit = await safeT.balance(tokenAddress, deployer.address)
-  console.log(balanceAfterDeposit.toString());
-  await safeT.connect(deployer).withdraw(tokenAddress, 50)
-  const balanceAfterWithdraw = await safeT.balance(tokenAddress, deployer.address)
-  console.log(balanceAfterWithdraw.toString());
+  const balance1 = await safeT.balance(tokenAddress, deployer.address)
+  console.log("Deposit succeed, current balance:",balance1.toString());
+  await safeT.connect(deployer).withdraw(tokenAddress, 40)
+  const balance2 = await safeT.balance(tokenAddress, deployer.address)
+  console.log("Withdraw for 40 token succeed, current balance:",balance2.toString());
+  await safeT.connect(deployer).authorize(user.address)
+  console.log("New address authorized");
+  await safeT.connect(user).withdrawByAA(tokenAddress,10)
+  const balance3 = await safeT.balance(tokenAddress, deployer.address)
+  console.log("Withdraw by authorized address succeed, Heres new balance after withdraw 10 tokens:", balance3.toString());
+  const userBalance = await tokenContract.balanceOf(user.address)
+  console.log("Here is the balance of withdrawed token: ",userBalance.toString());
+
+  await safeT.connect(deployer).depositNT({value: 1000})
+  const balance4 = await safeT.balance(zeroAddress, deployer.address)
+  console.log("Deposit of native token succeed, here is the balance: ",balance4.toString());
+  await safeT.connect(deployer).withdrawNT(300)
+  console.log("Withdrawal succeed");
+  const balance5 = await safeT.balance(zeroAddress, deployer.address)
+  console.log("Balance after native token withdrawal: ", balance5.toString());
+
 
 
 
