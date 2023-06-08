@@ -18,18 +18,19 @@ contract SafeTreasury is Ownable , ReentrancyGuard{
     error SafeTreasury__TransactionFailed();
     error SafeTreasury__AddressNotFound();
 
-// Mappings:
 
-// Mapping to get the address who authorized another address. We need this when an authorzied address wants to withdraw or transfer funcds of another address.
+    // Mappings:
+
+    // Mapping to get the address who authorized another address. We need this when an authorzied address wants to withdraw or transfer funcds of another address.
 mapping (address => address) private authorizedAddressesToMainAddress;
-// Mapping to get token balance of each address (token address => user address => balance)
+    // Mapping to get token balance of each address (token address => user address => balance)
 mapping (address => mapping(address => uint256)) private tokenAddressToOwnerToBalance;
 
 
-// External functions:
+    // External functions:
 
-// Depist token to contract and increase balance of the address.
-/// @dev Before calling this function, to transfer ERC20 token in smart contract we need to approve the amount that smart contract can spend token.
+    // Depist token to contract and increase balance of the address.
+    /// @dev Before calling this function, to transfer ERC20 token in smart contract we need to approve the amount that smart contract can spend token.
 function deposit(address tokenAddress, uint256 amount) external {
     (bool ok) = IERC20(tokenAddress).transferFrom(msg.sender, address(this), amount);
     if (!ok) {
@@ -38,15 +39,15 @@ function deposit(address tokenAddress, uint256 amount) external {
     tokenAddressToOwnerToBalance[tokenAddress][msg.sender] += amount;
 }
 
-// Deposit native toke of the chain and the amount is msg.value.
-// NT stands for: native token
-// Note that here we assume address of native token as address(0)
+    // Deposit native toke of the chain and the amount is msg.value.
+    // NT stands for: native token
+    // Note that here we assume address of native token as address(0)
 function depositNT() external payable {
     tokenAddressToOwnerToBalance[address(0)][msg.sender] += msg.value;
 }
 
 
-// Withdrawal of assets if amount less than balance or equal.
+    // Withdrawal of assets if amount less than balance or equal.
 function withdraw (address tokenAddress, uint256 amount) external{
     if (tokenAddressToOwnerToBalance[tokenAddress][msg.sender] < amount) {
         revert SafeTreasury__InsufficientBalance();
@@ -58,8 +59,8 @@ function withdraw (address tokenAddress, uint256 amount) external{
     }
 }
 
-// Withdrawal of native token of the current chain.
-// This withdrawal is the same as the previous one but to withdraw native token we should call this function instead of the previous one.
+    // Withdrawal of native token of the current chain.
+    // This withdrawal is the same as the previous one but to withdraw native token we should call this function instead of the previous one.
 function withdrawNT(uint256 amount) external payable nonReentrant{
     if (tokenAddressToOwnerToBalance[address(0)][msg.sender] < amount) {
         revert SafeTreasury__InsufficientBalance();
@@ -71,8 +72,8 @@ function withdrawNT(uint256 amount) external payable nonReentrant{
         }
 }
 
-// Withdrawal just for addresses who authorized by another address and they have access to another address assets.
-// AA stands for: authorized address
+    // Withdrawal just for addresses who authorized by another address and they have access to another address assets.
+    // AA stands for: authorized address
 function withdrawByAA(address tokenAddress,uint256 amount) external nonReentrant {
         address mainAddress = getAuthorized(msg.sender);
         if (mainAddress == address(0)) {
@@ -89,7 +90,7 @@ function withdrawByAA(address tokenAddress,uint256 amount) external nonReentrant
         }
 }
 
-// Same as previous one this function will withdraw user balance but this one uses for withdraw native token of chain.
+    // Same as previous one this function will withdraw user balance but this one uses for withdraw native token of chain.
 function withdrawNTByAA(uint256 amount) external nonReentrant {
         address mainAddress = getAuthorized(msg.sender);
         if (mainAddress == address(0)) {
@@ -106,7 +107,7 @@ function withdrawNTByAA(uint256 amount) external nonReentrant {
         }
 }
 
-// Transfer asset from this smart contract to another address
+    // Transfer asset from this smart contract to another address
 function externalTransfer(address tokenAddress, address to, uint256 amount) external nonReentrant{
     if (tokenAddressToOwnerToBalance[tokenAddress][msg.sender] < amount) {
         revert SafeTreasury__InsufficientBalance();
@@ -118,19 +119,19 @@ function externalTransfer(address tokenAddress, address to, uint256 amount) exte
     }
 }
 
-// Transfer asset inside contract without withdrawing fund from this smart contract.
-// It decreases the balance of sender address and increases balance of receiver address.
+    // Transfer asset inside contract without withdrawing fund from this smart contract.
+    // It decreases the balance of sender address and increases balance of receiver address.
 function internallTransfer(address tokenAddress, address to, uint256 amount) external{
     tokenAddressToOwnerToBalance[tokenAddress][msg.sender] -= amount;
     tokenAddressToOwnerToBalance[tokenAddress][to] += (amount * 995)/1000;
 }
 
-// With this function an address can authorize another address to have access its assets.
+    // With this function an address can authorize another address to have access its assets.
 function authorize(address authorizedAddress) external {
     authorizedAddressesToMainAddress[authorizedAddress]= msg.sender;
 }
 
-// This function will remove authorized address. 
+    // This function will remove authorized address. 
 function removeAuthorize(address authorizedAddress) external {
     if (authorizedAddressesToMainAddress[authorizedAddress] != msg.sender) {
         revert SafeTreasury__AddressNotFound();
@@ -138,18 +139,18 @@ function removeAuthorize(address authorizedAddress) external {
         authorizedAddressesToMainAddress[authorizedAddress] = address(0);
 }
 
-// What else we need?
-// A function to withdraw fees
+    // What else we need?
+    // A function to withdraw fees by owner
 
-// View funcs:
+    // View funcs:
 
-// Show token balance of an address using token address and user address.
+    // Show token balance of an address using token address and user address.
 function balance(address tokenAddress, address userAddress) public view returns (uint256) {
     return tokenAddressToOwnerToBalance[tokenAddress][userAddress];
 }
 
-// To get an address that authorized another address.
-// If returns address(0),'from' address not authorized by any address.
+    // To get an address that authorized another address.
+    // If returns address(0),'from' address not authorized by any address.
 function getAuthorized(address from) view public returns (address) {
     return authorizedAddressesToMainAddress[from];
 }
