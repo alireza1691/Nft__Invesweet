@@ -46,6 +46,14 @@ async function main() {
   const balance6 = await safeT.balance(zeroAddress, deployer.address)
   console.log("Balance after 100 native token withdrawed by anuthorized address : ", balance6.toString());
 
+  await safeT.connect(deployer).externalTransfer(tokenAddress, user.address, 10)
+  const balance7 = await tokenContract.balanceOf(user.address)
+  console.log("Balance of user after external transfer by deployer: ",balance7.toString());
+
+  await safeT.connect(deployer).internalTransfer(tokenAddress, user.address, 10)
+  const balance8 = await safeT.balance(tokenAddress, user.address)
+  console.log("Balance of user after internal transfer by deployer :",balance8.toString() );
+
 
 
 

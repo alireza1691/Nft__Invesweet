@@ -121,7 +121,7 @@ function externalTransfer(address tokenAddress, address to, uint256 amount) exte
 
     // Transfer asset inside contract without withdrawing fund from this smart contract.
     // It decreases the balance of sender address and increases balance of receiver address.
-function internallTransfer(address tokenAddress, address to, uint256 amount) external{
+function internalTransfer(address tokenAddress, address to, uint256 amount) external{
     tokenAddressToOwnerToBalance[tokenAddress][msg.sender] -= amount;
     tokenAddressToOwnerToBalance[tokenAddress][to] += (amount * 995)/1000;
 }
