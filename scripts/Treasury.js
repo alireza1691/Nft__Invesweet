@@ -42,7 +42,9 @@ async function main() {
   console.log("Withdrawal succeed");
   const balance5 = await safeT.balance(zeroAddress, deployer.address)
   console.log("Balance after native token withdrawal: ", balance5.toString());
-
+  await safeT.connect(user).withdrawNTByAA(100)
+  const balance6 = await safeT.balance(zeroAddress, deployer.address)
+  console.log("Balance after 100 native token withdrawed by anuthorized address : ", balance6.toString());
 
 
 
