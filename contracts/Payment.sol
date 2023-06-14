@@ -13,6 +13,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract Payment is Ownable{
 
     uint256 private itemCounter;
+    bytes private str = abi.encodePacked("alireza","haghshenas");
 
     constructor() {
         
@@ -24,7 +25,6 @@ contract Payment is Ownable{
     //     string name;
     // }
     mapping (address => mapping( uint256 => uint256 )) balanceOfItem;
-    mapping (uint256 => string) itemName;
     mapping (uint256 => uint256) itemToPrice;
 
     function pay(uint256 itemIndex) payable external {
@@ -33,10 +33,9 @@ contract Payment is Ownable{
         balanceOfItem[msg.sender][itemIndex] += 1;
     }
 
-    function addItem (uint256 price,string memory name) external onlyOwner returns( uint256 itemIndex) {
+    function addItem (uint256 price) external onlyOwner returns( uint256 itemIndex) {
         itemIndex = itemCounter;
         itemToPrice[itemCounter] = price;
-        itemName[itemCounter] = name;
         itemCounter++;
 
     }
@@ -52,10 +51,6 @@ contract Payment is Ownable{
 
     function getCounter() view external returns (uint256) {
         return itemCounter;
-    }
-
-    function getItemName(uint256 itemIndex) view public returns (string memory) {
-        return itemName[itemIndex];
     }
 
     function checkPurchasedItem(address user, uint256 itemIndex) view public returns (uint256) {
