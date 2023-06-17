@@ -25,8 +25,10 @@ contract SafeTreasury is Ownable , ReentrancyGuard{
     /// @param amount is amount of deposited token.
     event Deposit(address user, address token, uint256 amount);
     event Withdraw(address user, address token, uint256 amount);
-    event Authorize(address owner, address authorizedAddress);
-    event RemoveAuthorize(address owner, address authorizedAddress);
+    /// @param authorizedAddress is the address that authorized by another address. Authorized address has access to authorizer address assets.
+    /// @param authorizedAddress is the address that authorized an address.
+    event Authorize(address authorizer, address authorizedAddress);
+    event RemoveAuthorize(address authorizer, address authorizedAddress);
     event Transfer(address from, address to, address token, uint256 amount);
     event ExternallTransfer(address from, address to, address token, uint256 amount);
 
@@ -105,30 +107,38 @@ function withdrawNT(uint256 amount) external payable nonReentrant returns(addres
     return (from);
     
 }
-    // Transfer asset from this smart contract to another address
+/// @notice Transfer asset from this smart contract to another address.
+/// @dev Since we assume that native token address = 0, iff the token address as input was 0, we should send native token using 'call'.
 function externalTransfer(address tokenAddress, address to, uint256 amount) external nonReentrant{
     require(tokenAddressToOwnerToBalance[tokenAddress][msg.sender] >= amount, "Insufficient balance");
     tokenAddressToOwnerToBalance[tokenAddress][msg.sender] -= amount;
-    bool success = IERC20(tokenAddress).transfer(to, (amount * 995)/1000);
-    require(success,"Transaction failed");
+    if (tokenAddress == address(0)) {
+        (bool success,) = to.call{value: (amount * 995)/1000}("");
+        require(success,"Transaction failed");
+    } else {
+        bool success = IERC20(tokenAddress).transfer(to, (amount * 995)/1000);
+        require(success,"Transaction failed");
+    }
     emit ExternallTransfer(msg.sender, to, tokenAddress, amount);
 }
 
-    // Transfer asset inside contract without withdrawing fund from this smart contract.
-    // It decreases the balance of sender address and increases balance of receiver address.
+/// @notice Transfer to another address account inside contract.
+/// @dev This function changes the balance of the sender address and 'to' address by the amount.
 function transfer(address tokenAddress, address to, uint256 amount) external{
     tokenAddressToOwnerToBalance[tokenAddress][msg.sender] -= amount;
     tokenAddressToOwnerToBalance[tokenAddress][to] += (amount * 995)/1000;
     emit Transfer(msg.sender, to, tokenAddress, amount);
 }
 
-    // With this function an address can authorize another address to have access its assets.
+/// @notice Authorizing an address that can access to your assets.
+/// @dev Authorized address can removed using 'removeAuthorize' function
 function authorize(address authorizedAddress) external {
     authorizedAddressesToMainAddress[authorizedAddress]= msg.sender;
     emit Authorize(msg.sender, authorizedAddress);
 }
 
-    // This function will remove authorized address. 
+/// @notice Remove the authorized address with the address that already authorized it.
+/// @dev To access authorized addresses by an address, we can use relevant emited events 'event Authorize(address owner, address authorizedAddress);').
 function removeAuthorize(address authorizedAddress) external {
     if (authorizedAddressesToMainAddress[authorizedAddress] != msg.sender) {
         revert SafeTreasury__AddressNotFound();
@@ -137,18 +147,17 @@ function removeAuthorize(address authorizedAddress) external {
     emit RemoveAuthorize(msg.sender, authorizedAddress);
 }
 
-    // What else we need?
-    // A function to withdraw fees by owner
-
     // View funcs:
 
-    // Show token balance of an address using token address and user address.
+/// @notice Getting balance of an address for a token using both token address and user address
+/// @dev Same as before address(0) will return balance of native token
 function balance(address tokenAddress, address userAddress) public view returns (uint256) {
     return tokenAddressToOwnerToBalance[tokenAddress][userAddress];
 }
 
-    // To get an address that authorized another address.
-    // If returns address(0),'from' address not authorized by any address.
+/// @notice Getting an address that authorized another address.
+/// @dev If it returns address(0),'from' address is not authorized by any address.
+/// @dev If this function returns address 'A', address 'from' will have access to 'A' assets.
 function getAuthorized(address from) view public returns (address) {
     return authorizedAddressesToMainAddress[from];
 }
