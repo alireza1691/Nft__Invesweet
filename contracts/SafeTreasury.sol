@@ -39,103 +39,78 @@ mapping (address => mapping(address => uint256)) private tokenAddressToOwnerToBa
 
 
     // External functions:
-
-    // Depist token to contract and increase balance of the address.
-    /// @dev Before calling this function, to transfer ERC20 token in smart contract we need to approve the amount that smart contract can spend token.
+/// @notice Depist ERC20 token into contract, thereby increasing balance of the address who deposited.
+/// @dev Before calling this function, to transfer ERC20 token from user to address(this) we need to approve the amount in ERC20 smart contract as requirement of transferFrom function.
+/// @param tokenAddress is address of ERC20 token contract.
+/// @param amount is amount of ERC20 token.
 function deposit(address tokenAddress, uint256 amount) external {
-    (bool ok) = IERC20(tokenAddress).transferFrom(msg.sender, address(this), amount);
-    if (!ok) {
-        revert SafeTreasury__TransactionFailed();
-    }
+    (bool success) = IERC20(tokenAddress).transferFrom(msg.sender, address(this), amount);
+    require(success, "Transaction failed");
     tokenAddressToOwnerToBalance[tokenAddress][msg.sender] += amount;
     emit Deposit(msg.sender, tokenAddress, amount);
 }
 
-    // Deposit native toke of the chain and the amount is msg.value.
-    // NT stands for: native token
-    // Note that here we assume address of native token as address(0)
+/// @notice Deposit native toke of the chain and the amount is msg.value (NT stands for: native token).
+/// @dev Note that here we assume address of native token as address(0) adn since we enter amount of native token as msg.value, there isn't any input in this function
 function depositNT() external payable {
     tokenAddressToOwnerToBalance[address(0)][msg.sender] += msg.value;
     emit Deposit(msg.sender, address(0), msg.value);
 }
 
-
-    // Withdrawal of assets if amount less than balance or equal.
-function withdraw (address tokenAddress, uint256 amount) external{
+/// @notice Withdrawal of assets if amount less than balance or equal.
+/// @dev Explain to a developer any extra details
+function withdraw (address tokenAddress, uint256 amount) external nonReentrant returns(address){
+    address from;
     if (tokenAddressToOwnerToBalance[tokenAddress][msg.sender] < amount) {
-        revert SafeTreasury__InsufficientBalance();
-    }
-    tokenAddressToOwnerToBalance[tokenAddress][msg.sender] -= amount;
-    (bool ok) = IERC20(tokenAddress).transfer(msg.sender, amount);
-    if (!ok) {
-        revert SafeTreasury__TransactionFailed();
-    }
-    emit Withdraw(msg.sender, tokenAddress, amount);
-}
-
-    // Withdrawal of native token of the current chain.
-    // This withdrawal is the same as the previous one but to withdraw native token we should call this function instead of the previous one.
-function withdrawNT(uint256 amount) external payable nonReentrant{
-    if (tokenAddressToOwnerToBalance[address(0)][msg.sender] < amount) {
-        revert SafeTreasury__InsufficientBalance();
-    }
-    tokenAddressToOwnerToBalance[address(0)][msg.sender] -= amount;
-    (bool ok,) = msg.sender.call{value: amount}("");
-    if (!ok) {
-            revert SafeTreasury__TransactionFailed();
-        }
-    emit Withdraw(msg.sender, address(0), amount);
-}
-
-    // Withdrawal just for addresses who authorized by another address and they have access to another address assets.
-    // AA stands for: authorized address
-function withdrawByAA(address tokenAddress,uint256 amount) external nonReentrant {
-    address mainAddress = getAuthorized(msg.sender);
-        if (mainAddress == address(0)) {
-            revert SafeTreasury__NotAuthorized(); 
-        }
-        uint256 mainAddressBalance = tokenAddressToOwnerToBalance[tokenAddress][mainAddress];
-        if (mainAddressBalance < amount) {
-            revert SafeTreasury__InsufficientBalance();
-        }
-        tokenAddressToOwnerToBalance[tokenAddress][mainAddress] -= amount;
-        (bool ok) = IERC20(tokenAddress).transfer(msg.sender, amount);
-        if (!ok) {
-            revert SafeTreasury__TransactionFailed();
-        }
-
-    emit Withdraw(mainAddress, tokenAddress, amount);
-}
-
-    // Same as previous one this function will withdraw user balance but this one uses for withdraw native token of chain.
-function withdrawNTByAA(uint256 amount) external nonReentrant {
         address mainAddress = getAuthorized(msg.sender);
-        if (mainAddress == address(0)) {
-            revert SafeTreasury__NotAuthorized(); 
-        }
-        uint256 mainAddressBalance = tokenAddressToOwnerToBalance[address(0)][mainAddress];
-        if (mainAddressBalance < amount) {
-            revert SafeTreasury__InsufficientBalance();
-        }
-        tokenAddressToOwnerToBalance[address(0)][mainAddress] -= amount;
-        (bool ok, ) = msg.sender.call{value: (amount*995)/1000 }("");
-        if (!ok) {
-            revert SafeTreasury__TransactionFailed();
-        }
-        emit Withdraw(mainAddress, address(0), amount);
+        uint256 mainAddressBalance = tokenAddressToOwnerToBalance[tokenAddress][mainAddress];
+        require(mainAddress != address(0) &&
+        mainAddressBalance >= amount
+        ,"Insufficient balance");
+        tokenAddressToOwnerToBalance[tokenAddress][mainAddress] -= amount;
+        (bool authorizrdSuccessTransfer) = IERC20(tokenAddress).transfer(msg.sender, (amount*995)/1000 );
+        require(authorizrdSuccessTransfer,"Transacion failed");
+    from = mainAddress;
+    } else {
+        tokenAddressToOwnerToBalance[tokenAddress][msg.sender] -= amount;
+        (bool successTransfer) = IERC20(tokenAddress).transfer(msg.sender, (amount*995)/1000 );
+        require(successTransfer,"Transacion failed");
+    from = msg.sender;
+    }
+    emit Withdraw(from, tokenAddress, amount);
+    return from;
 }
-
+/// @notice Withdrawal of native token of the current chain.
+/// @dev This withdrawal is the same as the previous one but to withdraw native token we should call this function instead of the previous one.
+function withdrawNT(uint256 amount) external payable nonReentrant returns(address){
+    address from;
+    if (tokenAddressToOwnerToBalance[address(0)][msg.sender] < amount) {
+        address mainAddress = getAuthorized(msg.sender);
+        uint256 mainAddressBalance = tokenAddressToOwnerToBalance[address(0)][mainAddress];
+        require(mainAddress != address(0) &&
+        mainAddressBalance >= amount
+        ,"Insufficient balance");
+        tokenAddressToOwnerToBalance[address(0)][mainAddress] -= amount;
+        (bool authorizrdSuccessTransfer,) = msg.sender.call{value: (amount*995)/1000 }("");
+        require(authorizrdSuccessTransfer,"Transacion failed");
+    from = mainAddress;
+    }
+    else {
+        tokenAddressToOwnerToBalance[address(0)][msg.sender] -= amount;
+    (bool successTransfer,) = msg.sender.call{value:  (amount*995)/1000 }("");
+    require(successTransfer,"Transacion failed");
+    from = msg.sender;
+    }
+    emit Withdraw(from, address(0), amount);
+    return (from);
+    
+}
     // Transfer asset from this smart contract to another address
 function externalTransfer(address tokenAddress, address to, uint256 amount) external nonReentrant{
-    if (tokenAddressToOwnerToBalance[tokenAddress][msg.sender] < amount) {
-        revert SafeTreasury__InsufficientBalance();
-    }
+    require(tokenAddressToOwnerToBalance[tokenAddress][msg.sender] >= amount, "Insufficient balance");
     tokenAddressToOwnerToBalance[tokenAddress][msg.sender] -= amount;
-    bool ok = IERC20(tokenAddress).transfer(to, (amount * 995)/1000);
-    if (!ok) {
-        revert SafeTreasury__TransactionFailed();
-    }
-
+    bool success = IERC20(tokenAddress).transfer(to, (amount * 995)/1000);
+    require(success,"Transaction failed");
     emit ExternallTransfer(msg.sender, to, tokenAddress, amount);
 }
 
@@ -144,7 +119,6 @@ function externalTransfer(address tokenAddress, address to, uint256 amount) exte
 function transfer(address tokenAddress, address to, uint256 amount) external{
     tokenAddressToOwnerToBalance[tokenAddress][msg.sender] -= amount;
     tokenAddressToOwnerToBalance[tokenAddress][to] += (amount * 995)/1000;
-
     emit Transfer(msg.sender, to, tokenAddress, amount);
 }
 
