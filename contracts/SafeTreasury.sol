@@ -2,9 +2,15 @@
 
 pragma solidity ^0.8.17;
 
+// ****************************************************
+// ********************** Imports **********************
+// ****************************************************
+
+
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/interfaces/IERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+
 
 /// @title A smart contract that works as a treasury to keep user assets safe.
 /// @author Alireza Haghshenas Github: alireza1691
@@ -13,10 +19,11 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 contract SafeTreasury is Ownable , ReentrancyGuard{
 
-    error SafeTreasury__NotAuthorized();
-    error SafeTreasury__InsufficientBalance();
-    error SafeTreasury__TransactionFailed();
-    error SafeTreasury__AddressNotFound();
+    
+// ****************************************************
+// ********************** Events **********************
+// ****************************************************
+
 
     /// @notice Explain to an end user what this does
     /// @dev Explain to a developer any extra details
@@ -32,15 +39,40 @@ contract SafeTreasury is Ownable , ReentrancyGuard{
     event Transfer(address from, address to, address token, uint256 amount);
     event ExternallTransfer(address from, address to, address token, uint256 amount);
 
+ // ****************************************************
+// ******************** Variables *********************
+// ****************************************************
 
-    // Mappings:
+
+uint8 private immutable fee;
+
+
+// ****************************************************
+// ******************* Constructor ********************
+// ****************************************************
+
+
+    constructor( uint8 _fee) {
+        fee = _fee;
+    }
+
+
+// ****************************************************
+// ********************** Mappings **********************
+// ****************************************************
+
     // Mapping to get the address who authorized another address. We need this when an authorzied address wants to withdraw or transfer funcds of another address.
 mapping (address => address) private authorizedAddressesToMainAddress;
     // Mapping to get token balance of each address (token address => user address => balance)
 mapping (address => mapping(address => uint256)) private tokenAddressToOwnerToBalance;
+mapping (address => uint256) private income;
 
 
-    // External functions:
+// ****************************************************
+// ********************  functions ********************
+// ****************************************************
+
+
 /// @notice Depist ERC20 token into contract, thereby increasing balance of the address who deposited.
 /// @dev Before calling this function, to transfer ERC20 token from user to address(this) we need to approve the amount in ERC20 smart contract as requirement of transferFrom function.
 /// @param tokenAddress is address of ERC20 token contract.
@@ -70,18 +102,22 @@ function withdraw (address tokenAddress, uint256 amount) external nonReentrant r
         mainAddressBalance >= amount
         ,"Insufficient balance");
         tokenAddressToOwnerToBalance[tokenAddress][mainAddress] -= amount;
-        (bool authorizrdSuccessTransfer) = IERC20(tokenAddress).transfer(msg.sender, (amount*995)/1000 );
+        (bool authorizrdSuccessTransfer) = IERC20(tokenAddress).transfer(msg.sender, _amount(amount,fee));
+        income[tokenAddress] += amount - _amount(amount,fee);
         require(authorizrdSuccessTransfer,"Transacion failed");
-    from = mainAddress;
+        from = mainAddress;
     } else {
         tokenAddressToOwnerToBalance[tokenAddress][msg.sender] -= amount;
-        (bool successTransfer) = IERC20(tokenAddress).transfer(msg.sender, (amount*995)/1000 );
+        (bool successTransfer) = IERC20(tokenAddress).transfer(msg.sender, _amount(amount,fee));
         require(successTransfer,"Transacion failed");
-    from = msg.sender;
+        income[tokenAddress] += amount - _amount(amount,fee);
+        from = msg.sender;
     }
     emit Withdraw(from, tokenAddress, amount);
     return from;
 }
+
+
 /// @notice Withdrawal of native token of the current chain.
 /// @dev This withdrawal is the same as the previous one but to withdraw native token we should call this function instead of the previous one.
 function withdrawNT(uint256 amount) external payable nonReentrant returns(address){
@@ -93,34 +129,41 @@ function withdrawNT(uint256 amount) external payable nonReentrant returns(addres
         mainAddressBalance >= amount
         ,"Insufficient balance");
         tokenAddressToOwnerToBalance[address(0)][mainAddress] -= amount;
-        (bool authorizrdSuccessTransfer,) = msg.sender.call{value: (amount*995)/1000 }("");
+        (bool authorizrdSuccessTransfer,) = msg.sender.call{value: _amount(amount,fee) }("");
         require(authorizrdSuccessTransfer,"Transacion failed");
-    from = mainAddress;
+        income[address(0)] += amount - _amount(amount,fee);
+        from = mainAddress;
     }
     else {
         tokenAddressToOwnerToBalance[address(0)][msg.sender] -= amount;
-    (bool successTransfer,) = msg.sender.call{value:  (amount*995)/1000 }("");
-    require(successTransfer,"Transacion failed");
-    from = msg.sender;
+        (bool successTransfer,) = msg.sender.call{value:  _amount(amount,fee) }("");
+        require(successTransfer,"Transacion failed");
+        income[address(0)] += amount - _amount(amount,fee);
+        from = msg.sender;
     }
     emit Withdraw(from, address(0), amount);
     return (from);
     
 }
+
+
 /// @notice Transfer asset from this smart contract to another address.
 /// @dev Since we assume that native token address = 0, iff the token address as input was 0, we should send native token using 'call'.
 function externalTransfer(address tokenAddress, address to, uint256 amount) external nonReentrant{
     require(tokenAddressToOwnerToBalance[tokenAddress][msg.sender] >= amount, "Insufficient balance");
     tokenAddressToOwnerToBalance[tokenAddress][msg.sender] -= amount;
     if (tokenAddress == address(0)) {
-        (bool success,) = to.call{value: (amount * 995)/1000}("");
+        (bool success,) = to.call{value: _amount(amount,fee)}("");
         require(success,"Transaction failed");
+        income[address(0)] += amount - _amount(amount,fee);
     } else {
-        bool success = IERC20(tokenAddress).transfer(to, (amount * 995)/1000);
+        bool success = IERC20(tokenAddress).transfer(to, _amount(amount,fee));
         require(success,"Transaction failed");
+        income[tokenAddress] += amount - _amount(amount,fee);
     }
     emit ExternallTransfer(msg.sender, to, tokenAddress, amount);
 }
+
 
 /// @notice Transfer to another address account inside contract.
 /// @dev This function changes the balance of the sender address and 'to' address by the amount.
@@ -130,6 +173,7 @@ function transfer(address tokenAddress, address to, uint256 amount) external{
     emit Transfer(msg.sender, to, tokenAddress, amount);
 }
 
+
 /// @notice Authorizing an address that can access to your assets.
 /// @dev Authorized address can removed using 'removeAuthorize' function
 function authorize(address authorizedAddress) external {
@@ -137,17 +181,23 @@ function authorize(address authorizedAddress) external {
     emit Authorize(msg.sender, authorizedAddress);
 }
 
+
 /// @notice Remove the authorized address with the address that already authorized it.
 /// @dev To access authorized addresses by an address, we can use relevant emited events 'event Authorize(address owner, address authorizedAddress);').
 function removeAuthorize(address authorizedAddress) external {
-    if (authorizedAddressesToMainAddress[authorizedAddress] != msg.sender) {
-        revert SafeTreasury__AddressNotFound();
-    }
+    require(authorizedAddressesToMainAddress[authorizedAddress] == msg.sender,"Couldn't find address");
     authorizedAddressesToMainAddress[authorizedAddress] = address(0);
     emit RemoveAuthorize(msg.sender, authorizedAddress);
 }
 
-    // View funcs:
+function claimFee () external {}
+
+
+// ****************************************************
+// ****************** view functions ******************
+// ****************************************************
+
+
 
 /// @notice Getting balance of an address for a token using both token address and user address
 /// @dev Same as before address(0) will return balance of native token
@@ -161,5 +211,19 @@ function balance(address tokenAddress, address userAddress) public view returns 
 function getAuthorized(address from) view public returns (address) {
     return authorizedAddressesToMainAddress[from];
 }
+
+// ****************************************************
+// ****************** pure functions ******************
+// ****************************************************
+
+
+/// @notice Explain to an end user what this does
+/// @dev Explain to a developer any extra details
+/// @param initalAmount amount before calculating fee
+/// @param txFee the fee that should be deducated(this amount is amount in thousandth)
+function _amount(uint256 initalAmount ,uint txFee) internal pure returns(uint256) {
+    return (initalAmount * (1000 - txFee)) / 1000;
+}
+
 
 }
