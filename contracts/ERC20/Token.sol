@@ -8,7 +8,4 @@ contract Token is ERC20 {
         _mint(addressForMint, 100e18);
     }
     
-    function mint(uint256 amount)external {
-        _mint(msg.sender, amount);
-    }
 }
