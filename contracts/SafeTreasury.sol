@@ -11,6 +11,62 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/interfaces/IERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
+library TransferHelper {
+    /// @notice Transfers tokens from the targeted address to the given destination
+    /// @notice Errors with 'STF' if transfer fails
+    /// @param token The contract address of the token to be transferred
+    /// @param from The originating address from which the tokens will be transferred
+    /// @param to The destination address of the transfer
+    /// @param value The amount to be transferred
+    function safeTransferFrom(
+        address token,
+        address from,
+        address to,
+        uint256 value
+    ) internal {
+        (bool success, bytes memory data) =
+            token.call(abi.encodeWithSelector(IERC20.transferFrom.selector, from, to, value));
+        require(success && (data.length == 0 || abi.decode(data, (bool))), 'STF');
+    }
+
+    /// @notice Transfers tokens from msg.sender to a recipient
+    /// @dev Errors with ST if transfer fails
+    /// @param token The contract address of the token which will be transferred
+    /// @param to The recipient of the transfer
+    /// @param value The value of the transfer
+    function safeTransfer(
+        address token,
+        address to,
+        uint256 value
+    ) internal {
+        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(IERC20.transfer.selector, to, value));
+        require(success && (data.length == 0 || abi.decode(data, (bool))), 'ST');
+    }
+
+    /// @notice Approves the stipulated contract to spend the given allowance in the given token
+    /// @dev Errors with 'SA' if transfer fails
+    /// @param token The contract address of the token to be approved
+    /// @param to The target of the approval
+    /// @param value The amount of the given token the target will be allowed to spend
+    function safeApprove(
+        address token,
+        address to,
+        uint256 value
+    ) internal {
+        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(IERC20.approve.selector, to, value));
+        require(success && (data.length == 0 || abi.decode(data, (bool))), 'SA');
+    }
+
+    /// @notice Transfers ETH to the recipient address
+    /// @dev Fails with `STE`
+    /// @param to The destination of the transfer
+    /// @param value The value to be transferred
+    function safeTransferETH(address to, uint256 value) internal {
+        (bool success, ) = to.call{value: value}(new bytes(0));
+        require(success, 'STE');
+    }
+}
+
 
 /// @title A smart contract that works as a treasury to keep user assets safe.
 /// @author Alireza Haghshenas Github: alireza1691
@@ -78,8 +134,7 @@ mapping (address => uint256) private income;
 /// @param tokenAddress is address of ERC20 token contract.
 /// @param amount is amount of ERC20 token.
 function deposit(address tokenAddress, uint256 amount) external {
-    (bool success) = IERC20(tokenAddress).transferFrom(msg.sender, address(this), amount);
-    require(success, "Transaction failed");
+    TransferHelper.safeTransferFrom(tokenAddress, msg.sender, address(this), amount);
     tokenAddressToOwnerToBalance[tokenAddress][msg.sender] += amount;
     emit Deposit(msg.sender, tokenAddress, amount);
 }
@@ -102,14 +157,12 @@ function withdraw (address tokenAddress, uint256 amount) external nonReentrant r
         mainAddressBalance >= amount
         ,"Insufficient balance");
         tokenAddressToOwnerToBalance[tokenAddress][mainAddress] -= amount;
-        (bool authorizrdSuccessTransfer) = IERC20(tokenAddress).transfer(msg.sender, _amount(amount,fee));
+        TransferHelper.safeTransfer( tokenAddress, msg.sender, _amount(amount,fee) );
         income[tokenAddress] += amount - _amount(amount,fee);
-        require(authorizrdSuccessTransfer,"Transacion failed");
         from = mainAddress;
     } else {
         tokenAddressToOwnerToBalance[tokenAddress][msg.sender] -= amount;
-        (bool successTransfer) = IERC20(tokenAddress).transfer(msg.sender, _amount(amount,fee));
-        require(successTransfer,"Transacion failed");
+        TransferHelper.safeTransfer( tokenAddress, msg.sender, _amount(amount,fee));
         income[tokenAddress] += amount - _amount(amount,fee);
         from = msg.sender;
     }
@@ -129,21 +182,18 @@ function withdrawNT(uint256 amount) external payable nonReentrant returns(addres
         mainAddressBalance >= amount
         ,"Insufficient balance");
         tokenAddressToOwnerToBalance[address(0)][mainAddress] -= amount;
-        (bool authorizrdSuccessTransfer,) = msg.sender.call{value: _amount(amount,fee) }("");
-        require(authorizrdSuccessTransfer,"Transacion failed");
+        TransferHelper.safeTransferETH(msg.sender, _amount(amount,fee));
         income[address(0)] += amount - _amount(amount,fee);
         from = mainAddress;
     }
     else {
         tokenAddressToOwnerToBalance[address(0)][msg.sender] -= amount;
-        (bool successTransfer,) = msg.sender.call{value:  _amount(amount,fee) }("");
-        require(successTransfer,"Transacion failed");
+        TransferHelper.safeTransferETH(msg.sender, amount);
         income[address(0)] += amount - _amount(amount,fee);
         from = msg.sender;
     }
     emit Withdraw(from, address(0), amount);
     return (from);
-    
 }
 
 
@@ -153,12 +203,10 @@ function externalTransfer(address tokenAddress, address to, uint256 amount) exte
     require(tokenAddressToOwnerToBalance[tokenAddress][msg.sender] >= amount, "Insufficient balance");
     tokenAddressToOwnerToBalance[tokenAddress][msg.sender] -= amount;
     if (tokenAddress == address(0)) {
-        (bool success,) = to.call{value: _amount(amount,fee)}("");
-        require(success,"Transaction failed");
+        TransferHelper.safeTransferETH(to, _amount(amount,fee));
         income[address(0)] += amount - _amount(amount,fee);
     } else {
-        bool success = IERC20(tokenAddress).transfer(to, _amount(amount,fee));
-        require(success,"Transaction failed");
+        TransferHelper.safeTransfer(tokenAddress, to, _amount(amount,fee));
         income[tokenAddress] += amount - _amount(amount,fee);
     }
     emit ExternallTransfer(msg.sender, to, tokenAddress, amount);
@@ -190,7 +238,10 @@ function removeAuthorize(address authorizedAddress) external {
     emit RemoveAuthorize(msg.sender, authorizedAddress);
 }
 
-function claimFee () external {}
+function claimFee (address tokenAddress, uint256 amount) external onlyOwner{
+    require(income[tokenAddress] >= amount, "Bigger than income");
+    TransferHelper.safeTransfer(tokenAddress, msg.sender, amount);
+}
 
 
 // ****************************************************
