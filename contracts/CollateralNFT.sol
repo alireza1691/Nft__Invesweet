@@ -17,6 +17,8 @@ pragma solidity ^0.8.17;
 // import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "./TransferHelper.sol";
 
 error ERC721Metadata__URI_QueryFor_NonExistentToken();
 
@@ -44,6 +46,8 @@ contract CollateralNFT is ERC721URIStorage{
         creatorContract = payable(msg.sender);
     }
 
+    mapping (address => mapping(address => uint256)) private balance;
+
     // modifiers
     modifier onlyOwner {
         require(msg.sender == owner, "Only owner");
@@ -55,8 +59,10 @@ contract CollateralNFT is ERC721URIStorage{
         _;
     }
 
- 
-
+    function deposit(address token, address to, uint256 amount) external {
+        TransferHelper.safeTransferFrom(token, msg.sender, to, amount);
+        balance[msg.sender][token] = amount;
+    }
 
 
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {

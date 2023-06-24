@@ -27,6 +27,7 @@ const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || "Your etherscan API k
 const POLYGONSCAN_API_KEY = process.env.POLYGONSCAN_API_KEY || "Your polygonscan API key"
 // const REPORT_GAS = process.env.REPORT_GAS || false
 
+
 module.exports = {
     defaultNetwork: "hardhat",
     networks: {
