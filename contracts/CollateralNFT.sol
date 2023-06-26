@@ -27,7 +27,7 @@ error ERC721Metadata__URI_QueryFor_NonExistentToken();
 contract CollateralNFT is ERC721URIStorage{
 
     // Events
-    event Mint(address user,address nftContract, uint256 tokenId);
+    event Tokenize(address from,address token, uint256 amount, uint256 tokenId);
     event Withdraw(address user, address contractAddress, uint256 value);
 
     // Variables
@@ -53,8 +53,8 @@ contract CollateralNFT is ERC721URIStorage{
         uint256 balance;
     }
 
-    mapping (address => collateral[]) private collaterals;
-    mapping (address => uint8 ) private userCollaterals;
+    mapping (uint256 => collateral) private collaterals;
+    mapping (address => mapping(address => uint256)) private balance;
 
     // modifiers
     modifier onlyOwner {
@@ -69,18 +69,22 @@ contract CollateralNFT is ERC721URIStorage{
 
     function deposit(address token, address to, uint256 amount) external {
         TransferHelper.safeTransferFrom(token, msg.sender, to, amount);
-        collaterals[msg.sender][userCollaterals[msg.sender]] = collateral(token, amount);
+        balance[msg.sender][token] += amount;
     }
 
 
-    function tokenize() external {
+    function tokenize(address token, uint256 amount) external payable {
+        require(msg.value >= fee, "Requires fee");
+        require(balance[msg.sender][token] >= amount, "Insufficient fund");
+        balance[msg.sender][token] -= amount;
         _mint(msg.sender, counterTokenID);
-        userCollaterals[msg.sender] ++;
+        collaterals[counterTokenID] = collateral(token, amount);
         counterTokenID ++;
+        emit Tokenize(msg.sender, token, amount, counterTokenID - 1);
     }
 
 
-    function tokenURI(uint256 tokenId, uint8 index) public view virtual returns (string memory) {
+    function tokenURI(uint256 tokenId) public view override virtual returns (string memory) {
         if (!_exists(tokenId)) {
             revert ERC721Metadata__URI_QueryFor_NonExistentToken();
         }
@@ -97,9 +101,9 @@ contract CollateralNFT is ERC721URIStorage{
                         bytes(
                             abi.encodePacked(
                                 '{"token address":"',
-                                collaterals[ownerOf(tokenId)][index].tokenAddress,
+                                collaterals[tokenId].tokenAddress,
                                 '", "amount":"',
-                                collaterals[ownerOf(tokenId)][index].balance,
+                                collaterals[tokenId].balance,
                                 '","description": something , "image":"',
                                 s_url,
                                 '"}'
