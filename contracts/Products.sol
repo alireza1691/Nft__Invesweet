@@ -50,7 +50,7 @@ contract CollateralNFT is ERC721URIStorage{
         uint256 maxSupp;
     }
     // Product[] products;
-    mapping (uint256 => Product) private products;
+    mapping (uint256 => Product) private indexToProduct;
     mapping (uint256 => Product) private tokenIdToProduct;
 
     // modifiers
@@ -65,12 +65,12 @@ contract CollateralNFT is ERC721URIStorage{
     }
 
     function addProduct(string memory pName, string memory pImgUrl, uint256 pPrice, uint256 pMaxSupply) public onlyOwner onlyCreator{
-        products[productCounter] = Product(pName, pPrice, pImgUrl, pMaxSupply);
+        indexToProduct[productCounter] = Product(pName, pPrice, pImgUrl, pMaxSupply);
         productCounter ++;
     }
 
     function purchase(uint256 productCounterIndex)  external payable{
-        Product memory pdt = products[productCounterIndex];
+        Product memory pdt = indexToProduct[productCounterIndex];
         require(pdt.price <= msg.value, "Insufficient value");
         _safeMint(msg.sender, counterTokenID);
         tokenIdToProduct[counterTokenID] = pdt;
@@ -85,7 +85,7 @@ contract CollateralNFT is ERC721URIStorage{
         if (!_exists(tokenId)) {
             revert ERC721Metadata__URI_QueryFor_NonExistentToken();
         }
-        Product memory pdt = products[tokenId];
+        Product memory pdt = indexToProduct[tokenId];
         return
             string(
                 abi.encodePacked(
