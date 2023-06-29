@@ -509,3 +509,21 @@ transition:
 /* filter: blur(0); */
 opacity: 1;
 }
+
+.tabBtn :hover {
+  background-color: white;
+  color: #467889;
+  border: solid;
+  border-color: #467889;
+}
+.tabBtn button {
+  width: 80px;
+  padding: 5px 10px;
+  margin: 10px;
+  border-radius: 5px;
+  background-color: #b3c6cc;
+  border: none;
+  color: white;
+  height: 40px;
+}
+

@@ -4,6 +4,7 @@ import Main from "../pages/index"
 import { MoralisProvider } from "react-moralis"
 import Layout from 'components/Layout';
 import { useState } from 'react';
+import { ThirdwebProvider } from "@thirdweb-dev/react";
 export default function App({ Component, pageProps }) {
 
 
@@ -17,11 +18,13 @@ export default function App({ Component, pageProps }) {
 
 
   return(
+    <ThirdwebProvider >
     <MoralisProvider /* appId={APP_ID} serverUrl={SERVER_URL} */initializeOnMount={false}>
     <Layout  setUser={setUser} setSigner={setSigner} setProvider={setProvider} signer={signer} >
       <Component {...pageProps} signer={signer} setUrl={setUrl} setName={setName} name={name} url={url} />
     </Layout>
     </MoralisProvider>
+    </ThirdwebProvider>
 
   )
   // return(
