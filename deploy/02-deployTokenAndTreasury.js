@@ -22,7 +22,7 @@ module.exports = async () => {
 
     const SafeTreasury = await deploy("SafeTreasury", {
         from: deployer,
-        args: [],
+        args: [5],
         log: true,
         waitConfirmations: waitBlockConfirmations,
     

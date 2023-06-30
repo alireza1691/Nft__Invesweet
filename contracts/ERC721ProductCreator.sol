@@ -2,7 +2,7 @@
 pragma solidity ^0.8.17;
 
 // import "./ERC721Upgreadable.sol";
-import "./ERC721V1.sol";
+import "./ERC721Product.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 // import "./Storage.sol";
 
@@ -20,57 +20,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 
 
-// contract Storage is Ownable{
 
-//     address private owner;
-//     bytes32 public constant SLOT = keccak256("Invesweet");
-//     constructor() {
-//         owner = msg.sender;
-//     }
-
-//     function changeOwnership (address newOwner) external onlyOwner {
-//         owner = newOwner;
-//     }
-
-//     function getMintFee() external view returns(uint256){
-//         return Fees.fee(SLOT).mintFee;
-//     }
-//     function getDeployFee() external view returns(uint256){
-//         return Fees.fee(SLOT).mintFee;
-//     }
-//     function getWithdrawalFee() external view returns(uint256){
-//         return Fees.fee(SLOT).mintFee;
-//     }
-
-//     function setMintFee(uint256 newAmount) external onlyOwner {
-//         Fees.fee(SLOT).mintFee = newAmount;
-//     }
-//     function setDeployFee(uint256 newAmount) external onlyOwner {
-//         Fees.fee(SLOT).deployFee = newAmount;
-//     }
-//     function setWithdrawalFee(uint256 newAmount) external onlyOwner {
-//         Fees.fee(SLOT).withdrawalFee = newAmount;
-//     }
-// }
-
-// library Fees{
-//     struct FuncFees {
-//         uint256 mintFee;
-//         uint256 deployFee;
-//         uint256 withdrawalFee;
-//     }
-
-//     function fee(bytes32 slot) internal pure returns(FuncFees storage r) {
-//         assembly {
-//             r.slot := slot
-//         }
-//     }
-// }
-
-
-
-
-contract Creator is Ownable {
+contract ERC721ProductCreator is Ownable {
     
     event ERC721Create(address indexed contractAddress, address indexed owner, string symbol);
 
@@ -100,14 +51,13 @@ contract Creator is Ownable {
          
     }
 
-    function createERC721(string memory name, string memory symbol, uint256 price, uint256 maxSupply, string calldata imageURL) payable external returns(address) {
+    function createERC721(string memory name, string memory symbol) payable external returns(address) {
         require(msg.value >= deployCost, "create requires fee");
-        ERC721V1 newNft = new ERC721V1(name, symbol ,price , maxSupply, msg.sender, imageURL);
+        ERC721Product newNft = new ERC721Product(name, symbol , msg.sender);
         emit ERC721Create(address(newNft), msg.sender, symbol);
         // contractToOwner[address(newNft)] = msg.sender;
         return address(newNft);
     }
-
 
     function withdraw(uint256 amount) external payable onlyOwner{
         if (amount <= address(this).balance) {
@@ -116,9 +66,8 @@ contract Creator is Ownable {
         }
             
     }
-
     
-    // Getter funcs:
+        // Getter funcs:
     function getUserContracts(address user) external view returns(address[] memory){
         return addressToContracts[user];
     }
@@ -131,5 +80,6 @@ contract Creator is Ownable {
         return balances[who];
     }
 
+ 
     receive() external payable {}
 }
