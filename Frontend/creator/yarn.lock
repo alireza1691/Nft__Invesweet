@@ -2241,7 +2241,12 @@
     "@tanstack/query-core" "4.29.19"
     "use-sync-external-store" "^1.2.0"
 
-"@thirdweb-dev/chains@^0.1.25", "@thirdweb-dev/chains@0.1.25":
+"@thirdweb-dev/chains@^0.1.26":
+  "integrity" "sha512-+PjKn5bmg8Ua8OR+RwqnrGrQrYDvshv85EKvttnTqJmCdsvWMsPY2XXuDSpqg5ovKqgSYXgdw+dMEpyZKiZrXw=="
+  "resolved" "https://registry.npmjs.org/@thirdweb-dev/chains/-/chains-0.1.26.tgz"
+  "version" "0.1.26"
+
+"@thirdweb-dev/chains@0.1.25":
   "integrity" "sha512-srtH0L6FpwY44SclrUbRlkjiLfRBnVIvnAGA+/jh3rGzOjdXVpSftABd/ROxLGtEDvoTD4bhPKCWus9x8EzgIw=="
   "resolved" "https://registry.npmjs.org/@thirdweb-dev/chains/-/chains-0.1.25.tgz"
   "version" "0.1.25"
