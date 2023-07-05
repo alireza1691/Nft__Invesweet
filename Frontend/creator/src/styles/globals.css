@@ -237,7 +237,7 @@ footer {
   background-color: white;
   /* height: 200px; */
   padding: 10px;
-  width: 50%;
+  width: 70%;
   border-radius: 20px;
   position: static;
   justify-items: center;
@@ -525,5 +525,44 @@ opacity: 1;
   border: none;
   color: white;
   height: 40px;
+}
+
+.container {
+  display: flex;
+}
+
+.column {
+  flex: 1;
+  padding: 20px;
+}
+
+.column:first-child {
+  flex-basis: 200px; /* Width of the first column */
+  background-color: #f0f0f0;
+}
+
+.tabs {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tab {
+  padding: 10px;
+  background-color: #e0e0e0;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.tab:hover {
+  background-color: #d0d0d0;
+}
+
+.tab.active {
+  background-color: #ccc;
+}
+
+.content {
+  margin-top: 20px;
 }
 

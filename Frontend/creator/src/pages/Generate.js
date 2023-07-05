@@ -6,7 +6,7 @@ import { ThirdwebStorage } from "@thirdweb-dev/storage";
 import { useStorageUpload } from "@thirdweb-dev/react"
 // import {fs} from 'fs';
 
-export default function Create({ signer }) {
+export default function Generate({ signer }) {
   // creator address on mumbai:    0x46035ac7e3bd5aa9150276c38fd19947e897259e
 
   const storage = new ThirdwebStorage();
@@ -18,7 +18,11 @@ export default function Create({ signer }) {
   const [imgUrl, setImageUrl] = useState("");
   const [image, setImage] = useState(null);
   const [deactive, setDeactiver] = useState(false)
+  const [activeTab, setActiveTab] = useState('tab1');
 
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
 
   const { mutateAsync: upload, isLoading } = useStorageUpload();
 
@@ -88,7 +92,65 @@ export default function Create({ signer }) {
 
 
   return (
+    <>
+
     <div className="boxCreate">
+    <div className="tabs" style={{"paddingBottom":"20px","border":"none","border-bottom":"1px solid grey","borderColor":"#b3c6cc"}}>
+    <button
+      className={`tab ${activeTab === 'tab1'? 'active' : ''}`}
+      onClick={() => handleTabClick('tab1')}
+      style={ activeTab == 'tab1'? {"border":"none","borderColor":"#b3c6cc","borderRadius":"5px","backgroundColor":"#467889","color":"white"}:{"border":"none","borderColor":"#b3c6cc","backgroundColor":"white","color":"#467889"}}
+    >
+      Type 1 NFT
+    </button>
+    <button
+      className={`tab ${activeTab === 'tab2'? 'active' : ''}`}
+      onClick={() => handleTabClick('tab2')}
+      style={ activeTab == 'tab2'? {"border":"none","borderColor":"#b3c6cc","borderRadius":"5px","backgroundColor":"#467889","color":"white"}:{"border":"none","borderColor":"#b3c6cc","backgroundColor":"white","color":"#467889"}}
+    >
+      Advanced NFT
+    </button>
+    <button
+      className={`tab ${activeTab === 'tab3'? 'active' : ''}`}
+      onClick={() => handleTabClick('tab3')}
+      style={ activeTab == 'tab3'? {"border":"none","borderColor":"#b3c6cc","borderRadius":"5px","backgroundColor":"#467889","color":"white"}:{"border":"none","borderColor":"#b3c6cc","backgroundColor":"white","color":"#467889"}}
+    >
+      Tab 3
+    </button>
+    <button
+      className={`tab ${activeTab === 'tab4'? 'active' : ''}`}
+      onClick={() => handleTabClick('tab4')}
+      style={ activeTab == 'tab4'? {"border":"none","borderColor":"#b3c6cc","borderRadius":"5px","backgroundColor":"#467889","color":"white"}:{"border":"none","borderColor":"#b3c6cc","backgroundColor":"white","color":"#467889"}}
+    >
+      Tab 4
+    </button>
+    <button
+      className={`tab ${activeTab === 'tab5'? 'active' : ''}`}
+      onClick={() => handleTabClick('tab5')}
+      style={ activeTab == 'tab5'? {"border":"none","borderColor":"#b3c6cc","borderRadius":"5px","backgroundColor":"#467889","color":"white"}:{"border":"none","borderColor":"#b3c6cc","backgroundColor":"white","color":"#467889"}}
+    >
+      Tab 5
+    </button>
+    {/* <div className="tab-content" >
+      <div className={`tab-pane ${activeTab === 'tab1'? 'active' : ''}`}>
+        <p>Tab 1 content goes here.</p>
+      </div>
+      <div className={`tab-pane ${activeTab === 'tab2'? 'active' : ''}`}>
+        <p>Tab 2 content goes here.</p>
+      </div>
+      <div className={`tab-pane ${activeTab === 'tab3'? 'active' : ''}`}>
+        <p>Tab 3 content goes here.</p>
+      </div>
+      <div className={`tab-pane ${activeTab === 'tab4'? 'active' : ''}`}>
+        <p>Tab 4 content goes here.</p>
+      </div>
+      <div className={`tab-pane ${activeTab === 'tab5'? 'active' : ''}`}>
+        <p>Tab 5 content goes here.</p>
+      </div>
+    </div> */}
+  </div>
+  <div className="tab-content" >
+      <div className={`tab-pane ${activeTab === 'tab1'? 'active' : ''}`}>
       <div>
         <h6 style={{ color: "#467889", fontWeight: "bold", fontSize: "18px" }}>
           Create your NFTs
@@ -182,5 +244,8 @@ export default function Create({ signer }) {
         <p style={{"fontSize":"12px", "fontFamily":"sans-serif"}}>To send transaction you may need test token, <a href="https://mumbaifaucet.com/">claim test token </a></p>
       </div>
     </div>
+    </div>
+    </div>
+    </>
   );
 }

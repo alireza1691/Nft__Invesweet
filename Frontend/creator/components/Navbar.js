@@ -70,7 +70,7 @@ const Navbar = ({setUser ,setSigner , setProvider }) => {
     <div className='dropDown' style={{"width":"50%"}}>
       {/* ,"fontSize":"20px","color":"black","backgroundColor":"#EBEBDF","fontStyle":"normal","border":"solid","borderColor":"#DDDDCF","padding":"10px 10px","textDecorationLine":"blink" */}
     <Link href='/'style={{"marginLeft":"auto","marginRight":"auto", "color": "#467889" ,"fontSize":"20px","textDecorationLine":"blink","padding":"10px 20px"}} >Home</Link>
-    <Link href='/Create' style={{"marginLeft":"auto","marginRight":"auto", "color": "#467889" ,"fontSize":"20px","textDecorationLine":"blink","padding":"10px 20px"}} >Create</Link>
+    <Link href='/Generate' style={{"marginLeft":"auto","marginRight":"auto", "color": "#467889" ,"fontSize":"20px","textDecorationLine":"blink","padding":"10px 20px"}} >Generate</Link>
     <Link href='/EnterAddress'style={{"marginLeft":"auto","marginRight":"auto", "color": "#467889" ,"fontSize":"20px","textDecorationLine":"blink","padding":"10px 20px"}} >Mint</Link>
     <Link href='/Dashboard' style={{"marginLeft":"auto","marginRight":"auto", "color": "#467889" ,"fontSize":"20px","textDecorationLine":"blink","padding":"10px 20px"}} >Dashboard</Link>
     <Link href='/About'style={{"marginLeft":"auto","marginRight":"auto", "color": "#467889" ,"fontSize":"20px","textDecorationLine":"blink","padding":"10px 20px"}} >About</Link>
