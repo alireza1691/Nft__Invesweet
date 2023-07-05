@@ -43,15 +43,16 @@ contract ERC721Product is ERC721URIStorage{
         creatorContract = payable(msg.sender);
     }
 
-    struct Product {
+    struct Item {
         string name;
         uint256 price;
         string imgUrl;
-        uint256 maxSupp;
     }
     // Product[] products;
-    mapping (uint256 => Product) private indexToProduct;
-    mapping (uint256 => Product) private tokenIdToProduct;
+    mapping (uint256 => Item) private indexToProduct;
+    mapping (uint256 => Item) private tokenIdToProduct;
+    mapping (uint256 => uint256) private itemMaxSupply;
+    mapping (uint256 => uint256) private itemMinted;
 
     // modifiers
     modifier onlyOwner {
@@ -64,15 +65,23 @@ contract ERC721Product is ERC721URIStorage{
         _;
     }
 
-    function addProduct(string memory pName, string memory pImgUrl, uint256 pPrice, uint256 pMaxSupply) public onlyOwner onlyCreator{
-        indexToProduct[productCounter] = Product(pName, pPrice, pImgUrl, pMaxSupply);
+    function addItem(string memory pName, string memory pImgUrl, uint256 pPrice, uint256 pMaxSupply) public onlyOwner onlyCreator{
+        indexToProduct[productCounter] = Item(pName, pPrice, pImgUrl);
+        if (pMaxSupply > 0) {
+            itemMaxSupply[productCounter] = pMaxSupply;   
+        }
         productCounter ++;
     }
 
-    function purchase(uint256 productCounterIndex)  external payable{
-        Product memory pdt = indexToProduct[productCounterIndex];
+    function purchase(uint256 itemCounterIndex)  external payable{
+        Item memory pdt = indexToProduct[itemCounterIndex];
         require(pdt.price <= msg.value, "Insufficient value");
+        if (itemMaxSupply[itemCounterIndex] > 0) {
+            require(itemMinted[itemCounterIndex] < itemMaxSupply[itemCounterIndex], "Maximum amount was minted");
+        }
         _safeMint(msg.sender, counterTokenID);
+        string memory uri = indexToProduct[itemCounterIndex].imgUrl;
+        _setTokenURI(counterTokenID, uri);
         tokenIdToProduct[counterTokenID] = pdt;
         counterTokenID ++;
     }
@@ -81,33 +90,31 @@ contract ERC721Product is ERC721URIStorage{
         
     }
 
-    function tokenURI(uint256 tokenId) public view override virtual returns (string memory) {
-        if (!_exists(tokenId)) {
-            revert ERC721Metadata__URI_QueryFor_NonExistentToken();
-        }
-        Product memory pdt = indexToProduct[tokenId];
-        return
-            string(
-                abi.encodePacked(
-                    _baseURI(),
-                    Base64.encode(
-                        bytes(
-                            abi.encodePacked(
-                                '{"token name":"',
-                                pdt.name,
-                                '", "image URL":"',
-                                pdt.imgUrl,
-                                '", "max supply":"',
-                                pdt.maxSupp,
-                                '", "price":"',
-                                pdt.price,
-                                '","description": something"}'
-                            )
-                        )
-                    )
-                )
-            );
-    }
+    // function tokenURI(uint256 tokenId) public view override virtual returns (string memory) {
+    //     if (!_exists(tokenId)) {
+    //         revert ERC721Metadata__URI_QueryFor_NonExistentToken();
+    //     }
+    //     Item memory pdt = indexToProduct[tokenId];
+    //     return
+    //         string(
+    //             abi.encodePacked(
+    //                 _baseURI(),
+    //                 Base64.encode(
+    //                     bytes(
+    //                         abi.encodePacked(
+    //                             '{"token name":"',
+    //                             pdt.name,
+    //                             '", "image URL":"',
+    //                             pdt.imgUrl,
+    //                             '", "price":"',
+    //                             pdt.price,
+    //                             '","description": something"}'
+    //                         )
+    //                     )
+    //                 )
+    //             )
+    //         );
+    // }
 
 
  
