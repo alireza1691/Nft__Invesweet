@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import CreatorC from "../../Blockchain/Creator.json";
+import ItemCreator from "../../Blockchain/ERC721ProductCreator.json";
 import { ethers } from "ethers";
 // const { useStorageUpload,ThirdwebStorage } = require("@thirdweb-dev/storage");
 import { ThirdwebStorage } from "@thirdweb-dev/storage";
 import { useStorageUpload } from "@thirdweb-dev/react";
-// import {fs} from 'fs';
-
+// import * as fs from 'fs';
+// require("dotenv").config()
 export default function Generate({ signer }) {
   // creator address on mumbai:    0x46035ac7e3bd5aa9150276c38fd19947e897259e
 
@@ -23,6 +24,10 @@ export default function Generate({ signer }) {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
+
+
+  const type1CreatorAddress = "0x46035ac7e3bd5aa9150276c38fd19947e897259e"
+  const type2CreatorAddress = "0x994F56F982Ceeca068CFB8E275E9e4e640F8EE4A"
 
   const { mutateAsync: upload, isLoading } = useStorageUpload();
 
@@ -77,7 +82,7 @@ export default function Generate({ signer }) {
     console.log(uploadUrl);
   }
 
-  async function generate() {
+  async function generateType1() {
     await uploadToIpfs();
     const contractInstance = new ethers.Contract(
       "0x46035ac7e3bd5aa9150276c38fd19947e897259e",
@@ -90,6 +95,18 @@ export default function Generate({ signer }) {
       price,
       maxSupply,
       imgUrl,
+      { value: ethers.utils.parseEther("0.01") }
+    );
+  }
+  async function generateType2() {
+    const contractInstance = new ethers.Contract(
+      type2CreatorAddress,
+      ItemCreator,
+      signer
+    );
+    await contractInstance.createERC721(
+      name,
+      symbol,
       { value: ethers.utils.parseEther("0.01") }
     );
   }
@@ -340,7 +357,7 @@ export default function Generate({ signer }) {
                 {/* {image && <img src={image} alt="uploaded image" style={{ width: '300px', height: '300px' }} />} */}
               </div>
               <div className="submitbtn">
-                <button onClick={() => generate()}>Submit</button>
+                <button onClick={() => generateType1()}>Submit</button>
               </div>
               <p style={{ fontSize: "12px", fontFamily: "sans-serif" }}>
                 To send transaction you may need test token,{" "}
@@ -372,7 +389,7 @@ export default function Generate({ signer }) {
               After generating collection, you can enter different items in dashboard{" "}
             </p>
             <div className="submitbtn">
-              <button onClick={() => generate()}>Submit</button>
+              <button onClick={() => generateType2()}>Submit</button>
             </div>
             <p style={{ fontSize: "12px", fontFamily: "sans-serif" }}>
               To send transaction you may need test token,{" "}
